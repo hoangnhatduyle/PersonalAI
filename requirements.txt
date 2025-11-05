@@ -2,6 +2,7 @@ gradio
 openai
 python-dotenv
 pypdf
+pydantic
 langchain
 langchain-community
 langchain-openai

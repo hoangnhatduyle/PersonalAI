@@ -7,10 +7,15 @@ import os
 import glob
 import json
 import requests
+import warnings
 from dotenv import load_dotenv
 import gradio as gr
 from pypdf import PdfReader
 import numpy as np
+from pydantic import BaseModel
+
+# Suppress LangChain chunk size warnings
+warnings.filterwarnings('ignore', message='Created a chunk of size.*')
 
 # LangChain imports for RAG
 from langchain_community.document_loaders import DirectoryLoader, TextLoader
@@ -24,6 +29,7 @@ from openai import OpenAI
 
 # Configuration
 MODEL = "gpt-4o-mini"
+EVALUATOR_MODEL = "gemini-2.0-flash-exp"
 DB_NAME = "vector_db"
 KNOWLEDGE_BASE_PATH = "Knowledge_Base"
 PDF_PATH = "me/linkedin.pdf"
@@ -36,9 +42,35 @@ TOP_K_RETRIEVAL = 3
 MAX_CONTEXT_LENGTH = 3000
 
 
+# Pydantic model for evaluation
+class Evaluation(BaseModel):
+    is_acceptable: bool
+    feedback: str
+
+
 # Load environment variables
 load_dotenv(override=True)
-os.environ['OPENAI_API_KEY'] = os.getenv('OPENAI_API_KEY', 'your-key-if-not-using-env')
+
+# Check for OpenAI API key
+openai_api_key = os.getenv('OPENAI_API_KEY')
+if not openai_api_key:
+    raise ValueError(
+        "OPENAI_API_KEY not found! Please set it as an environment variable or secret in HuggingFace Spaces.\n"
+        "Go to Settings > Repository Secrets and add OPENAI_API_KEY with your API key."
+    )
+os.environ['OPENAI_API_KEY'] = openai_api_key
+
+# Initialize Gemini for evaluation (optional)
+google_api_key = os.getenv('GOOGLE_API_KEY')
+if google_api_key:
+    gemini = OpenAI(
+        api_key=google_api_key,
+        base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
+    )
+    print("✓ Gemini evaluator enabled")
+else:
+    gemini = None
+    print("ℹ Gemini evaluator not configured (optional - responses will not be evaluated)")
 
 
 def push(text):
@@ -173,7 +205,9 @@ class PersonalAI:
         # Split documents into chunks
         text_splitter = CharacterTextSplitter(
             chunk_size=CHUNK_SIZE, 
-            chunk_overlap=CHUNK_OVERLAP
+            chunk_overlap=CHUNK_OVERLAP,
+            separator="\n\n",  # Split by paragraphs first
+            length_function=len,
         )
         self.chunks = text_splitter.split_documents(self.documents)
         
@@ -199,6 +233,116 @@ class PersonalAI:
         )
         
         print(f"✓ Vector store created with {vectorstore._collection.count()} documents")
+
+    def evaluator_system_prompt(self):
+        """Generate evaluator system prompt"""
+        prompt = f"""You are an evaluator that decides whether a response to a question is acceptable. \
+You are provided with a conversation between a User and an Agent. Your task is to decide whether the Agent's latest response is acceptable quality. \
+The Agent is playing the role of {self.name} and is representing {self.name} on their website. \
+The Agent has been instructed to be professional and engaging, as if talking to a potential client or future employer who came across the website. \
+The Agent has been provided with context on {self.name} in the form of their summary and LinkedIn details. Here's the information:
+
+## Summary:
+{self.summary}
+
+## LinkedIn Profile:
+{self.linkedin}
+
+With this context, please evaluate the latest response, replying with whether the response is acceptable and your feedback."""
+        return prompt
+
+    def evaluator_user_prompt(self, reply, message, history):
+        """Generate evaluator user prompt"""
+        # Format history for evaluation
+        history_text = ""
+        if history:
+            for msg in history:
+                role = msg.get("role", "")
+                content = msg.get("content", "")
+                if role == "user":
+                    history_text += f"User: {content}\n"
+                elif role == "assistant":
+                    history_text += f"Assistant: {content}\n"
+        
+        user_prompt = f"Here's the conversation between the User and the Agent: \n\n{history_text}\n\n"
+        user_prompt += f"Here's the latest message from the User: \n\n{message}\n\n"
+        user_prompt += f"Here's the latest response from the Agent: \n\n{reply}\n\n"
+        user_prompt += "Please evaluate the response, replying with whether it is acceptable and your feedback."
+        return user_prompt
+
+    def evaluate(self, reply, message, history) -> Evaluation:
+        """Evaluate response quality using Gemini"""
+        if not gemini:
+            # If Gemini is not configured, always accept
+            return Evaluation(is_acceptable=True, feedback="Evaluation skipped - Gemini not configured")
+        
+        messages = [
+            {"role": "system", "content": self.evaluator_system_prompt()},
+            {"role": "user", "content": self.evaluator_user_prompt(reply, message, history)}
+        ]
+        
+        try:
+            response = gemini.beta.chat.completions.parse(
+                model=EVALUATOR_MODEL,
+                messages=messages,
+                response_format=Evaluation
+            )
+            return response.choices[0].message.parsed
+        except Exception as e:
+            print(f"⚠️ Evaluation failed: {e}")
+            # If evaluation fails, accept the response
+            return Evaluation(is_acceptable=True, feedback=f"Evaluation error: {str(e)}")
+
+    def rerun(self, reply, message, history, feedback):
+        """Regenerate response based on evaluation feedback"""
+        # Retrieve context again
+        docs = self.retriever.invoke(message)
+        
+        context_parts = []
+        total_length = 0
+        for doc in docs:
+            doc_content = doc.page_content
+            doc_type = doc.metadata.get('doc_type', 'Unknown')
+            context_part = f"[{doc_type}]: {doc_content}"
+            
+            if total_length + len(context_part) > MAX_CONTEXT_LENGTH:
+                remaining = MAX_CONTEXT_LENGTH - total_length
+                if remaining > 100:
+                    context_part = context_part[:remaining] + "..."
+                    context_parts.append(context_part)
+                break
+            
+            context_parts.append(context_part)
+            total_length += len(context_part)
+        
+        context = "\n\n".join(context_parts)
+        
+        # Build updated system prompt with feedback
+        updated_system_prompt = self.system_prompt() + "\n\n## Previous answer rejected\n"
+        updated_system_prompt += "You just tried to reply, but the quality control rejected your reply.\n"
+        updated_system_prompt += f"## Your attempted answer:\n{reply}\n\n"
+        updated_system_prompt += f"## Reason for rejection:\n{feedback}\n\n"
+        updated_system_prompt += "Please try again with a better response that addresses the feedback."
+        
+        # Build messages with context
+        user_message_with_context = f"""Context: {context}
+
+Question: {message}"""
+        
+        messages = [
+            {"role": "system", "content": updated_system_prompt},
+            {"role": "user", "content": user_message_with_context}
+        ]
+        
+        # Generate new response (non-streaming for rerun)
+        response = self.openai.chat.completions.create(
+            model=MODEL,
+            messages=messages,
+            tools=tools,
+            temperature=0.7
+        )
+        
+        return response.choices[0].message.content
 
     def handle_tool_calls(self, tool_calls):
         """Execute tool calls and return results"""
@@ -391,6 +535,19 @@ Question: {message}"""
                 final_response = ""
             else:
                 done = True
+        
+        # Step 6: Evaluate response quality (if Gemini is configured)
+        if final_response and gemini:
+            print("🔍 Evaluating response quality...")
+            evaluation = self.evaluate(final_response, message, history)
+            
+            if evaluation.is_acceptable:
+                print("✅ Response passed evaluation")
+            else:
+                print("❌ Response failed evaluation - regenerating...")
+                print(f"📝 Feedback: {evaluation.feedback}")
+                final_response = self.rerun(final_response, message, history, evaluation.feedback)
+                print("✅ New response generated")
         
         # Return final response (this ensures history is preserved)
         if final_response:
