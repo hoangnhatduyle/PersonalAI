@@ -1,0 +1,505 @@
+📅 Updated Timeline (Oct 2025 – May 2026)
+October 2025
+Courses
+- Finish Ed Donner: LLM Engineering (current course, 50% done) → ~5 hrs/week, complete by end of month.
+- Begin Machine Learning Specialization (Andrew Ng, Coursera) → ~5–6 hrs/week.
+Application Tasks
+- Finalize application tracking sheet (deadlines, SOP status, recommenders).
+- Request letters of recommendation (professors/employers).
+- Draft base SOP (general narrative).
+Deliverables
+- Resume updated to emphasize AI/ML.
+- 1 GitHub repo from LLM Engineering course (agent project).
+
+November 2025
+Courses
+- Continue Machine Learning Specialization (finish by end of month).
+- Start Ed Donner: Complete Agentic AI Engineering (2025) → ~3–4 hrs/week, complete 2 projects this month.
+Application Tasks
+- Customize SOPs for top 3 schools (U‑M, MSU, UC).
+- Collect transcripts.
+- Submit early applications if Dec deadlines (U‑M, MSU).
+Deliverables
+- Blog Post #1: “Building AI Agents for Manufacturing Systems”.
+- 2–3 GitHub repos (LLM + Agentic AI projects).
+
+December 2025
+Courses
+- Wrap up Machine Learning Specialization.
+- Continue Agentic AI Engineering (2025) → complete 2 more projects.
+- Begin Deep Learning Specialization (Andrew Ng) → ~5–6 hrs/week.
+Application Tasks
+- Draft SOPs for remaining schools.
+- Ensure recommenders have drafts + resume.
+- Submit applications with Dec 15 deadlines (U‑M, MSU).
+Deliverables
+- Blog Post #2: “Predictive Analytics with ML in Manufacturing”.
+- Application submissions for early deadlines.
+
+January 2026
+Courses
+- Continue Deep Learning Specialization (CNNs, RNNs).
+- Wrap up Agentic AI Engineering (2025) → total 4–5 projects on GitHub.
+Application Tasks
+- Submit applications for Jan deadlines (Kent, Wright, Wayne).
+- Publish GitHub project: CNN‑based predictive maintenance demo.
+Deliverables
+- Blog Post #3: “Applying Deep Learning to Industrial Data”.
+- 1–2 more GitHub repos.
+
+February 2026
+Courses
+- Finish Deep Learning Specialization.
+- Begin TensorFlow Developer Certificate (Laurence Moroney) → ~5 hrs/week.
+Application Tasks
+- Submit remaining applications (UC, Toledo, Miami, Oakland).
+- Join IEEE/ACM; attend at least one virtual event.
+- Contribute to open‑source repo (small PR).
+Deliverables
+- All 9 applications submitted.
+- Blog Post #4: “Deploying AI Models with TensorFlow”.
+
+March 2026
+Courses
+- Continue TensorFlow Developer Certificate.
+Application Tasks
+- Follow up with recommenders to confirm submissions.
+- Track application statuses in sheet.
+- Prepare for possible interviews (funding/assistantship).
+Deliverables
+- GitHub repo: TensorFlow project (e.g., anomaly detection).
+- Blog Post #5: “TensorFlow for Real‑World AI Applications”.
+
+April 2026
+Courses
+- Finish TensorFlow Developer Certificate.
+- Optional: Start Fast.ai Practical Deep Learning (project‑based, ~4 weeks).
+Application Tasks
+- Organize portfolio: GitHub, blog links, certificates.
+- Begin comparing admissions offers (funding, EB‑2 potential, commute).
+Deliverables
+- Blog Post #6: “Lessons from Building AI Projects Before Grad School”.
+- Portfolio PDF/website ready.
+
+May 2026
+Courses
+- Wrap up any remaining Fast.ai projects.
+Application Tasks
+- STEM OPT ends → transition to F‑1 status with I‑20 from chosen university.
+- Finalize enrollment decision.
+- Prepare visa/financial documents.
+Deliverables
+- 5 completed AI credentials:
+- Ed Donner LLM Engineering ✅
+- Ed Donner Agentic AI Engineering (2025) ✅
+- Machine Learning Specialization ✅
+- Deep Learning Specialization ✅
+- TensorFlow Developer Certificate ✅
+- 6 blog posts, 5–6 GitHub projects, IEEE/ACM membership.
+- All grad school applications submitted and decisions rolling in.
+
+🎯 Big Picture Outcomes
+- Applications: 9 schools applied, SOPs tailored, recommendations submitted.
+- AI Credentials: 5 respected courses completed.
+- Portfolio: 5–6 GitHub projects + 6 blog posts (public evidence of contributions).
+- Professional Recognition: IEEE/ACM membership, open‑source contributions.
+- Immigration Strategy: Transition to F‑1 secured, EB‑2 evidence pipeline started.
+
+✨ This updated plan ensures you finish both Ed Donner courses (LLM Engineering + Agentic AI Engineering 2025) while still completing the Andrew Ng + TensorFlow sequence. By May 2026, you’ll have status security through grad school and a public AI portfolio that strengthens your EB‑2 case.
+
+
+
+🗓️ Sample Weekly Schedule (Oct 2025 – May 2026)
+Monday – Friday (Workdays)
+- Evenings (2 hrs each, 3–4 days/week)
+- Coursework focus:
+- Oct–Nov: Finish Ed Donner LLM Engineering + Machine Learning Specialization.
+- Dec–Jan: Agentic AI Engineering (2025) + Deep Learning Specialization.
+- Feb–Apr: TensorFlow Developer Certificate.
+- Pace: 1–2 lessons or 1 project milestone per evening.
+- One evening per week (2 hrs)
+- Application tasks:
+- Oct–Dec: SOP drafting, resume polishing, recommender coordination.
+- Jan–Feb: Application submissions, follow‑ups.
+- Mar–Apr: Portfolio organization, admissions tracking.
+
+Saturday (4–5 hrs)
+- Morning (2 hrs)
+- Project work: Build/extend GitHub repos from course projects (e.g., predictive maintenance model, AI agent demo).
+- Afternoon (2–3 hrs)
+- Blog writing / publishing: Turn projects into public posts (Medium, LinkedIn).
+- Example cadence:
+- Nov: Blog #1 (AI Agents in Manufacturing).
+- Dec: Blog #2 (Predictive Analytics with ML).
+- Jan: Blog #3 (Deep Learning for Industrial Data).
+- Feb: Blog #4 (TensorFlow Deployment).
+- Mar: Blog #5 (Applied AI Projects).
+- Apr: Blog #6 (Lessons Before Grad School).
+
+Sunday (2–3 hrs)
+- Morning (2 hrs)
+- Catch‑up / review: Finish any course modules you fell behind on.
+- Optional (1 hr)
+- Professional engagement: IEEE/ACM event, open‑source contribution, or networking outreach.
+
+📅 Month‑by‑Month Milestones
+October 2025
+- Finish LLM Engineering (Ed Donner).
+- Start Machine Learning Specialization.
+- Draft base SOP + request recommendations.
+November 2025
+- Finish Machine Learning Specialization.
+- Start Agentic AI Engineering (2025).
+- SOPs for U‑M, MSU, UC.
+- Blog #1 published.
+December 2025
+- Wrap up Agentic AI Engineering.
+- Start Deep Learning Specialization.
+- Submit early apps (U‑M, MSU).
+- Blog #2 published.
+January 2026
+- Continue Deep Learning Specialization.
+- Submit Jan‑deadline apps (Kent, Wright, Wayne).
+- Blog #3 published.
+February 2026
+- Finish Deep Learning Specialization.
+- Start TensorFlow Developer Certificate.
+- Submit remaining apps (UC, Toledo, Miami, Oakland).
+- Blog #4 published.
+March 2026
+- Continue TensorFlow Developer Certificate.
+- Blog #5 published.
+- Track application statuses.
+April 2026
+- Finish TensorFlow Developer Certificate.
+- Optional: Start Fast.ai Practical Deep Learning.
+- Blog #6 published.
+- Compare admissions offers.
+May 2026
+- Wrap up Fast.ai (if started).
+- Transition to F‑1 with chosen university.
+- Prepare visa/financial docs.
+
+🎯 By May 2026 You’ll Have:
+- 5 AI credentials (2 Ed Donner, ML Specialization, Deep Learning Specialization, TensorFlow Certificate).
+- 6 blog posts + 5–6 GitHub projects (public EB‑2 evidence).
+- 9 Master’s applications submitted with tailored SOPs.
+- IEEE/ACM membership + open‑source contributions.
+- Admissions decisions in hand and F‑1 status secured.
+
+
+
+📊 Gantt‑Style Roadmap (Oct 2025 → May 2026)
+Legend
+🟩 = Course Work
+🟦 = Application Task
+🟨 = EB‑2/Portfolio Deliverable
+
+October 2025
+Courses:   🟩 Finish Ed Donner LLM Engineering (50% → 100%) [Oct 1–31]
+           🟩 Start Machine Learning Specialization (Andrew Ng) [Oct 10–Nov 30]
+
+Apps:      🟦 Build tracking sheet [Oct 1–10]
+           🟦 Request recommendations [Oct 5–15]
+           🟦 Draft base SOP [Oct 10–31]
+
+Portfolio: 🟨 Update resume with AI/ML framing [Oct 15–20]
+           🟨 Push 1 GitHub repo (LLM project) [Oct 25–31]
+		   
+November 2025
+Courses:   🟩 Continue Machine Learning Specialization [Nov 1–30]
+           🟩 Start Ed Donner Agentic AI Engineering (2025) [Nov 5–Dec 31]
+
+Apps:      🟦 SOP drafts for U‑M, MSU, UC [Nov 1–20]
+           🟦 Collect transcripts [Nov 10–20]
+           🟦 Prep early apps (U‑M/MSU) [Nov 20–30]
+
+Portfolio: 🟨 Blog #1: AI Agents in Manufacturing [Nov 15]
+           🟨 GitHub: 2 Agentic AI repos [Nov 30]
+		   
+		   
+December 2025
+Courses:   🟩 Finish Machine Learning Specialization [Dec 1–15]
+           🟩 Continue Agentic AI Engineering (2025) [Dec 1–31]
+           🟩 Start Deep Learning Specialization [Dec 10–Jan 31]
+
+Apps:      🟦 SOP drafts for Kent, Wright, Wayne, Toledo, Miami, Oakland [Dec 1–20]
+           🟦 Submit early apps (U‑M/MSU) [Dec 15]
+
+Portfolio: 🟨 Blog #2: Predictive Analytics with ML [Dec 20]
+
+
+
+January 2026
+Courses:   🟩 Continue Deep Learning Specialization (CNNs, RNNs) [Jan 1–31]
+           🟩 Wrap up Agentic AI Engineering (2025) [Jan 1–15]
+
+Apps:      🟦 Submit Jan‑deadline apps (Kent, Wright, Wayne) [Jan 10–20]
+           🟦 GitHub: CNN predictive maintenance project [Jan 25]
+
+Portfolio: 🟨 Blog #3: Deep Learning for Industrial Data [Jan 30]
+
+
+
+February 2026
+Courses:   🟩 Finish Deep Learning Specialization [Feb 1–15]
+           🟩 Start TensorFlow Developer Certificate [Feb 10–Apr 10]
+
+Apps:      🟦 Submit remaining apps (UC, Toledo, Miami, Oakland) [Feb 1–15]
+           🟦 Join IEEE/ACM + attend event [Feb 15–28]
+           🟦 Contribute to open‑source repo [Feb 20–28]
+
+Portfolio: 🟨 Blog #4: Deploying AI Models with TensorFlow [Feb 28]
+
+
+
+March 2026
+Courses:   🟩 Continue TensorFlow Developer Certificate [Mar 1–31]
+
+Apps:      🟦 Confirm recommenders submitted letters [Mar 1–10]
+           🟦 Track application statuses [Mar 1–31]
+           🟦 Prep for funding/assistantship interviews [Mar 15–31]
+
+Portfolio: 🟨 GitHub: TensorFlow anomaly detection project [Mar 20]
+           🟨 Blog #5: TensorFlow for Real‑World AI [Mar 30]
+
+
+
+April 2026
+Courses:   🟩 Finish TensorFlow Developer Certificate [Apr 1–10]
+           🟩 Optional: Start Fast.ai Practical Deep Learning [Apr 15–May 15]
+
+Apps:      🟦 Organize portfolio (GitHub, blogs, certificates) [Apr 1–15]
+           🟦 Compare admissions offers [Apr 20–30]
+
+Portfolio: 🟨 Blog #6: Lessons Before Grad School [Apr 25]
+           🟨 Portfolio PDF/website ready [Apr 30]
+
+
+
+May 2026
+Courses:   🟩 Wrap up Fast.ai (if started) [May 1–15]
+
+Apps:      🟦 Transition to F‑1 with chosen university [May 1–31]
+           🟦 Prepare visa/financial docs [May 1–31]
+
+Portfolio: 🟨 Finalize EB‑2 evidence binder (resume, projects, blogs, memberships) [May 15–31]
+
+🎯 Final Outcomes by May 2026
+- Applications: 9 submitted, decisions rolling in, F‑1 status secured.
+- Courses Completed:
+- Ed Donner LLM Engineering ✅
+- Ed Donner Agentic AI Engineering (2025) ✅
+- Machine Learning Specialization ✅
+- Deep Learning Specialization ✅
+- TensorFlow Developer Certificate ✅
+- (Optional) Fast.ai Practical Deep Learning ✅
+- Portfolio: 6 blog posts, 5–6 GitHub projects, IEEE/ACM membership, open‑source contributions.
+- EB‑2 Prep: Public evidence of contributions, advanced AI credentials, research‑ready profile for Master’s.
+
+✨ This roadmap shows exactly how your coursework, applications, and EB‑2 prep interlock month by month.
+Would you like me to also create a condensed one‑page “Application & EB‑2 Roadmap” summary (like a checklist) that you can print and keep at your desk for quick reference?
+
+
+🎯 Application & EB‑2 Roadmap (Oct 2025 → May 2026)
+📚 Courses & Credentials
+- ✅ Oct 2025: Finish Ed Donner – LLM Engineering (50% → 100%)
+- ✅ Nov–Dec 2025: Machine Learning Specialization (Andrew Ng)
+- ✅ Nov 2025–Jan 2026: Ed Donner – Agentic AI Engineering (2025)
+- ✅ Dec 2025–Feb 2026: Deep Learning Specialization (Andrew Ng)
+- ✅ Feb–Apr 2026: TensorFlow Developer Certificate (Laurence Moroney)
+- ⬜ Apr–May 2026 (optional): Fast.ai Practical Deep Learning
+
+🏫 Master’s Applications
+- Oct 2025: Build tracking sheet; request recommendations; draft base SOP
+- Nov–Dec 2025: SOPs for U‑M, MSU, UC; submit early apps (Dec 15 deadlines)
+- Jan 2026: Submit Kent, Wright, Wayne
+- Feb 2026: Submit UC, Toledo, Miami, Oakland
+- Mar–Apr 2026: Track statuses, confirm rec letters, prep for funding interviews
+- May 2026: Finalize enrollment; transition to F‑1 visa
+
+🛠 EB‑2 Evidence Building
+- GitHub Projects:
+- Oct: 1 repo (LLM agent project)
+- Nov–Jan: 3–4 repos (Agentic AI + ML/DL projects)
+- Feb–Apr: 2 repos (TensorFlow + applied AI)
+- Blog Posts:
+- Nov: Blog #1 – AI Agents in Manufacturing
+- Dec: Blog #2 – Predictive Analytics with ML
+- Jan: Blog #3 – Deep Learning for Industrial Data
+- Feb: Blog #4 – Deploying AI Models with TensorFlow
+- Mar: Blog #5 – TensorFlow for Real‑World AI
+- Apr: Blog #6 – Lessons Before Grad School
+- Professional Recognition:
+- Feb: Join IEEE/ACM, attend event
+- Feb–Mar: Contribute to open‑source repo
+- Apr: Organize portfolio (resume, GitHub, blogs, certificates)
+
+📅 Key Milestones by Month
+- Oct 2025: Finish LLM Eng course; draft base SOP; recommender requests
+- Nov 2025: Finish ML Specialization; start Agentic AI Eng; Blog #1
+- Dec 2025: Submit U‑M/MSU; Blog #2
+- Jan 2026: Submit Kent/Wright/Wayne; Blog #3
+- Feb 2026: Submit UC/Toledo/Miami/Oakland; Blog #4; IEEE/ACM join
+- Mar 2026: Blog #5; GitHub TensorFlow project; track apps
+- Apr 2026: Blog #6; portfolio ready; compare offers
+- May 2026: Transition to F‑1; finalize enrollment; EB‑2 evidence binder
+
+✅ By May 2026 You Will Have
+- 5 AI credentials (2 Ed Donner, ML, DL, TensorFlow)
+- 6 blog posts + 6 GitHub projects (public EB‑2 evidence)
+- 9 Master’s applications submitted with tailored SOPs
+- IEEE/ACM membership + open‑source contributions
+- Admissions decisions + F‑1 visa secured
+
+
+
+📘 Graduate Application & EB‑2 Strategy Roadmap
+Prepared for Hoang – October 2025
+
+🎯 Goals
+- Secure admission to a Master’s program (Fall 2026) to maintain status after STEM OPT ends (May 2026).
+- Build a strong EB‑2 petition profile through research, publications, projects, and recognition.
+- Balance budget, commute, and prestige while maximizing EB‑2 potential.
+
+🏫 Shortlisted Universities
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+|  |  |  |  |  |  |  | 
+
+
+
+📚 AI/ML Courses Plan (Oct 2025 → May 2026)
+- Ed Donner – LLM Engineering (Udemy) → Finish Oct 2025 (50% done).
+- Machine Learning Specialization (Andrew Ng, Coursera) → Oct–Nov 2025.
+- Ed Donner – Complete Agentic AI Engineering (2025, Udemy) → Nov–Jan 2026.
+- Deep Learning Specialization (Andrew Ng, Coursera) → Dec 2025–Feb 2026.
+- TensorFlow Developer Certificate (Laurence Moroney, Coursera) → Feb–Apr 2026.
+- Fast.ai Practical Deep Learning (Optional) → Apr–May 2026.
+
+📝 Application Timeline
+- Oct 2025: Build tracking sheet, request recommendations, draft base SOP.
+- Nov–Dec 2025: SOPs for U‑M, MSU, UC; submit early apps (Dec 15 deadlines).
+- Jan 2026: Submit Kent, Wright, Wayne.
+- Feb 2026: Submit UC, Toledo, Miami, Oakland.
+- Mar–Apr 2026: Track statuses, confirm rec letters, prep for funding interviews.
+- May 2026: Finalize enrollment, transition to F‑1 visa.
+
+🛠 EB‑2 Evidence Building
+- GitHub Projects:
+- Oct: 1 repo (LLM agent project).
+- Nov–Jan: 3–4 repos (Agentic AI + ML/DL projects).
+- Feb–Apr: 2 repos (TensorFlow + applied AI).
+- Blog Posts:
+- Nov: AI Agents in Manufacturing.
+- Dec: Predictive Analytics with ML.
+- Jan: Deep Learning for Industrial Data.
+- Feb: Deploying AI Models with TensorFlow.
+- Mar: TensorFlow for Real‑World AI.
+- Apr: Lessons Before Grad School.
+- Professional Recognition:
+- Feb: Join IEEE/ACM, attend event.
+- Feb–Mar: Contribute to open‑source repo.
+- Apr: Organize portfolio (resume, GitHub, blogs, certificates).
+
+📅 Month‑by‑Month Milestones
+- Oct 2025: Finish LLM Eng course; draft base SOP; recommender requests.
+- Nov 2025: Finish ML Specialization; start Agentic AI Eng; Blog #1.
+- Dec 2025: Submit U‑M/MSU; Blog #2.
+- Jan 2026: Submit Kent/Wright/Wayne; Blog #3.
+- Feb 2026: Submit UC/Toledo/Miami/Oakland; Blog #4; IEEE/ACM join.
+- Mar 2026: Blog #5; GitHub TensorFlow project; track apps.
+- Apr 2026: Blog #6; portfolio ready; compare offers.
+- May 2026: Transition to F‑1; finalize enrollment; EB‑2 evidence binder.
+
+✅ By May 2026 You Will Have
+- 5 AI credentials (2 Ed Donner, ML, DL, TensorFlow).
+- 6 blog posts + 6 GitHub projects (public EB‑2 evidence).
+- 9 Master’s applications submitted with tailored SOPs.
+- IEEE/ACM membership + open‑source contributions.
+- Admissions decisions + F‑1 visa secured.
+
+
+
+OCT 2025
+ ├─ Finish Ed Donner LLM Engineering (50% → 100%)
+ ├─ Start Machine Learning Specialization
+ ├─ Draft base SOP + request recommendations
+ └─ GitHub repo #1 (LLM project)
+
+NOV 2025
+ ├─ Finish Machine Learning Specialization
+ ├─ Start Agentic AI Engineering (2025)
+ ├─ SOPs for U‑M, MSU, UC
+ └─ Blog #1: AI Agents in Manufacturing
+
+DEC 2025
+ ├─ Wrap up Agentic AI Engineering
+ ├─ Start Deep Learning Specialization
+ ├─ Submit early apps (U‑M, MSU)
+ └─ Blog #2: Predictive Analytics with ML
+
+JAN 2026
+ ├─ Continue Deep Learning Specialization
+ ├─ Submit Kent, Wright, Wayne
+ ├─ GitHub project: CNN predictive maintenance
+ └─ Blog #3: Deep Learning for Industrial Data
+
+FEB 2026
+ ├─ Finish Deep Learning Specialization
+ ├─ Start TensorFlow Developer Certificate
+ ├─ Submit UC, Toledo, Miami, Oakland
+ ├─ Join IEEE/ACM + attend event
+ └─ Blog #4: Deploying AI Models with TensorFlow
+
+MAR 2026
+ ├─ Continue TensorFlow Developer Certificate
+ ├─ Confirm recommendation letters submitted
+ ├─ Track application statuses
+ ├─ GitHub project: TensorFlow anomaly detection
+ └─ Blog #5: TensorFlow for Real‑World AI
+
+APR 2026
+ ├─ Finish TensorFlow Developer Certificate
+ ├─ Optional: Start Fast.ai Practical Deep Learning
+ ├─ Organize portfolio (resume, GitHub, blogs, certs)
+ ├─ Compare admissions offers
+ └─ Blog #6: Lessons Before Grad School
+
+MAY 2026
+ ├─ Wrap up Fast.ai (if started)
+ ├─ Transition to F‑1 visa with chosen university
+ ├─ Prepare visa/financial docs
+ └─ EB‑2 evidence binder finalized
+ 
+ 
+ 🎯 Deliverables by May 2026
+- 5 AI Credentials:
+- Ed Donner LLM Engineering
+- Ed Donner Agentic AI Engineering (2025)
+- Machine Learning Specialization
+- Deep Learning Specialization
+- TensorFlow Developer Certificate
+- (Optional) Fast.ai Practical Deep Learning
+- Portfolio:
+- 6 blog posts
+- 5–6 GitHub projects
+- Resume reframed for AI/ML
+- Portfolio PDF/website
+- Applications:
+- 9 schools applied
+- SOPs tailored
+- Recommendations submitted
+- Admissions decisions rolling in
+- EB‑2 Prep:
+- IEEE/ACM membership
+- Open‑source contributions
+- Public evidence of contributions (blogs, repos, talks)
+- EB‑2 evidence binder ready
