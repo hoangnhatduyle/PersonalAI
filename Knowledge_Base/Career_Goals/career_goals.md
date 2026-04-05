@@ -7,7 +7,7 @@
 
 **Priority 3: University of Toledo**
 **Tags:** career-goals, long-term, EB-2, professional-development, AI-systems, graduate-school
-**Last Updated:** 2025-10-08
+**Last Updated:** 2026-04-05
 
 ## Executive Summary
 Short-term focus (1-2 years): Complete LLM/ML/DL training, build production RAG projects (DigitalTwin, myHome improvements), secure MS admission (Fall 2026), and advance to Software Engineer II or LLM Engineer roles. Long-term vision (5-10 years): Become a Senior AI Systems Engineer/Architect specializing in production-grade RAG and agentic systems for manufacturing and enterprise applications, with publications and mentorship contributions.
@@ -29,7 +29,29 @@ DeepLearning.AI TensorFlow Developer Professional Certificate - Laurence Moroney
 **myHome Project:**
 Improve current myHome project (see Projects Knowledge Base) by bug fixing and adding features based on user feedback.
 
-### Graduate Programs Targeted (Fall 2026)
+### Graduate Applications Status (as of April 2026)
+
+> **H1B FY2027 Update:** Not selected in the H1B FY2027 lottery. The plan is to return to school for Fall 2026 (August start) to maintain F-1 student status.
+
+**University of Toledo — MS in Computer Science and Engineering**
+- **Status:** Applied, awaiting decision
+- Link: https://www.utoledo.edu/programs/grad/computer-science-engineering/
+
+**University of Cincinnati — MS in Computer Science**
+- **Status:** Applied, awaiting one more recommendation letter + final decision
+- Link: https://webapps2.uc.edu/ecurriculum/degreeprograms/program/detail/20MAS-CS20-MS
+
+**Miami University — MS in Computer Science**
+- **Status:** On the target list; application status TBD
+
+**Kent State University — MS in Computer Science / MS in AI**
+- **Status:** On the target list; application status TBD
+
+**Focus:** Ohio-based programs for proximity and lower cost; UToledo and UCincinnati are the primary targets.
+
+---
+
+### Graduate Programs Reference List (Fall 2026)
 
 **Priority 1: University of Cincinnati**
 University: University of Cincinnati
@@ -188,7 +210,7 @@ From the graduate programs above
 # Career goals (short- and long-term)
 
 **Tags:** career-goals, long-term, EB-2, professional-development, AI-systems
-**Last Updated:** 2025-10-08
+**Last Updated:** 2026-04-05
 
 ## Short-Term Goals (1–2 years)
 
@@ -201,9 +223,10 @@ From the graduate programs above
 - DigitalTwin: build a production-ready RAG vectorized knowledge base about yourself (resume/portfolio focus).
 - myHome: continue feature work, bug fixes, and user-driven improvements; publish project writeups and reproducible notebooks.
 
-### Graduate applications (target: Fall 2026)
-- Shortlist: University of Cincinnati (CS, CE), University of Toledo (MS CSE), Miami University (MS CS), Wayne State (MS AI / CS / CE), Kent State (MS AI / CS).
-- Application plan: SOP drafts, recommender outreach, tailored applications, and timeline in `Month-by-month milestones` below.
+### Graduate applications (Fall 2026 — Updated April 2026)
+- **Applied:** University of Toledo MS CSE (awaiting decision); University of Cincinnati MS CS (awaiting final rec letter + decision)
+- **Target list:** UToledo, UCincinnati, Miami University, Kent State (all Ohio)
+- **Context:** H1B FY2027 not selected; returning to school in August 2026 is the primary visa transition plan.
 
 ### Near-term roles
 - Target titles: Software Engineer II; LLM Engineer; Software Engineer (AI specialization).
@@ -230,8 +253,9 @@ From the graduate programs above
 
 ## Graduate Application & EB‑2 Roadmap (summary)
 
-- Goals: secure MS admission (Fall 2026), build EB‑2 evidence, balance budget & commute while maximizing research/career impact.
-- Shortlisted universities: UC, Toledo, Miami, Wayne State, Kent State (see above for links).
+- Goals: secure MS admission (Fall 2026), build EB-2 evidence, balance budget & commute while maximizing research/career impact.
+- **Applied:** UToledo (awaiting), UCincinnati (awaiting final rec letter); target list: UToledo, UCincinnati, Miami, Kent State.
+- **H1B FY2027:** Not selected. Graduate school (F-1 student visa) is the visa transition path for August 2026.
 
 ### Month-by-month milestones (Oct 2025 → May 2026)
 - Oct 2025: Finish LLM Engineering course; draft base SOP; request recommendation letters.

@@ -1,2 +1,9 @@
-My name is Hoang Nhat Duy Le. I'm a software engineer and data scientist, working for First Solar. I'm originally from Ho Chi Minh City, Vietnam, but I moved to Toledo, Ohio, USA in 2018.
-I love all foods, particularly Vietnamese and Asian food. I am enthusiastic about AI Applications and how AI is gradually shaping out how the world operates.
+My name is Hoang Nhat Duy Le. I'm an MES Software Engineer I at First Solar, where I build manufacturing execution systems and AI-powered tools for solar panel production. I'm originally from Ho Chi Minh City, Vietnam, and moved to Toledo, Ohio in 2018 for university.
+
+I hold a B.S. in Computer Science from the University of Toledo (3.89 GPA, magna cum laude, 2023) and have completed courses in LLM Engineering and Agentic AI. I'm passionate about applying large language models and agentic AI systems to real-world manufacturing and enterprise problems.
+
+My recent personal projects include a Personal AI Assistant (RAG-powered portfolio chatbot using LangChain + ChromaDB + OpenAI) and a Multi-Agent AI Trading Platform (5 autonomous AI traders, auditor agent, genetic algorithm strategy optimizer, Next.js dashboard).
+
+I'm currently applying to Master's programs (University of Toledo MS CSE, University of Cincinnati MS CS) for Fall 2026 enrollment, as my F-1 OPT STEM expires May 14, 2026 and I was not selected in the H1B FY2027 lottery.
+
+I love Vietnamese and Asian food, enjoy chess competitively, and am enthusiastic about how AI is reshaping the world.

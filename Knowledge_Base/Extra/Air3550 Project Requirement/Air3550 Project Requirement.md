@@ -118,7 +118,9 @@ From requirements: 1, 5, 6, 10, 14, 19.
 1. Origin and Destination are the same ⇒ Customer chooses a different origin/destination
 1. Flight Date is later (or equal to) the Return Date ⇒ Throw an exception
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.001.png)
+![Use Case 1: Book Ticket UML Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.001.png)
+
+**[IMAGE DESCRIPTION — Use Case 1: Book Ticket Activity/Use Case Diagram]:** This diagram illustrates the Book Ticket use case with two actors: **Customer** and **Program**. The Customer actor's actions include: choose the origin city, choose the destination city, choose flight date and return date (for round trips). The diagram shows two exception/error paths: (1) an error is raised if the origin and destination cities are the same, and (2) an error is raised if the flight start date is the same as or after the return date. The Program actor's responsibilities include: seeding a hardcoded list of cities and airports for selection, proposing available flights from origin to destination, computing ticket points (10 points per dollar spent), and tracking the payment method. The output of this use case is a **New Ticket** record stored in the database. The diagram shows a directional flow from the Customer's choices through the Program's processing logic to the final ticket creation output.
 
 
 
@@ -155,7 +157,9 @@ From Requirement 4, 8
 
 1\. Marketing manager should only be able to choose a plane for incomplete flights (when the current date has not passed the flight date)
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.002.png)
+![Use Case 2: Marketing Manager Chooses Planes UML Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.002.png)
+
+**[IMAGE DESCRIPTION — Use Case 2: Marketing Manager Chooses Planes Activity Diagram]:** This use case diagram has two actors: **Marketing Manager** and **Program**. The Marketing Manager's actions are: (1) review the existing list of available flights, and (2) choose a plane model for each flight based on the travel distance of that flight. The Program's responsibility is to seed a hardcoded list of plane models (pre-defined aircraft types) for the marketing manager to choose from. There is one exception path: the marketing manager should only be able to select a plane for **incomplete flights** — flights where the current date has not yet passed the flight date (i.e., future flights only). The output of this use case is **Flights with chosen plane** — each flight record is updated with the selected aircraft model. The diagram uses standard swimlane/use case notation with directional arrows between actors and system actions.
 
 **Use Case 3 - Customer Cancels Flight**
 
@@ -181,7 +185,9 @@ From Requirement 11, 13
 1. When customers cancel their complete ticket, it should not be allowed
 1. If refunding the flight would give them negative points, it should not be allowed (this is possible if they purchase a flight with points after purchasing a flight with cash)
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.003.png)
+![Use Case 3: Customer Cancels Flight Activity Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.003.png)
+
+**[IMAGE DESCRIPTION — Use Case 3: Customer Cancels Flight Activity Diagram]:** This use case diagram has two actors: **Customer** and **Program**. The Customer's actions are: (1) select an existing ticket to cancel, and (2) encounter an error if attempting to cancel a flight that is already complete (completed flights cannot be cancelled). The Program's processing steps are: (1) identify the payment method used to purchase the ticket — either cash/credit card or loyalty points, and (2) issue the appropriate refund: if paid by cash/credit card, refund via credit to the customer's account balance; if paid by points, refund the points back to the customer's loyalty point balance. The output flows back to the Customer actor as a confirmation of the cancellation and refund. There is one key exception path: if a refund in points would result in the customer having negative points (which can happen if they earned points from a cash purchase and then used those points on another purchase), the cancellation is not allowed.
 
 **Use Case 4 - Manage Schedule of Flights**
 
@@ -207,7 +213,9 @@ From Requirement 9
 
 5\. Program: Saves the change and displays the new start time when queried.
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.004.png)
+![Use Case 4: Manage Schedule of Flights Activity Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.004.png)
+
+**[IMAGE DESCRIPTION — Use Case 4: Manage Schedule of Flights Activity Diagram]:** This diagram has two actors: **Load Engineer** and **Program**. The Load Engineer can perform three operations on the flight schedule: **Edit Flight**, **Add Flight**, or **Delete Flight**. The flow shows a decision branch: for Edit and Delete, the system first checks **"Does the flight exist?"** — if the flight does not exist, the operation ends with an error/invalid state. If the flight exists, the operation proceeds (edit the flight details or delete the record). For Add Flight, a new flight record is created directly. The Load Engineer is the only user role that can manage the flight schedule — adding new routes between cities, modifying departure/arrival times, and deleting existing flights. The same flights operate 7 days a week. The diagram ends at a unified **End** terminal after any of the three operations completes.
 
 
 
@@ -269,7 +277,9 @@ The customer decides to create an account with the airline
 **Open issues:**
 
 1. Do we accept all credit cards and do we check the correctness of credit card information?
-1. Does the email address need verification and do we implement 2FA?![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.005.png)
+1. Does the email address need verification and do we implement 2FA?![Use Case 5: Register Customer Account Activity Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.005.png)
+
+**[IMAGE DESCRIPTION — Use Case 5: Register Customer Account Activity Diagram]:** This use case diagram has two actors: **Viewer** (prospective customer) and **Program**. The flow shows the account registration and management process. The customer inputs three types of information: **Security Details** (username, password — stored as SHA-512 hash), **Personal Details** (name, date of birth, city, country, address, phone number, email), and **Financial Details** (credit card number). Additionally, the customer provides their desired **ID** (which will be a randomly generated 6-digit number in the system). The Program then checks: **"Does the account already exist?"** — If Yes: the customer is redirected to **Modify** their existing account information, then End. If No: the Program **Creates a New Account**, stores all the provided information, and then End. Error exceptions shown: entering invalid information throws a validation error, and entering an incorrect ID/password throws an authentication error. This covers the full lifecycle of customer account management: initial creation, login, and personal information updates.
 
 
 
@@ -326,7 +336,9 @@ Via the airlines financial system
 1. Do we encrypt the credit card information?
 1. What if the credit card number is incorrect?
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.006.png)
+![Use Case 6: Process Financial Transaction Activity Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.006.png)
+
+**[IMAGE DESCRIPTION — Use Case 6: Process Financial Transaction Activity Diagram]:** This use case diagram has two actors: **System Administrator** and **Program**. The trigger is: the customer has provided their credit card information and booked a flight. The flow is: (1) Check if the customer provided a credit card and has booked a flight. (2) Check if the **credit card number is valid** — if not valid, the Program returns an **Authentication error** / invalid payment path. (3) If valid: the System Administrator accesses the financial transaction system and the Program **fetches the customer's details, flight information, and credit card number** from the database. (4) The Program **processes the payment** and updates the booking status to "Confirmed." (5) The Program **updates the customer's loyalty points** (10 points per dollar spent). (6) End. The diagram shows the payment processing as a secure, multi-step validation flow that connects the customer's reservation to the financial system and loyalty point tracking. Exception: if credit card number is incorrect or validation fails, an authentication/payment error is thrown.
 
 **Use Case 7 - Print Flight Manifests for Flight Manager**
 
@@ -372,7 +384,9 @@ The flight manager selects the flight for which they want to print the manifest 
 1. What do we do if there are no passengers on the flight?
 1. What to do if the flight does not exist?
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.007.png)
+![Use Case 7: Print Flight Manifests Activity Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.007.png)
+
+**[IMAGE DESCRIPTION — Use Case 7: Print Flight Manifests for Flight Manager Activity Diagram]:** This use case diagram has two actors: **Flight Manager** and **Program**. The Flight Manager's actions are: (1) select a specific flight to view its passenger manifest, (2) encounter an authentication error if not logged in as a Flight Manager role. The Program's steps are: (1) fetch all passenger information booked on the selected flight from the database. (2) Check if the flight exists — if the flight does **not exist**, return an **Invalid** error/path. (3) If the flight exists, display the **list of all passengers on the flight** (the Manifest) either as a GUI grid (visual table in the web interface) or as a downloadable CSV text file. End. This use case is essential for pre-flight operations — the flight manager needs this manifest before the plane takes off to verify passenger lists. The diagram shows authentication as a prerequisite gate before any flight selection or data fetching occurs.
 
 **Use Case 8 - Print Flight Records for Accountants**
 
@@ -407,7 +421,9 @@ From Requirement 21
 
 1. Should this produce a CSV only, a GUI only, or both?
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.008.png)
+![Use Case 8: Print Flight Records for Accountants Activity Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.008.png)
+
+**[IMAGE DESCRIPTION — Use Case 8: Print Flight Records for Accountants Activity Diagram]:** This use case diagram has two actors: **Accounting Manager** and **Program**. The trigger is: the accounting manager wants to view flight statistics and financial data. The Accounting Manager's actions are: (1) log in as an Accounting Manager role, (2) view accounting statistics. There is an exception path: if the user is not an Accounting Manager, access is denied. The Program's steps are: (1) fetch from the database **all flights and payment information** for every booked flight, (2) generate a list of flights with their associated statistics. The output is a **"List of flights and statistic data"** that shows: how many flights the airline has had, how full each flight was (percentage of capacity occupied), income per flight, and total company income across all flights. This data can be viewed as a GUI table or exported as a report. This use case serves the business intelligence and accounting needs of the airline management — tracking revenue, capacity utilization, and overall financial performance.
 
 **Use Case 9 -** Customer prints their boarding pass
 
@@ -454,7 +470,9 @@ From Requirement 16
 
 1. N/A
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.009.png)
+![Use Case 9: Customer Prints Boarding Pass Activity Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.009.png)
+
+**[IMAGE DESCRIPTION — Use Case 9: Customer Prints Boarding Pass Activity Diagram]:** This use case diagram has two actors: **Customer** and **Program**. The trigger is: the customer wants to print their boarding pass 24 hours before the flight. The Customer's actions are: (1) click the "Print" button to initiate boarding pass printing, (2) encounter an authentication error if not logged in. The Program's steps are: (1) fetch the customer's details and flight information from the database. (2) Check if the flight is **cancelled or does not exist** — if so, the operation ends in an **Invalid** error state (no boarding pass can be printed for a cancelled flight). (3) If the flight is valid, the Program **displays the boarding pass** with all essential flight and customer details: Flight Number, Customer's Name, Departure and Arrival Time, and Account Number. (4) The Program **saves the boarding pass as a PDF** through a system print/save dialog prompt. End. This use case is only available starting **24 hours before the flight time**. The boarding pass serves as the customer's proof of booking and check-in document.
 
 1. **Additional Requirements**
 
@@ -504,6 +522,8 @@ Solution: Flights will be stored separately from tickets, including all of this 
 
 
 
-![](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.010.png)
+![Database Architecture Class Diagram](Aspose.Words.4d8084ea-5479-4212-8d70-aaf41168cb3b.010.png)
+
+**[IMAGE DESCRIPTION — Database Architecture Class Diagram (Requirements Document)]:** This class diagram is identical in content to the one in the Design Document and represents the final database schema for the Air3550 airline reservation system. It shows five entity classes: (1) **AppUser-with-Roles** — all user fields (Id, Username, Password, DOB, FullName, City, Country, Address, CreditCardNumber, PointsAvailable, PointsUsed, Credit, Tickets, UserRoles, PhoneNumber, Email) plus role-specific methods: ChooseFlight(), ModifyFlight(), ViewFlights(). (2) **AppUser** (standard customer class) — same fields with customer methods: BookTicket(), CancelTicket(), CheckIn(), PrintBoardingPass(), ViewHistory(), ManageAccount(). (3) **Ticket** — Id, Type (one-way/round-trip), Amount (dollar price), Points (loyalty points earned), Status (checked-in/cancelled/complete), List\<Flights\>. (4) **Payment** — Id, Method (Cash or Points), PayDate, Amount, CreditCardNumber. One-to-one relationship with Ticket. (5) **Flight** — FlightNumber, Origin, Destination, LeaveTime, ArriveTime, Duration, PlaneModel, Capacity, Occupied. The diagram serves as the definitive reference for the database schema required to fulfill all 21 project requirements, including user management, ticketing, payment processing, flight scheduling, and loyalty points tracking.
 
 

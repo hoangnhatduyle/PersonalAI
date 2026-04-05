@@ -91,7 +91,9 @@ Team Members:
 - Sanskar Lamsal
 1. **System Architecture**
 
-   Overall Entity Relationship Diagram showing the relationship between entities![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.001.png)
+   Overall Entity Relationship Diagram showing the relationship between entities![Entity Relationship Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.001.png)
+
+**[IMAGE DESCRIPTION — Entity Relationship Diagram (ERD)]:** This diagram shows the complete data model for the Air3550 airline reservation system. The central entity is **AppUser**, which has the following fields: Id (primary key), Username, Password, DateOfBirth (DOB), FullName, City, Country, Address, CreditCardNumber, PointsAvailable, PointsUsed, Credit, Tickets (list), UserRoles, PhoneNumber, and Email. AppUser has a **one-to-many relationship with Tickets** — each user can have multiple tickets, but each ticket belongs to one user. The **Ticket** entity connects to **Payment** in a **one-to-one relationship** (each ticket has exactly one payment), and connects to **Flight** in a **one-to-many relationship** (a ticket can include multiple flights for connection/round-trip routes, but each flight segment is tied to one ticket). There is also a separate **City** entity with fields: Id, State, Name, Airport, Latitude, and Longitude — used to store the 10 supported airports and compute distances between them. The ERD visually shows the cardinality and foreign key relationships among all five main entities: AppUser, Ticket, Payment, Flight, and City.
 
 
 
@@ -120,7 +122,9 @@ Team Members:
 
 - Login Activity
 
-  ![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.002.png)
+  ![Login Activity UML Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.002.png)
+
+  **[IMAGE DESCRIPTION — Login Activity UML Diagram]:** This UML Activity Diagram shows the login workflow for the Air3550 airline system. The flow begins with the user entering their username and password. It then reaches a **decision diamond** that checks whether the credentials are valid or invalid. **Valid path:** If credentials are valid, the user is authenticated and the diagram shows three available actions they can take: (1) **Book Ticket** — navigate to the ticket booking flow, (2) **Manage Ticket** — which branches into three sub-actions: Check In, Cancel Ticket, and Print Boarding Pass, and (3) **View Ticket History** — see past bookings. **Invalid path:** If credentials are invalid, the system prompts the user to re-enter their username and password, creating a retry loop back to the credential input step. The diagram uses standard UML notation with a filled circle start node, diamond decision gates, rectangular activity bars, and a filled circle with outer ring as the end node.
 
 
 
@@ -136,7 +140,9 @@ Team Members:
 
 
 
-- Book new ticket activity![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.003.png)
+- Book new ticket activity![Book New Ticket Activity UML Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.003.png)
+
+  **[IMAGE DESCRIPTION — Book New Ticket Activity UML Diagram]:** This UML Activity Diagram shows the complete step-by-step flow for booking a new ticket in the Air3550 system. The flow is: **Start → Authenticate user** (decision: if authentication fails → return BadRequest HTTP error; if passed → continue) **→ Select Origin City → Select Destination City → Select Ticket Type** (one-way or round-trip) **→ Select Departure Date** (and Return Date if round-trip) **→ Select Payment Method** (cash or loyalty points) **→ Validate User Input** (decision: if validation fails → return BadRequest error; if passed → continue) **→ Select offered trip/ticket** (system proposes available flights for the chosen route and dates) **→ Save new ticket to database → Exit (return HTTP 200 OK)**. Each decision node shows two branches: a failure branch that returns an appropriate HTTP error code, and a success branch that continues the booking flow. The diagram uses standard UML notation with swim lanes implicitly separating user actions from system actions.
 
 
 
@@ -160,7 +166,9 @@ Team Members:
 
 
 
-- View ticket history activity![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.004.png)
+- View ticket history activity![View Ticket History Activity UML Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.004.png)
+
+  **[IMAGE DESCRIPTION — View Ticket History Activity UML Diagram]:** This UML Activity Diagram shows the workflow for viewing a user's ticket history. The flow is: **Start → Authenticate user** (decision: if authentication fails → return BadRequest/unauthorized error; if passed → continue) **→ Get Tickets For User → Query Tickets** (the system queries all Ticket records associated with the authenticated user, joining with their associated Flights and Payment records) **→ Return all tickets (along with Flights and Payment data) → Exit (return HTTP 200 OK)**. The diagram shows that the ticket history query performs a JOIN across three related entities — Ticket, Flight, and Payment — so the returned data includes the complete ticket record with all associated flight segments and payment information. The failure branch on authentication exits early with an error response. This is a relatively simple, read-only flow with no user input beyond authentication.
 
 
 
@@ -182,7 +190,9 @@ Team Members:
 
 - Manage Ticket Activity
 
-  ![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.005.png)
+  ![Manage Ticket Activity UML Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.005.png)
+
+  **[IMAGE DESCRIPTION — Manage Ticket Activity UML Diagram]:** This UML Activity Diagram shows two parallel ticket management workflows triggered after authentication. The flow starts with **Start → Authenticate** (failure → error). After successful authentication, the diagram splits into two parallel paths: **Path 1 — Check In Ticket:** Fetch the ticket → Validate check-in time (the check-in window must be within the allowed time window before departure) → Set ticket status to "Checked-in" → Add loyalty points to the user's balance → Return HTTP 200 OK. **Path 2 — Cancel Ticket:** Fetch the ticket → Validate cancel time (cannot cancel a completed flight) → Set ticket status to "Cancelled" → If ticket was paid by cash/credit: Refund credit to user's account balance → Return HTTP 200 OK. Both paths perform a database fetch of the ticket first, then apply their respective business rules before updating the ticket status record. The diagram uses parallel activity bars to show that these are two distinct operations available under the "Manage Ticket" feature, not concurrent operations.
 
 
 
@@ -280,7 +290,9 @@ Team Members:
 
 
 
-  ![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.006.png)
+  ![User Entity Class Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.006.png)
+
+  **[IMAGE DESCRIPTION — User Entity Class Diagram]:** This class diagram shows the software architecture for the User entity in the Air3550 backend. The diagram shows three main components: (1) **UserRepository** — implements the **AppRepository** interface, which defines generic CRUD operations (GetAll, GetById, Add, Update, Delete). The UserRepository provides these implementations for the AppUser entity specifically. (2) **UserController** — the ASP.NET MVC controller that handles incoming HTTP requests related to user operations. It calls UserRepository methods to access/modify user data. (3) **AppUser class** — the entity class with all properties: Id, Username, Password, DateOfBirth, FullName, City, Country, Address, CreditCardNumber, PointsAvailable, PointsUsed, Credit, Tickets (ICollection), UserRoles (ICollection), PhoneNumber, Email. The **Entity Framework DataContext** sits between the repository and the actual database, managing the object-relational mapping. A **1-to-1 relationship** indicator is shown in the diagram. The overall flow is: Controller → Repository → DataContext → Database.
 
 
 
@@ -320,7 +332,9 @@ Team Members:
 
    - Longitude: longitude of the current city. Used to compute the distance between cities
 
-- Note: since it only needs one method, it is not necessary to create a repository for this entity.![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.007.png)
+- Note: since it only needs one method, it is not necessary to create a repository for this entity.![City Entity Class Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.007.png)
+
+  **[IMAGE DESCRIPTION — City Entity Class Diagram]:** This class diagram shows the architecture for the City entity in the Air3550 backend. Unlike the User entity, the City entity does **not require a Repository** because it only needs a single query method (GetCities). The diagram shows: (1) **CitiesController** — the ASP.NET MVC controller that handles incoming HTTP requests for city/airport data. It has a dependency on **IUnitOfWork** (interface). The controller exposes a **GetCities** method that returns all available cities/airports. (2) **Entity Framework DataContext** — connects to the underlying database to fetch City records. (3) **City Entity class** — with fields: int Id, string State, string Name, string Airport, double Latitude, double Longitude. The Latitude and Longitude fields are used to compute straight-line distances between airports (using the Haversine or Euclidean distance formula) to determine flight prices. The diagram shows the direct controller → DataContext → Database flow without an intermediate repository layer, since the city data is essentially read-only seed data.
 
 
 
@@ -400,7 +414,9 @@ Team Members:
 
 
 
-1. **Final Backend Architecture:![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.008.png)**
+1. **Final Backend Architecture:![Full Backend Architecture Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.008.png)**
+
+   **[IMAGE DESCRIPTION — Full Backend Architecture Diagram]:** This comprehensive architecture diagram shows the complete backend structure for the Air3550 airline reservation system built with ASP.NET Core. The diagram shows all entities, repositories, controllers, and their interconnections. **Entities:** AppUser (with UserRoles), Ticket, Payment, Flight, and City — each representing a table in the SQLite/SQL database. **Repositories:** UserRepository implements AppRepository (generic interface with CRUD methods: GetAll, GetById, Add, Update, Delete). The AppRepository pattern enforces a consistent data access layer. **Controllers:** UserController (manages user CRUD and authentication), CitiesController (provides city/airport data via GetCities). **Unit of Work:** The IUnitOfWork interface groups multiple repository operations into a single transaction — ensures that related database changes either all succeed or all fail together, maintaining data integrity. **DataContext:** Entity Framework's DataContext manages the object-relational mapping between C# entity objects and the underlying database tables. **Data Transfer Objects (DTOs):** Used to pass data between controllers and the frontend without exposing the full entity model. The overall architecture follows a layered pattern: HTTP Request → Controller → Unit of Work → Repository → DataContext → Database, with DTOs used at the controller boundary.
 
 
 
@@ -446,7 +462,9 @@ Team Members:
 
 1. **Final Backend Structure:**
 
-![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.009.png)
+![Angular Frontend Architecture Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.009.png)
+
+**[IMAGE DESCRIPTION — Angular Frontend Architecture Diagram]:** This diagram shows the frontend architecture for the Air3550 web application using Angular. The diagram illustrates the Angular component model and data flow pattern. The architecture has three main layers: (1) **Template Layer** — HTML and CSS files that define what is rendered on the page. Templates connect to Components via **property binding** (data flows from Component to Template, e.g., displaying values) and **event binding** (user actions in the Template trigger Component methods, e.g., button clicks). (2) **Component Layer** — TypeScript classes that define the behavior of each UI element. Components do not directly fetch or save data; they delegate data access to Services. Components interact with Templates bidirectionally through Angular's binding system. (3) **Services Layer (Injections)** — Angular Services are injected into Components via dependency injection. Services are responsible for fetching data from and updating data to the backend API. Services make HTTP requests (GET, POST, PUT, DELETE) to the **API Interface (Controllers)** on the backend. The diagram shows that the flow of data is: User interacts with Template → Template triggers Component event → Component calls Service method → Service makes HTTP request to Backend API → API returns data → Service passes data back to Component → Component updates Template via property binding.
 
 
 
@@ -489,7 +507,9 @@ Team Members:
 1. **Database Architecture**
 
 
-   ![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.010.png)
+   ![Database Class Diagram](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.010.png)
+
+   **[IMAGE DESCRIPTION — Database Class Diagram]:** This class diagram shows the complete database schema and entity relationships for the Air3550 airline reservation system. The diagram shows five entity classes with their full properties and methods: (1) **AppUser-with-Roles** — fields: Id, Username, Password, DOB, FullName, City, Country, Address, CreditCardNumber, PointsAvailable, PointsUsed, Credit, Tickets, UserRoles, PhoneNumber, Email. Methods: ChooseFlight(), ModifyFlight(), ViewFlights(). (2) **AppUser** (base class) — same fields with methods: BookTicket(), CancelTicket(), CheckIn(), PrintBoardingPass(), ViewHistory(), ManageAccount(). (3) **Ticket** — fields: Id, Type (one-way/round-trip), Amount (price), Points (loyalty points earned), Status (checked-in/cancelled/complete), List\<Flights\>. Relationships: many-to-one with AppUser (many tickets per user), one-to-many with Flights, one-to-one with Payment. (4) **Payment** — fields: Id, Method (Cash/Points), PayDate, Amount, CreditCardNumber. Relationship: one-to-one with Ticket. (5) **Flight** — fields: FlightNumber, Origin (airport), Destination (airport), LeaveTime, ArriveTime, Duration (travel hours), PlaneModel, Capacity (total seats), Occupied (booked seats). Relationship: many-to-one with Ticket (each flight belongs to one ticket, but a ticket can have multiple flights). The diagram shows the cardinality arrows between all entities, illustrating the complete relational data model.
 
 
 
@@ -515,7 +535,9 @@ We have decided to serve 10 airports. Each airport is the largest airport of tha
 - San Francisco International Airport	
 - Seattle-Tacoma International Airport
 
-![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.011.png)
+![US Airport Map with Flight Routes](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.011.png)
+
+**[IMAGE DESCRIPTION — US Airport Map with Flight Routes]:** This is a map of the continental United States showing the 10 airports served by the Air3550 airline system and the hardcoded flight paths between them. The 10 airports are: **Cleveland Hopkins International Airport** (Cleveland, OH), **Dallas Fort Worth International Airport** (Dallas, TX), **Detroit Metro Wayne County Airport** (Detroit, MI), **Harry Reid International Airport** (Las Vegas, NV), **LaGuardia Airport** (New York City, NY), **Miami International Airport** (Miami, FL), **Nashville International Airport** (Nashville, TN), **Phoenix Sky Harbor International Airport** (Phoenix, AZ), **San Francisco International Airport** (San Francisco, CA), and **Seattle-Tacoma International Airport** (Seattle, WA). The airports are shown as labeled points on the US map. **Colored lines** connect the airports to show the available direct flight routes between them — each line represents a bidirectional connection (the same path can be used in both directions, e.g., Cleveland to Detroit and Detroit to Cleveland). Not all airports are directly connected; some routes require connection flights through intermediate airports. The geographic distribution covers the Northeast (LaGuardia, Cleveland), Southeast (Nashville, Miami), Midwest (Detroit), South (Dallas), Southwest (Phoenix, Las Vegas), and West Coast (San Francisco, Seattle).
 
 
 
@@ -543,5 +565,7 @@ For this project, we will only hardcode paths from one airport to one airport. T
 
   => For example: we can go from Detroit to Harry Reid and we can go from Harry Reid to Detroit using the same path
 
-![](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.012.png)
+![Flight Path Matrix Table](Aspose.Words.1665e3cb-0081-46c1-be06-a9f270e0986d.012.png)
+
+**[IMAGE DESCRIPTION — 10×10 Flight Path Matrix Table]:** This is a 10×10 routing matrix showing the available flight paths between all 10 airports in the Air3550 system. Both the rows and columns represent the 10 airports: Cleveland, Dallas, Detroit, Harry Reid (Las Vegas), LaGuardia (NYC), Miami, Nashville, Phoenix, San Francisco, and Seattle. Each cell in the matrix describes how to travel from the row airport to the column airport. **"Straight"** in a cell means there is a direct non-stop flight between those two airports. For routes without a direct flight, the cell lists the **connection airport(s)** required for the journey (e.g., "Cleveland-Detroit, Harry Reid-Phoenix" means you fly Cleveland→Detroit first, then connect to a Detroit→Phoenix leg). The diagonal cells are blank (you can't fly from an airport to itself). All paths are bidirectional — the table is used symmetrically. This matrix was hardcoded in the application to simulate a realistic (but not fully-connected) airline route network. The routing logic uses this table to propose trips to customers, selecting the shortest available path from origin to destination. Example routes from the matrix: Cleveland to Detroit = Straight (direct flight); Cleveland to Seattle = requires connections through intermediate airports.
 

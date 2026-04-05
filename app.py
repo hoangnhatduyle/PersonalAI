@@ -6,6 +6,7 @@ Combines vector database retrieval with OpenAI function calling
 import os
 import glob
 import json
+import inspect
 import requests
 import warnings
 from dotenv import load_dotenv
@@ -28,8 +29,8 @@ from openai import OpenAI
 
 
 # Configuration
-MODEL = "gpt-4o-mini"
-EVALUATOR_MODEL = "gemini-2.0-flash-exp"
+MODEL = "gpt-5-mini"
+EVALUATOR_MODEL = "gemini-2.0-flash"
 DB_NAME = "vector_db"
 KNOWLEDGE_BASE_PATH = "Knowledge_Base"
 PDF_PATH = "me/linkedin.pdf"
@@ -256,9 +257,7 @@ With this context, please evaluate the latest response, replying with whether th
         # Format history for evaluation
         history_text = ""
         if history:
-            for msg in history:
-                role = msg.get("role", "")
-                content = msg.get("content", "")
+            for role, content in self._iter_history_messages(history):
                 if role == "user":
                     history_text += f"User: {content}\n"
                 elif role == "assistant":
@@ -338,8 +337,7 @@ Question: {message}"""
         response = self.openai.chat.completions.create(
             model=MODEL,
             messages=messages,
-            tools=tools,
-            temperature=0.7
+            tools=tools
         )
         
         return response.choices[0].message.content
@@ -382,6 +380,25 @@ Note: Detailed information is provided in the retrieved context below.
 """
         return prompt
 
+    def _iter_history_messages(self, history):
+        """Yield normalized (role, content) pairs from Gradio history across versions."""
+        for item in history or []:
+            # Newer Gradio message format: {"role": "user|assistant", "content": "..."}
+            if isinstance(item, dict):
+                role = item.get("role")
+                content = item.get("content")
+                if role and content is not None:
+                    yield role, content
+                continue
+
+            # Legacy Gradio tuple format: (user_message, assistant_message)
+            if isinstance(item, (list, tuple)) and len(item) == 2:
+                user_msg, assistant_msg = item
+                if user_msg:
+                    yield "user", user_msg
+                if assistant_msg:
+                    yield "assistant", assistant_msg
+
     def chat(self, message, history):
         """
         Main chat function with streaming that:
@@ -418,9 +435,7 @@ Note: Detailed information is provided in the retrieved context below.
         history_text = ""
         if history:
             recent_history = history[-6:]  # Last 3 exchanges (6 messages)
-            for msg in recent_history:
-                role = msg.get("role", "")
-                content = msg.get("content", "")
+            for role, content in self._iter_history_messages(recent_history):
                 if role == "user":
                     history_text += f"User: {content}\n"
                 elif role == "assistant":
@@ -454,7 +469,6 @@ Question: {message}"""
                 model=MODEL,
                 messages=messages,
                 tools=tools,
-                temperature=0.7,
                 stream=True
             )
             
@@ -574,12 +588,23 @@ if __name__ == "__main__":
     """
     
     # Launch Gradio interface
-    interface = gr.ChatInterface(
-        personal_ai.chat,
-        type="messages",
-        title=f"Personal AI - {personal_ai.name}",
-        description="Ask me anything about my background, experience, skills, and projects!",
-        js=force_dark_mode
-    )
+    chat_interface_kwargs = {
+        "title": f"Personal AI - {personal_ai.name}",
+        "description": "Ask me anything about my background, experience, skills, and projects!",
+        "js": force_dark_mode,
+    }
+
+    chat_interface_params = inspect.signature(gr.ChatInterface.__init__).parameters
+
+    if "type" in chat_interface_params:
+        chat_interface_kwargs["type"] = "messages"
+    else:
+        print("ℹ Legacy Gradio detected: ChatInterface(type='messages') not supported")
+
+    if "js" not in chat_interface_params:
+        chat_interface_kwargs.pop("js", None)
+        print("ℹ Legacy Gradio detected: ChatInterface(js=...) not supported")
+
+    interface = gr.ChatInterface(personal_ai.chat, **chat_interface_kwargs)
     
     interface.launch(inbrowser=True, share=True)

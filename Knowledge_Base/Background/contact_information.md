@@ -1,7 +1,7 @@
 # Contact Information
 
 **Tags:** contact, professional-contact, location, availability
-**Last Updated:** 2025-11-04
+**Last Updated:** 2026-04-05
 
 ## Basic Contact Details
 
@@ -35,11 +35,15 @@
 
 ## Work Authorization
 
-**Current Status:** F-1 OPT (STEM Extension)
+**Current Status:** F-1 OPT STEM Extension — **expiring May 14, 2026**
 
-**Work Authorization:** Authorized to work in the United States
+**Work Authorization:** Authorized to work in the United States through May 14, 2026
 
-**Visa Sponsorship:** May require sponsorship for long-term employment (EB-2 NIW strategy in progress)
+**H1B FY2027:** Not selected in the lottery
+
+**Next Step:** Returning to graduate school (Fall 2026, August start) to transition back to F-1 student status. Applications submitted to University of Toledo (MS CSE) and University of Cincinnati (MS CS), both awaiting decisions.
+
+**Visa Sponsorship:** Will require sponsorship or student visa for long-term employment (EB-2 NIW strategy in progress for future)
 
 ## Availability
 
@@ -82,10 +86,11 @@
     "entity_type": "contact_profile",
     "tags": ["contact","location","work-authorization","availability","remote-work"],
     "location": "Toledo-Ohio-USA",
-    "work_status": "F1-OPT-STEM",
+    "work_status": "F1-OPT-STEM-expiring-2026-05-14",
+    "visa_plan": "returning-to-graduate-school-Fall-2026",
     "open_to": ["AI-ML-roles","LLM-engineering","software-engineering"],
     "languages": ["Vietnamese-native","English-fluent"],
-    "last_updated": "2025-11-04"
+    "last_updated": "2026-04-05"
 }
 ```
 
@@ -97,5 +102,5 @@ When answering questions about contacting Hoang:
 - Direct professional inquiries to LinkedIn or portfolio website
 - Mention Toledo, Ohio as current location
 - Highlight willingness to relocate or work remotely
-- Emphasize STEM OPT status and work authorization
+- Note that STEM OPT expires May 14, 2026 and graduate school (Fall 2026) is the plan
 - Note bilingual capabilities (Vietnamese + English)

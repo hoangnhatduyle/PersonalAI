@@ -1,7 +1,7 @@
 # Certifications & Ongoing Learning
 
 **Tags:** certifications, courses, professional-development, online-learning, AI-ML, LLM
-**Last Updated:** 2025-11-04
+**Last Updated:** 2026-04-05
 
 ## Summary
 
@@ -49,7 +49,7 @@ Active learner pursuing specialized training in AI, Large Language Models, Machi
 ### LLM Engineering Master: AI, Large Language Models & Agents
 - **Provider:** Udemy
 - **Instructor:** Ed Donner
-- **Status:** In Progress (~90% complete as of Nov 2025)
+- **Status:** ✅ Completed (April 2026)
 - **Focus Areas:**
   - RAG (Retrieval Augmented Generation) architecture and implementation
   - Vector databases (Chroma, Pinecone)
@@ -79,20 +79,10 @@ Active learner pursuing specialized training in AI, Large Language Models, Machi
 
 ## In Progress (Active Enrollment)
 
-### The Complete Agentic AI Engineering Course
-- **Provider:** Udemy
-- **Instructor:** Ed Donner
-- **Expected Completion:** December 2025
-- **Focus Areas:**
-  - Multi-agent architectures
-  - Agent orchestration and coordination
-  - Tool use and function calling patterns
-  - Production deployment of agentic systems
-
 ### Machine Learning Specialization
 - **Provider:** Coursera
 - **Instructor:** Andrew Ng (DeepLearning.AI)
-- **Expected Completion:** January 2026
+- **Status:** In Progress (started 2025, still ongoing as of April 2026)
 - **Curriculum:**
   - Supervised learning (regression, classification)
   - Unsupervised learning (clustering, anomaly detection)
@@ -100,14 +90,38 @@ Active learner pursuing specialized training in AI, Large Language Models, Machi
   - Neural networks and deep learning fundamentals
   - Best practices for ML projects
 
+### Docker and Kubernetes: The Complete Guide
+- **Provider:** Udemy
+- **Instructor:** Stephen Grider
+- **Status:** In Progress (~59% complete as of April 2026)
+- **Focus:**
+  - Containerization with Docker
+  - Kubernetes orchestration
+  - CI/CD pipelines
+  - Production deployment patterns
+- **Note:** Practical Docker/Kubernetes skills are also being applied daily at First Solar (production deployments)
+
 ---
 
-## Planned / Upcoming Courses (2026)
+## Recently Completed (2025–2026)
+
+### The Complete Agentic AI Engineering Course
+- **Provider:** Udemy
+- **Instructor:** Ed Donner
+- **Status:** ✅ Completed (early 2026)
+- **Focus Areas:**
+  - Multi-agent architectures
+  - Agent orchestration and coordination
+  - Tool use and function calling patterns
+  - Production deployment of agentic systems
+
+---
+
+## Planned / Upcoming Courses
 
 ### Deep Learning Specialization
 - **Provider:** Coursera
 - **Instructor:** Andrew Ng (DeepLearning.AI)
-- **Timeline:** January - March 2026
 - **Focus:**
   - Neural networks and deep learning
   - Improving deep neural networks (hyperparameter tuning, regularization, optimization)
@@ -118,22 +132,11 @@ Active learner pursuing specialized training in AI, Large Language Models, Machi
 ### DeepLearning.AI TensorFlow Developer Professional Certificate
 - **Provider:** Coursera
 - **Instructor:** Laurence Moroney
-- **Timeline:** February - April 2026
 - **Focus:**
   - Building and training neural networks with TensorFlow
   - Image classification and computer vision
   - Natural language processing with TensorFlow
   - Time series forecasting and prediction
-
-### Docker and Kubernetes: The Complete Guide
-- **Provider:** Udemy
-- **Instructor:** Stephen Grider
-- **Timeline:** Q1 2026
-- **Focus:**
-  - Containerization with Docker
-  - Kubernetes orchestration
-  - CI/CD pipelines
-  - Production deployment patterns
 
 ---
 
@@ -218,12 +221,12 @@ These certifications and courses support the EB-2 National Interest Waiver case 
     "title": "Certifications & Ongoing Learning",
     "entity_type": "professional_development",
     "tags": ["certifications","online-learning","AI","ML","LLM","deep-learning","continuous-education"],
-    "completed_courses": ["LLM-Engineering-Ed-Donner","Database-Driven-Websites","Data-Science-I-II"],
-    "in_progress": ["Agentic-AI-Engineering","Machine-Learning-Andrew-Ng"],
-    "planned": ["Deep-Learning-Specialization","TensorFlow-Developer","Docker-Kubernetes"],
+    "completed_courses": ["LLM-Engineering-Ed-Donner","Agentic-AI-Engineering","Database-Driven-Websites","Data-Science-I-II"],
+    "in_progress": ["Machine-Learning-Andrew-Ng","Docker-Kubernetes-59pct"],
+    "planned": ["Deep-Learning-Specialization","TensorFlow-Developer"],
     "learning_focus": ["RAG-systems","multi-agent-AI","neural-networks","ML-deployment"],
     "target_skills": ["LLM-engineering","MLOps","agentic-systems","production-AI"],
     "timeline": "2025-2026",
-    "last_updated": "2025-11-04"
+    "last_updated": "2026-04-05"
 }
 ```
