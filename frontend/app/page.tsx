@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import confetti from "canvas-confetti";
-import { streamChatEvents, type Message } from "@/lib/api";
+import { streamChatEvents, pingBackend, type Message } from "@/lib/api";
 import ChatWindow from "@/components/ChatWindow";
 import InputBar from "@/components/InputBar";
 import StarterQuestions from "@/components/StarterQuestions";
@@ -53,8 +53,29 @@ export default function Home() {
   const [suggestions,     setSuggestions]     = useState<string[]>([]);
   const [newMessageIndex, setNewMessageIndex] = useState<number | null>(null);
   const [sheetOpen,       setSheetOpen]       = useState(false);
+  const [waking,          setWaking]          = useState(false);
 
   const abortRef = useRef<AbortController | null>(null);
+
+  // Wake up HuggingFace Space on load — show banner if cold start takes >1.5s
+  useEffect(() => {
+    let bannerTimer: ReturnType<typeof setTimeout>;
+    let cancelled = false;
+
+    const wake = async () => {
+      bannerTimer = setTimeout(() => {
+        if (!cancelled) setWaking(true);
+      }, 1500);
+
+      await pingBackend();
+
+      clearTimeout(bannerTimer);
+      if (!cancelled) setWaking(false);
+    };
+
+    wake();
+    return () => { cancelled = true; clearTimeout(bannerTimer); };
+  }, []);
 
   const topicColor      = TOPIC_COLORS[topic]      ?? TOPIC_COLORS.general;
   const [blobA, blobB]  = TOPIC_BLOB_COLORS[topic] ?? TOPIC_BLOB_COLORS.general;
@@ -200,6 +221,14 @@ export default function Home() {
             </div>
           </div>
         </header>
+
+        {/* Wake-up banner */}
+        {waking && (
+          <div className="flex items-center justify-center gap-2 px-4 py-2 bg-amber-500/10 border-b border-amber-500/20 text-amber-400 text-xs flex-shrink-0">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
+            Waking up the AI — this takes ~30 seconds after inactivity…
+          </div>
+        )}
 
         {/* Chat + sidebar row */}
         <div className="flex flex-1 overflow-hidden">

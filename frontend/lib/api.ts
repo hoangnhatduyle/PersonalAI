@@ -12,6 +12,16 @@ export type StreamEvent =
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:7860";
 
+/** Ping the backend health endpoint. Resolves true if alive, false otherwise. */
+export async function pingBackend(): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_URL}/api/health`, { cache: "no-store" });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Stream typed events from the Personal AI backend via SSE.
  * Yields strongly-typed StreamEvent objects.
