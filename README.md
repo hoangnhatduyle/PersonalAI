@@ -1,3 +1,14 @@
+---
+title: Personal_AI
+emoji: 🤖
+colorFrom: indigo
+colorTo: purple
+sdk: gradio
+sdk_version: "5.49.1"
+app_file: app.py
+pinned: false
+---
+
 # Personal AI — Hoang Nhat Duy Le
 
 A full-stack personal AI assistant that answers questions about me using RAG (Retrieval-Augmented Generation) over my career history, projects, skills, and GitHub repositories.
