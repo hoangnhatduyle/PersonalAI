@@ -1,0 +1,78 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+:root {
+  --background: #09090b;  /* zinc-950 */
+  --foreground: #f4f4f5;  /* zinc-100 */
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+/* Smooth scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #3f3f46; /* zinc-700 */
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b; /* zinc-600 */
+}
+
+/* New message highlight flash */
+@keyframes highlight-flash {
+  0%   { background-color: transparent; box-shadow: none; }
+  25%  { background-color: rgba(99, 102, 241, 0.12); box-shadow: 0 0 0 1px rgba(99,102,241,0.2); }
+  100% { background-color: transparent; box-shadow: none; }
+}
+
+.message-highlight {
+  animation: highlight-flash 1.8s ease-out;
+  border-radius: 1rem;
+}
+
+/* Thinking status fade in */
+@keyframes fade-slide-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.thinking-animate {
+  animation: fade-slide-in 0.2s ease-out;
+}
+
+/* Animated background gradient blobs */
+@keyframes blob-drift-a {
+  0%, 100% { transform: translate(0%, 0%)   scale(1);    }
+  25%       { transform: translate(-4%, 6%)  scale(1.06); }
+  50%       { transform: translate(3%, -4%)  scale(0.96); }
+  75%       { transform: translate(-2%, 3%)  scale(1.03); }
+}
+
+@keyframes blob-drift-b {
+  0%, 100% { transform: translate(0%, 0%)   scale(1);    }
+  25%       { transform: translate(5%, -3%)  scale(0.97); }
+  50%       { transform: translate(-3%, 5%)  scale(1.04); }
+  75%       { transform: translate(2%, -2%)  scale(0.99); }
+}
+
+.blob-a {
+  animation: blob-drift-a 18s ease-in-out infinite;
+}
+.blob-b {
+  animation: blob-drift-b 22s ease-in-out infinite;
+}

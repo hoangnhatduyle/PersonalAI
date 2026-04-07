@@ -1,3 +1,9 @@
 .env
 *.md
 Knowledge_Base/Extra/Bone Conduction Railing Project/*.png
+
+# GitHub docs cache (rebuilt at startup from GitHub API)
+github_cache/
+
+# Vector DB (rebuilt at startup)
+vector_db/
