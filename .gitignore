@@ -1,4 +1,5 @@
 .env
+.venv/
 *.md
 Knowledge_Base/Extra/Bone Conduction Railing Project/*.png
 
