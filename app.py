@@ -43,8 +43,8 @@ from fastapi.responses import StreamingResponse
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
-MODEL = "gpt-4o-mini"
-EVALUATOR_MODEL = "gemini-2.0-flash"
+MODEL = "gpt-5-mini"
+EVALUATOR_MODEL = "gemini-2.5-flash"
 DB_NAME = "vector_db"
 KNOWLEDGE_BASE_PATH = "Knowledge_Base"
 GITHUB_CACHE_PATH = "github_cache"
@@ -537,18 +537,11 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
         # Create embeddings with upgraded model
         embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
 
-        # Rebuild vector store from scratch
-        if os.path.exists(DB_NAME):
-            Chroma(
-                persist_directory=DB_NAME,
-                embedding_function=embeddings
-            ).delete_collection()
-            print(f"  ✓ Cleared existing vector store")
-
+        # Build in-memory vector store (no disk persistence — compatible with
+        # read-only filesystems such as Vercel serverless functions)
         vectorstore = Chroma.from_documents(
             documents=self.chunks,
             embedding=embeddings,
-            persist_directory=DB_NAME
         )
 
         self.retriever = vectorstore.as_retriever(
@@ -965,12 +958,15 @@ personal_ai = PersonalAI()
 # ─────────────────────────────────────────────
 api_app = FastAPI(title="Personal AI API", version="2.0")
 
+_raw_frontend_urls = os.getenv("FRONTEND_URL", "")
+_explicit_origins = ["http://localhost:3000"] + [
+    u.strip() for u in _raw_frontend_urls.split(",") if u.strip()
+]
+
 api_app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",                    # local dev
-        os.getenv("FRONTEND_URL", ""),              # set this in HF Secrets once you have the Vercel URL
-    ],
+    allow_origins=_explicit_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )

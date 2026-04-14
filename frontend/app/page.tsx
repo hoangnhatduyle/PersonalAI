@@ -148,9 +148,9 @@ export default function Home() {
 
   const exportChat = useCallback(() => {
     if (messages.length === 0) return;
-    const header = `# Conversation with Hoang's Personal AI\n_Exported ${new Date().toLocaleDateString()}_\n\n---\n\n`;
+    const header = `# Conversation with Hoang\n_Exported ${new Date().toLocaleDateString()}_\n\n---\n\n`;
     const body   = messages
-      .map(m => `**${m.role === "user" ? "You" : "Hoang's AI"}:** ${m.content}`)
+      .map(m => `**${m.role === "user" ? "You" : "Hoang"}:** ${m.content}`)
       .join("\n\n");
     const blob = new Blob([header + body], { type: "text/markdown" });
     const url  = URL.createObjectURL(blob);
@@ -199,7 +199,7 @@ export default function Home() {
           </div>
           <div>
             <h1 className="text-sm font-semibold text-white">Hoang Nhat Duy Le</h1>
-            <p className="text-xs text-zinc-400">Personal AI Assistant · MES Software Engineer @ First Solar</p>
+            <p className="text-xs text-zinc-400">MES Software Engineer @ First Solar</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
             {messages.length > 0 && (
@@ -240,9 +240,9 @@ export default function Home() {
                   <div className={`w-16 h-16 rounded-full bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center mb-4`}>
                     <span className="text-2xl font-bold text-indigo-400">H</span>
                   </div>
-                  <h2 className="text-xl font-semibold text-white mb-1">Ask me about Hoang</h2>
+                  <h2 className="text-xl font-semibold text-white mb-1">Hi, I&apos;m Hoang Le</h2>
                   <p className="text-sm text-zinc-400 text-center max-w-sm mb-6">
-                    I have access to his full career history, projects, skills, and GitHub repositories.
+                    Ask me anything about my experience, projects, skills, and GitHub repositories.
                   </p>
                   <StarterQuestions onSelect={sendMessage} />
                 </div>

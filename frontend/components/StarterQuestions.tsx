@@ -1,10 +1,10 @@
 const STARTERS = [
-  "What is Hoang currently working on?",
+  "What are you currently working on?",
   "Tell me about the Trading Platform project",
-  "What's his educational background?",
-  "What tech stack does he use?",
-  "What are his career goals?",
-  "What did his annual review say?",
+  "What's your educational background?",
+  "What tech stack do you use?",
+  "What are your career goals?",
+  "What did your annual review say?",
 ];
 
 interface Props {
