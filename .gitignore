@@ -8,3 +8,5 @@ github_cache/
 
 # Vector DB (rebuilt at startup)
 vector_db/
+
+__pycache__/

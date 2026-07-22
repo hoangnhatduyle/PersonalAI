@@ -1,14 +1,10 @@
-gradio
 openai
 python-dotenv
 pypdf
-pydantic
-langchain
-langchain-community
+langchain-core
 langchain-openai
-langchain-chroma
 langchain-text-splitters
-chromadb
 numpy
+requests
 fastapi
 uvicorn[standard]

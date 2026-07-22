@@ -7,29 +7,24 @@ import os
 import glob
 import json
 import base64
-import inspect
 import asyncio
 import requests
 import warnings
 from datetime import datetime
 from dotenv import load_dotenv
-import gradio as gr
 from pypdf import PdfReader
 import numpy as np
-from pydantic import BaseModel
 
 # Suppress LangChain chunk size warnings
 warnings.filterwarnings('ignore', message='Created a chunk of size.*')
 
 # LangChain imports for RAG
-from langchain_community.document_loaders import DirectoryLoader, TextLoader
 from langchain_core.documents import Document
 from langchain_text_splitters import (
     MarkdownHeaderTextSplitter,
     RecursiveCharacterTextSplitter,
 )
 from langchain_openai import OpenAIEmbeddings
-from langchain_chroma import Chroma
 
 # OpenAI imports for function calling
 from openai import OpenAI
@@ -44,7 +39,6 @@ from fastapi.responses import StreamingResponse
 # Configuration
 # ─────────────────────────────────────────────
 MODEL = "gpt-5-mini"
-EVALUATOR_MODEL = "gemini-2.5-flash"
 DB_NAME = "vector_db"
 KNOWLEDGE_BASE_PATH = "Knowledge_Base"
 GITHUB_CACHE_PATH = "github_cache"
@@ -64,14 +58,6 @@ MAX_CONTEXT_LENGTH = 4000  # slightly larger since re-ranking improves precision
 
 
 # ─────────────────────────────────────────────
-# Pydantic model for evaluation
-# ─────────────────────────────────────────────
-class Evaluation(BaseModel):
-    is_acceptable: bool
-    feedback: str
-
-
-# ─────────────────────────────────────────────
 # Load environment variables
 # ─────────────────────────────────────────────
 load_dotenv(override=True)
@@ -79,22 +65,9 @@ load_dotenv(override=True)
 openai_api_key = os.getenv('OPENAI_API_KEY')
 if not openai_api_key:
     raise ValueError(
-        "OPENAI_API_KEY not found! Please set it as an environment variable or secret in HuggingFace Spaces.\n"
-        "Go to Settings > Repository Secrets and add OPENAI_API_KEY with your API key."
+        "OPENAI_API_KEY not found! Please set it as an environment variable in your deployment platform.\n"
     )
 os.environ['OPENAI_API_KEY'] = openai_api_key
-
-# Gemini evaluator (optional)
-google_api_key = os.getenv('GOOGLE_API_KEY')
-if google_api_key:
-    gemini = OpenAI(
-        api_key=google_api_key,
-        base_url="https://generativelanguage.googleapis.com/v1beta/openai/"
-    )
-    print("✓ Gemini evaluator enabled")
-else:
-    gemini = None
-    print("ℹ Gemini evaluator not configured (optional)")
 
 # Re-ranking is handled by the OpenAI client (no extra dependency needed)
 
@@ -234,6 +207,41 @@ tools = [
     {"type": "function", "function": record_user_details_json},
     {"type": "function", "function": record_unknown_question_json}
 ]
+
+
+# ─────────────────────────────────────────────
+# Lightweight in-memory vector store
+#
+# The knowledge base is a few hundred chunks, rebuilt fresh on every
+# cold start (no persistence). A numpy cosine-similarity scan does the
+# same job as Chroma here without the onnxruntime/kubernetes/grpc
+# dependency chain, which is what pushed the Vercel function past its
+# 500MB bundle limit.
+# ─────────────────────────────────────────────
+class SimpleVectorStore:
+    def __init__(self, chunks: list[Document], embeddings: OpenAIEmbeddings):
+        self._chunks = chunks
+        self._embed_query = embeddings.embed_query
+        vectors = np.array(embeddings.embed_documents(
+            [chunk.page_content for chunk in chunks]
+        ), dtype=np.float32)
+        self._normalized = vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
+
+    def similarity_search(self, query: str, k: int) -> list[Document]:
+        query_vec = np.array(self._embed_query(query), dtype=np.float32)
+        query_vec /= np.linalg.norm(query_vec)
+        scores = self._normalized @ query_vec
+        top_k = np.argsort(-scores)[:k]
+        return [self._chunks[i] for i in top_k]
+
+
+class SimpleRetriever:
+    def __init__(self, store: SimpleVectorStore, k: int):
+        self._store = store
+        self._k = k
+
+    def invoke(self, query: str) -> list[Document]:
+        return self._store.similarity_search(query, self._k)
 
 
 # ─────────────────────────────────────────────
@@ -454,14 +462,20 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
         print(f"✓ GitHub cache: {cached_files} files from {len(repos)} repos")
 
     # ── RAG Initialization ─────────────────────
+    @staticmethod
+    def _load_markdown_dir(folder: str, doc_type: str) -> list:
+        """Load all *.md files under folder as Documents."""
+        docs = []
+        for path in glob.glob(os.path.join(folder, "**", "*.md"), recursive=True):
+            with open(path, "r", encoding="utf-8") as f:
+                docs.append(Document(
+                    page_content=f.read(),
+                    metadata={"source": path, "doc_type": doc_type},
+                ))
+        return docs
+
     def _initialize_rag(self):
         """Initialize RAG: load documents, chunk with heading awareness, embed, store."""
-
-        def add_metadata(doc, doc_type):
-            doc.metadata["doc_type"] = doc_type
-            return doc
-
-        text_loader_kwargs = {'encoding': 'utf-8'}
         self.documents = []
 
         # Load Knowledge_Base folders
@@ -470,25 +484,12 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
             if not os.path.isdir(folder):
                 continue
             doc_type = os.path.basename(folder)
-            loader = DirectoryLoader(
-                folder,
-                glob="**/*.md",
-                loader_cls=TextLoader,
-                loader_kwargs=text_loader_kwargs
-            )
-            folder_docs = loader.load()
-            self.documents.extend([add_metadata(doc, doc_type) for doc in folder_docs])
+            self.documents.extend(self._load_markdown_dir(folder, doc_type))
 
         # Load GitHub cache
         if os.path.exists(GITHUB_CACHE_PATH) and os.listdir(GITHUB_CACHE_PATH):
-            github_loader = DirectoryLoader(
-                GITHUB_CACHE_PATH,
-                glob="**/*.md",
-                loader_cls=TextLoader,
-                loader_kwargs=text_loader_kwargs
-            )
-            github_docs = github_loader.load()
-            self.documents.extend([add_metadata(doc, "GitHub") for doc in github_docs])
+            github_docs = self._load_markdown_dir(GITHUB_CACHE_PATH, "GitHub")
+            self.documents.extend(github_docs)
             print(f"  + Loaded {len(github_docs)} GitHub cached docs")
 
         print(f"  Loaded {len(self.documents)} documents total — chunking...")
@@ -539,17 +540,10 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
 
         # Build in-memory vector store (no disk persistence — compatible with
         # read-only filesystems such as Vercel serverless functions)
-        vectorstore = Chroma.from_documents(
-            documents=self.chunks,
-            embedding=embeddings,
-        )
+        vectorstore = SimpleVectorStore(self.chunks, embeddings)
+        self.retriever = SimpleRetriever(vectorstore, TOP_K_RETRIEVAL)
 
-        self.retriever = vectorstore.as_retriever(
-            search_type="similarity",
-            search_kwargs={"k": TOP_K_RETRIEVAL}
-        )
-
-        print(f"  ✓ Vector store: {vectorstore._collection.count()} chunks indexed")
+        print(f"  ✓ Vector store: {len(self.chunks)} chunks indexed")
 
     # ── Intelligence Helpers ───────────────────
     def _hyde_query(self, message: str) -> str:
@@ -651,87 +645,6 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
         except Exception as e:
             print(f"  ⚠ Suggestions generation failed: {e}")
             return ["What projects have you built?", "What's your current role?", "How can I get in touch?"]
-
-    # ── Evaluation ─────────────────────────────
-    def evaluator_system_prompt(self):
-        return f"""You are an evaluator that decides whether a response to a question is acceptable. \
-You are provided with a conversation between a User and an Agent. Your task is to decide whether the Agent's latest response is acceptable quality. \
-The Agent is playing the role of {self.name}, speaking in first person ("I", "my") on their personal website. \
-The Agent has been instructed to be professional and engaging, as if talking to a potential client or future employer who came across the website. \
-The Agent must speak in first person — any response using third-person references like "{self.name} is..." or "He is..." should be flagged. \
-The Agent has been provided with context on {self.name} in the form of their summary and LinkedIn details. Here's the information:
-
-## Summary:
-{self.summary}
-
-## LinkedIn Profile:
-{self.linkedin}
-
-With this context, please evaluate the latest response, replying with whether the response is acceptable and your feedback."""
-
-    def evaluator_user_prompt(self, reply, message, history):
-        history_text = ""
-        if history:
-            for role, content in self._iter_history_messages(history):
-                if role == "user":
-                    history_text += f"User: {content}\n"
-                elif role == "assistant":
-                    history_text += f"Assistant: {content}\n"
-
-        user_prompt = f"Here's the conversation between the User and the Agent: \n\n{history_text}\n\n"
-        user_prompt += f"Here's the latest message from the User: \n\n{message}\n\n"
-        user_prompt += f"Here's the latest response from the Agent: \n\n{reply}\n\n"
-        user_prompt += "Please evaluate the response, replying with whether it is acceptable and your feedback."
-        return user_prompt
-
-    def evaluate(self, reply, message, history) -> Evaluation:
-        if not gemini:
-            return Evaluation(is_acceptable=True, feedback="Evaluation skipped - Gemini not configured")
-
-        messages = [
-            {"role": "system", "content": self.evaluator_system_prompt()},
-            {"role": "user", "content": self.evaluator_user_prompt(reply, message, history)}
-        ]
-
-        try:
-            response = gemini.beta.chat.completions.parse(
-                model=EVALUATOR_MODEL,
-                messages=messages,
-                response_format=Evaluation
-            )
-            return response.choices[0].message.parsed
-        except Exception as e:
-            print(f"⚠️ Evaluation failed: {e}")
-            return Evaluation(is_acceptable=True, feedback=f"Evaluation error: {str(e)}")
-
-    def rerun(self, reply, message, history, feedback):
-        """Regenerate response incorporating evaluator feedback."""
-        # Use HyDE + re-rank for better context on rerun too
-        search_query = self._hyde_query(message)
-        docs = self.retriever.invoke(search_query)
-        docs = self._rerank(message, docs)
-        context = self._build_context(docs)
-
-        updated_system_prompt = self.system_prompt() + "\n\n## Previous answer rejected\n"
-        updated_system_prompt += "You just tried to reply, but the quality control rejected your reply.\n"
-        updated_system_prompt += f"## Your attempted answer:\n{reply}\n\n"
-        updated_system_prompt += f"## Reason for rejection:\n{feedback}\n\n"
-        updated_system_prompt += "Please try again with a better response that addresses the feedback."
-
-        user_message_with_context = f"Context:\n{context}\n\nQuestion: {message}"
-
-        messages = [
-            {"role": "system", "content": updated_system_prompt},
-            {"role": "user", "content": user_message_with_context}
-        ]
-
-        response = self.openai.chat.completions.create(
-            model=MODEL,
-            messages=messages,
-            tools=tools
-        )
-
-        return response.choices[0].message.content
 
     def handle_tool_calls(self, tool_calls):
         results = []
@@ -919,35 +832,9 @@ Note: Detailed context from the knowledge base is provided with each question.
             print(f"⚠ chat_stream_api error: {e}")
             yield {"type": "error", "message": str(e)}
 
-    def chat(self, message: str, history):
-        """
-        Gradio-compatible streaming chat (wraps chat_stream_api).
-        Yields cumulative text strings. Runs Gemini evaluation after streaming.
-        """
-        final_response = ""
-        for event in self.chat_stream_api(message, history):
-            if event.get("type") == "token":
-                final_response = event["text"]
-                yield event["text"]
-
-        # Gradio only: evaluate and potentially rerun
-        if final_response and gemini:
-            print("🔍 Evaluating response quality...")
-            evaluation = self.evaluate(final_response, message, history)
-            if evaluation.is_acceptable:
-                print("✅ Response passed evaluation")
-            else:
-                print(f"❌ Response rejected — regenerating... Feedback: {evaluation.feedback}")
-                final_response = self.rerun(final_response, message, history, evaluation.feedback)
-                print("✅ New response generated")
-                yield final_response
-
-        return final_response if final_response else "I apologize, but I couldn't generate a response. Please try again."
-
 
 # ─────────────────────────────────────────────
 # Initialize Personal AI at module level
-# (accessible by both Gradio and FastAPI)
 # ─────────────────────────────────────────────
 print("🚀 Launching Personal AI Assistant...")
 personal_ai = PersonalAI()
@@ -996,41 +883,7 @@ async def chat_endpoint(request: Request):
     return StreamingResponse(event_stream(), media_type="text/event-stream")
 
 
-# ─────────────────────────────────────────────
-# Gradio interface (mounted inside FastAPI)
-# ─────────────────────────────────────────────
-force_dark_mode = """
-function refresh() {
-    const url = new URL(window.location);
-    if (url.searchParams.get('__theme') !== 'dark') {
-        url.searchParams.set('__theme', 'dark');
-        window.location.href = url.href;
-    }
-}
-"""
-
-chat_interface_kwargs = {
-    "title": f"Personal AI - {personal_ai.name}",
-    "description": "Ask me anything about my background, experience, skills, and projects!",
-    "js": force_dark_mode,
-}
-
-chat_interface_params = inspect.signature(gr.ChatInterface.__init__).parameters
-
-if "type" in chat_interface_params:
-    chat_interface_kwargs["type"] = "messages"
-else:
-    print("ℹ Legacy Gradio: ChatInterface(type='messages') not supported")
-
-if "js" not in chat_interface_params:
-    chat_interface_kwargs.pop("js", None)
-    print("ℹ Legacy Gradio: ChatInterface(js=...) not supported")
-
-interface = gr.ChatInterface(personal_ai.chat, **chat_interface_kwargs)
-
-# Mount Gradio at "/" inside the FastAPI app
-# The /api/* routes remain accessible alongside the Gradio UI
-app = gr.mount_gradio_app(api_app, interface, path="/")
+app = api_app
 
 
 # ─────────────────────────────────────────────
