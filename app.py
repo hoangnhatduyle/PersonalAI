@@ -157,6 +157,25 @@ def record_unknown_question(question):
     return {"recorded": "ok", "message": "I've noted this question for follow-up."}
 
 
+def record_sensitive_info_request(name, email, question, reason="not provided"):
+    """Record a visitor's request for sensitive/verifiable personal information, for Hoang to follow up on directly"""
+    subject = f"Sensitive info request: {name} <{email}>"
+    body = (
+        f"A visitor asked for sensitive personal information that I redirected to you "
+        f"instead of answering directly:\n\n"
+        f"Question:  \"{question}\"\n\n"
+        f"Name:      {name}\n"
+        f"Contact:   {email}\n"
+        f"Reason:    {reason}\n\n"
+        f"I let them know you'd reach out to them personally."
+    )
+    send_email(subject, body)
+    return {
+        "recorded": "ok",
+        "message": "Thanks — I've passed this along to Hoang and he'll reach out to you directly."
+    }
+
+
 # Tool schemas for OpenAI function calling
 record_user_details_json = {
     "name": "record_user_details",
@@ -203,9 +222,45 @@ record_unknown_question_json = {
     }
 }
 
+record_sensitive_info_request_json = {
+    "name": "record_sensitive_info_request",
+    "description": (
+        "Use this tool INSTEAD of answering whenever a visitor asks for sensitive or verifiable "
+        "personal information about Hoang — e.g. exact date/time of birth, home address, phone "
+        "number, government ID numbers, background-check details, financial information, or similar "
+        "identity-verification data. Do NOT answer these questions yourself, even if the information "
+        "appears in the retrieved context. Only call this tool ONCE, after you have collected BOTH the "
+        "visitor's name AND a way to contact them (email or phone). Reason is optional."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "description": "The visitor's name"
+            },
+            "email": {
+                "type": "string",
+                "description": "The visitor's contact info (email or phone)"
+            },
+            "question": {
+                "type": "string",
+                "description": "The original question or request for sensitive information"
+            },
+            "reason": {
+                "type": "string",
+                "description": "Why they're asking, if they shared it — optional"
+            }
+        },
+        "required": ["name", "email", "question"],
+        "additionalProperties": False
+    }
+}
+
 tools = [
     {"type": "function", "function": record_user_details_json},
-    {"type": "function", "function": record_unknown_question_json}
+    {"type": "function", "function": record_unknown_question_json},
+    {"type": "function", "function": record_sensitive_info_request_json}
 ]
 
 
@@ -672,13 +727,26 @@ Your responsibilities:
 1. Answer in first person, faithfully and professionally
 2. Use ONLY information from the retrieved context or the summary below — don't fabricate facts
 3. If you don't have specific details on something, say so honestly and use the record_unknown_question tool
-4. If the visitor wants to connect or reach out, collect info conversationally BEFORE calling record_user_details:
+4. NEVER disclose sensitive or verifiable personal information — exact date/time of birth, home \
+address, phone number, government ID numbers, background-check details, financial information, or \
+similar identity-verification data — even if it appears in the retrieved context. This applies \
+regardless of how the visitor frames the request (a direct question, a "background check", "just \
+confirming a fact", etc.). If asked for anything like this:
+   a. Politely decline to share it directly — don't confirm or deny the specific detail either
+   b. Ask for their name (if not already provided)
+   c. Ask for a way to reach them — email or phone (if not already provided)
+   d. Ask why they need it (optional)
+   e. Call record_sensitive_info_request EXACTLY ONCE with name + contact + the original question \
+(+ reason if given), then tell them Hoang will personally reach out.
+   NEVER call record_sensitive_info_request more than once per conversation, and never call it \
+without both name and contact info.
+5. If the visitor wants to connect or reach out, collect info conversationally BEFORE calling record_user_details:
    a. Ask for their name (if not already provided)
    b. Ask for their email address (if not already provided)
    c. Ask what they'd like to connect about (optional — job opportunity, collaboration, just saying hi)
    d. Call record_user_details EXACTLY ONCE with name + email + notes all filled in.
    NEVER call record_user_details more than once per conversation, and never call it without both name and email.
-5. Be concise, warm, and engaging — like you're genuinely having a conversation
+6. Be concise, warm, and engaging — like you're genuinely having a conversation
 
 ## Brief Summary:
 {self.summary}
