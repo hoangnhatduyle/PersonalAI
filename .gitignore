@@ -10,3 +10,4 @@ github_cache/
 vector_db/
 
 __pycache__/
+.vercel
