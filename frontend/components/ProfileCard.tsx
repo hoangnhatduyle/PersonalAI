@@ -45,10 +45,10 @@ function GeneralCard() {
       <Section title="Quick Stats">
         <div className="grid grid-cols-2 gap-2">
           {[
-            ["14+ mo", "at First Solar"],
+            ["MS CS", "@ Univ. of Cincinnati"],
             ["8+", "projects built"],
             ["Full-Stack", "+ AI/ML"],
-            ["Toledo, OH", "📍"],
+            ["Cincinnati, OH", "📍"],
           ].map(([val, label]) => (
             <div key={val} className="bg-zinc-800/60 rounded-lg p-2 text-center">
               <p className="text-sm font-semibold text-white">{val}</p>
@@ -85,14 +85,21 @@ function GeneralCard() {
 function WorkCard() {
   return (
     <>
-      <Section title="Current Role">
+      <Section title="Currently">
         <div className="bg-zinc-800/60 rounded-lg p-3">
-          <p className="text-sm font-semibold text-white">First Solar</p>
-          <p className="text-xs text-zinc-400">MES Software Engineer</p>
-          <p className="text-[10px] text-zinc-500 mt-0.5">Mar 2024 – Present · Toledo, OH</p>
+          <p className="text-sm font-semibold text-white">Full-time graduate student</p>
+          <p className="text-xs text-zinc-400">University of Cincinnati · MS Computer Science</p>
+          <p className="text-[10px] text-zinc-500 mt-0.5">Fall 2026 – Present · Cincinnati, OH</p>
         </div>
       </Section>
-      <Section title="Active Projects">
+      <Section title="Most Recent Role">
+        <div className="bg-zinc-800/60 rounded-lg p-3">
+          <p className="text-sm font-semibold text-white">First Solar</p>
+          <p className="text-xs text-zinc-400">MES Software Engineer I</p>
+          <p className="text-[10px] text-zinc-500 mt-0.5">Feb 2025 – May 2026 · Perrysburg, OH (Remote)</p>
+        </div>
+      </Section>
+      <Section title="Key Projects at First Solar">
         <ul className="space-y-1.5 text-xs text-zinc-400">
           {[
             "Floor Incident Dashboard (Next.js + PG)",
@@ -104,7 +111,7 @@ function WorkCard() {
           ))}
         </ul>
       </Section>
-      <Section title="Stack at Work">
+      <Section title="Stack Used at Work">
         <div className="flex flex-wrap gap-1.5">
           {[".NET 10","C#","Next.js","PostgreSQL","Docker","Kubernetes","Airflow","MQTT"].map(s => (
             <Badge key={s} label={s} color="blue" />
@@ -114,7 +121,7 @@ function WorkCard() {
       <Divider />
       <div className="flex items-center gap-2 text-xs text-emerald-400">
         <span className="w-2 h-2 rounded-full bg-emerald-400" />
-        Annual review: Rated <span className="font-semibold ml-0.5">Green ✓</span>
+        First Solar annual review: Rated <span className="font-semibold ml-0.5">Green ✓</span>
       </div>
     </>
   );
@@ -197,11 +204,18 @@ function ProjectsCard() {
 function EducationCard() {
   return (
     <>
-      <Section title="Degree">
+      <Section title="Current Degree">
+        <div className="bg-zinc-800/60 rounded-lg p-3">
+          <p className="text-sm font-semibold text-white">M.S. Computer Science</p>
+          <p className="text-xs text-zinc-400">University of Cincinnati</p>
+          <p className="text-[10px] text-zinc-500 mt-0.5">In progress · Started Fall 2026 · Expected May 2028</p>
+        </div>
+      </Section>
+      <Section title="Prior Degree">
         <div className="bg-zinc-800/60 rounded-lg p-3">
           <p className="text-sm font-semibold text-white">B.S. Computer Science</p>
           <p className="text-xs text-zinc-400">University of Toledo</p>
-          <p className="text-[10px] text-zinc-500 mt-0.5">Class of 2022 · Ohio, USA</p>
+          <p className="text-[10px] text-zinc-500 mt-0.5">Class of 2023 · magna cum laude · 3.89 GPA</p>
         </div>
       </Section>
       <Section title="Certifications">
@@ -219,14 +233,6 @@ function EducationCard() {
             </li>
           ))}
         </ul>
-      </Section>
-      <Section title="Graduate School Applications">
-        <div className="flex flex-wrap gap-1.5">
-          {["UToledo","UCincinnati","Miami Univ","Kent State"].map(s => (
-            <Badge key={s} label={s} color="emerald" />
-          ))}
-        </div>
-        <p className="text-[10px] text-zinc-500 mt-2">MS CS/CSE · Target: Fall 2026</p>
       </Section>
     </>
   );
@@ -260,20 +266,20 @@ function CareerCard() {
       <Section title="Visa Status">
         <div className="bg-zinc-800/60 rounded-lg p-3 space-y-1.5">
           <div className="flex justify-between text-xs">
-            <span className="text-zinc-400">F-1 OPT STEM</span>
-            <span className="text-amber-400 font-medium">ends May 2026</span>
+            <span className="text-zinc-400">F-1 Student</span>
+            <span className="text-emerald-400 font-medium">MS CS @ Univ. of Cincinnati</span>
           </div>
           <div className="flex justify-between text-xs">
             <span className="text-zinc-400">H1B FY2027</span>
-            <span className="text-rose-400">Not selected</span>
+            <span className="text-zinc-500">Not selected → returned to school</span>
           </div>
         </div>
       </Section>
       <Section title="Next Steps">
         <ul className="space-y-1.5 text-xs text-zinc-400">
           {[
-            "Return to school — Fall 2026",
-            "MS CS/CSE applications pending",
+            "MS CS @ University of Cincinnati (expected May 2028)",
+            "Open to internships / research assistantships during the program",
             "Long-term: Senior/Staff Engineer",
             "Focus: AI/ML systems & architecture",
           ].map(g => (
@@ -281,17 +287,11 @@ function CareerCard() {
           ))}
         </ul>
       </Section>
-      <Section title="Applications Under Review">
+      <Section title="Current Program">
         <div className="flex flex-wrap gap-1.5">
-          {["UToledo","UCincinnati"].map(s => (
-            <Badge key={s} label={s} color="rose" />
-          ))}
+          <Badge label="University of Cincinnati" color="emerald" />
         </div>
-        <div className="flex flex-wrap gap-1.5 mt-1.5">
-          {["Miami Univ","Kent State"].map(s => (
-            <Badge key={s} label={s} color="zinc" />
-          ))}
-        </div>
+        <p className="text-[10px] text-zinc-500 mt-2">MS Computer Science · Enrolled Fall 2026 · Expected May 2028</p>
       </Section>
     </>
   );
@@ -334,12 +334,12 @@ function ContactCard() {
 // ── Topic config ────────────────────────────────────────
 
 const TOPICS: Record<string, { icon: string; title: string; subtitle: string; card: React.ReactNode }> = {
-  general:   { icon: "👋", title: "Hoang Nhat Duy Le", subtitle: "MES Software Engineer @ First Solar", card: <GeneralCard /> },
-  work:      { icon: "💼", title: "Work Experience",   subtitle: "First Solar · Mar 2024–Present",      card: <WorkCard /> },
+  general:   { icon: "👋", title: "Hoang Nhat Duy Le", subtitle: "MS Computer Science student @ Univ. of Cincinnati", card: <GeneralCard /> },
+  work:      { icon: "💼", title: "Work Experience",   subtitle: "First Solar · Feb 2025–May 2026 (past role)", card: <WorkCard /> },
   projects:  { icon: "🚀", title: "Projects",          subtitle: "8+ shipped projects",                 card: <ProjectsCard /> },
-  education: { icon: "🎓", title: "Education",         subtitle: "B.S. CS · Univ. of Toledo, 2022",     card: <EducationCard /> },
+  education: { icon: "🎓", title: "Education",         subtitle: "M.S. CS in progress · B.S. CS '23",   card: <EducationCard /> },
   skills:    { icon: "⚙️", title: "Tech Stack",         subtitle: "Full-Stack + AI/ML + Infra",          card: <SkillsCard /> },
-  career:    { icon: "🎯", title: "Career Goals",       subtitle: "F-1 OPT → Grad School Fall 2026",     card: <CareerCard /> },
+  career:    { icon: "🎯", title: "Career Goals",       subtitle: "F-1 Student @ Univ. of Cincinnati",   card: <CareerCard /> },
   contact:   { icon: "📫", title: "Get in Touch",       subtitle: "GitHub · LinkedIn · Email",           card: <ContactCard /> },
 };
 

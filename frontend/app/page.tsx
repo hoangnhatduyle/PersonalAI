@@ -199,7 +199,7 @@ export default function Home() {
           </div>
           <div>
             <h1 className="text-sm font-semibold text-white">Hoang Nhat Duy Le</h1>
-            <p className="text-xs text-zinc-400">MES Software Engineer @ First Solar</p>
+            <p className="text-xs text-zinc-400">MS Computer Science student @ University of Cincinnati</p>
           </div>
           <div className="ml-auto flex items-center gap-3">
             {messages.length > 0 && (
