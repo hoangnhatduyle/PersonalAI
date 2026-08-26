@@ -44,6 +44,7 @@ Knowledge_Base/
 │   ├── achievements.md                     [Scholarships, Dean's List, President's List]
 │   ├── continuing_education.md             [Certifications, online courses, self-study]
 │   ├── degree.md                           [Bachelor's degree details, transcript]
+│   ├── masters_degree.md                   [MS Computer Science, University of Cincinnati - current, in progress]
 │   ├── extracurricular.md                  [Data Science Club, Teaching Assistant, leadership]
 │   └── mentorship.md                       [Influential mentors, Professor Lawrence Thomas]
 │
@@ -178,7 +179,7 @@ Knowledge_Base/
 1. **role_1_PTI.md** - Plastic Technologies Inc (Jan-May 2020) - Co-op
 2. **role_2_Equity_Trust.md** - Equity Trust Company (May-Sep 2021) - Intern
 3. **role_3_Nysus_Solutions.md** - Nysus Solutions (Jan 2022-Feb 2025) - Full-time
-4. **role_4_First_Solar.md** - First Solar (Feb 2025-Present) - Current role
+4. **role_4_First_Solar.md** - First Solar (Feb 2025-May 2026) - Most recent role (concluded; now a full-time MS CS student at University of Cincinnati)
 
 ---
 

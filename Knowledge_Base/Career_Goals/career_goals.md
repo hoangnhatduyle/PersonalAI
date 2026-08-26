@@ -29,25 +29,23 @@ DeepLearning.AI TensorFlow Developer Professional Certificate - Laurence Moroney
 **myHome Project:**
 Improve current myHome project (see Projects Knowledge Base) by bug fixing and adding features based on user feedback.
 
-### Graduate Applications Status (as of April 2026)
+### Graduate Applications Status (Updated August 2026 — RESOLVED)
 
-> **H1B FY2027 Update:** Not selected in the H1B FY2027 lottery. The plan is to return to school for Fall 2026 (August start) to maintain F-1 student status.
+> **H1B FY2027 Update:** Not selected in the H1B FY2027 lottery. Returned to school for Fall 2026 (August start) to maintain F-1 student status — this plan is now complete.
+
+**University of Cincinnati — MS in Computer Science — ✅ ENROLLED (current program)**
+- **Status:** Admitted and enrolled, started Fall 2026. This is Hoang's current graduate program.
+- Link: https://webapps2.uc.edu/ecurriculum/degreeprograms/program/detail/20MAS-CS20-MS
+- See `Knowledge_Base/Education/masters_degree.md` for full details.
 
 **University of Toledo — MS in Computer Science and Engineering**
-- **Status:** Applied, awaiting decision
+- **Status:** Applied; not the program ultimately chosen (Hoang enrolled at UC instead)
 - Link: https://www.utoledo.edu/programs/grad/computer-science-engineering/
 
-**University of Cincinnati — MS in Computer Science**
-- **Status:** Applied, awaiting one more recommendation letter + final decision
-- Link: https://webapps2.uc.edu/ecurriculum/degreeprograms/program/detail/20MAS-CS20-MS
+**Miami University / Kent State University — MS in Computer Science / MS in AI**
+- **Status:** Were on the target list; no longer relevant now that Hoang is enrolled at UC
 
-**Miami University — MS in Computer Science**
-- **Status:** On the target list; application status TBD
-
-**Kent State University — MS in Computer Science / MS in AI**
-- **Status:** On the target list; application status TBD
-
-**Focus:** Ohio-based programs for proximity and lower cost; UToledo and UCincinnati are the primary targets.
+**Outcome:** Left First Solar in May 2026 and relocated from Toledo, Ohio to Cincinnati, Ohio to begin the MS Computer Science program at the University of Cincinnati full-time.
 
 ---
 
@@ -223,10 +221,9 @@ From the graduate programs above
 - DigitalTwin: build a production-ready RAG vectorized knowledge base about yourself (resume/portfolio focus).
 - myHome: continue feature work, bug fixes, and user-driven improvements; publish project writeups and reproducible notebooks.
 
-### Graduate applications (Fall 2026 — Updated April 2026)
-- **Applied:** University of Toledo MS CSE (awaiting decision); University of Cincinnati MS CS (awaiting final rec letter + decision)
-- **Target list:** UToledo, UCincinnati, Miami University, Kent State (all Ohio)
-- **Context:** H1B FY2027 not selected; returning to school in August 2026 is the primary visa transition plan.
+### Graduate applications (Updated August 2026 — RESOLVED)
+- **Enrolled:** University of Cincinnati, MS in Computer Science — started Fall 2026. This is Hoang's current program; see `Knowledge_Base/Education/masters_degree.md`.
+- **Context:** H1B FY2027 was not selected; returning to school in August 2026 was the visa-transition plan, now completed. Hoang left First Solar in May 2026 and relocated to Cincinnati, Ohio.
 
 ### Near-term roles
 - Target titles: Software Engineer II; LLM Engineer; Software Engineer (AI specialization).
@@ -290,10 +287,10 @@ From the graduate programs above
 ## RAG-friendly metadata (JSON)
 ```
 {
-	"id": "career-goals-20251008",
+	"id": "career-goals-20260825",
 	"title": "Career goals & EB-2 roadmap",
-	"tags": ["career-goals","EB-2","graduate-applications","AI-systems","RAG"],
-	"short_summary": "Short-term: finish LLM/ML/DL training and build DigitalTwin RAG project. Long-term: become AI Systems Engineer/Architect focused on production RAG and agentic systems.",
-	"last_updated": "2025-10-08"
+	"tags": ["career-goals","EB-2","graduate-school-enrolled","AI-systems","RAG"],
+	"short_summary": "Currently a full-time MS Computer Science student at the University of Cincinnati (started Fall 2026), after leaving First Solar in May 2026. Short-term: finish LLM/ML/DL training and build DigitalTwin RAG project. Long-term: become AI Systems Engineer/Architect focused on production RAG and agentic systems.",
+	"last_updated": "2026-08-25"
 }
 ```

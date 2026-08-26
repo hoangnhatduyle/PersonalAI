@@ -99,7 +99,7 @@ Active learner pursuing specialized training in AI, Large Language Models, Machi
   - Kubernetes orchestration
   - CI/CD pipelines
   - Production deployment patterns
-- **Note:** Practical Docker/Kubernetes skills are also being applied daily at First Solar (production deployments)
+- **Note:** Practical Docker/Kubernetes skills were also applied daily at First Solar (production deployments, Feb 2025 – May 2026)
 
 ---
 

@@ -1,10 +1,10 @@
 # Identity & Basics
 
 **Tags:** identity, personal-background, values, motivation, professional-identity
-**Last Updated:** 2025-10-06
+**Last Updated:** 2026-08-25
 
 ## Quick Reference Summary
-Full-stack software engineer specializing in MES/ERP systems and AI/LLM integration. Vietnamese native, fluent in English. Based in Toledo, Ohio. Strong technical background in C#, ASP.NET, Angular, and manufacturing systems integration. Focused on building production-grade AI systems (RAG, agentic workflows) for enterprise applications.
+Full-stack software engineer turned graduate student, specializing in MES/ERP systems and AI/LLM integration. Vietnamese native, fluent in English. Based in Cincinnati, Ohio, pursuing an MS in Computer Science at the University of Cincinnati. Strong technical background in C#, ASP.NET, Angular, and manufacturing systems integration. Focused on building production-grade AI systems (RAG, agentic workflows) for enterprise applications.
 
 ## Basic Information
 
@@ -14,11 +14,11 @@ Full-stack software engineer specializing in MES/ERP systems and AI/LLM integrat
 
 **Pronouns:** He / Him
 
-**Date of Birth:** Available upon request
+**Date of Birth:** August 2000 (exact date available upon request)
 
 **Place of Birth:** Ho Chi Minh City, Vietnam
 
-**Current Location:** Toledo, Ohio, United States of America
+**Current Location:** Cincinnati, Ohio, United States of America
 
 **Languages Spoken & Proficiency:** Vietnamese (Native), English (Fluent & Professional)
 
@@ -114,10 +114,10 @@ Success for me is measured by meaningful impact across three dimensions: family 
 	"title": "Identity & Background",
 	"entity_type": "person_profile",
 	"tags": ["identity","background","values","motivation","career-philosophy"],
-	"short_summary": "Full-stack MES/AI engineer from Vietnam, based in Toledo, OH. Focuses on production-grade systems, family-first values, and continuous learning. Fluent in English and Vietnamese.",
+	"short_summary": "Full-stack MES/AI engineer from Vietnam, now a graduate student based in Cincinnati, OH. Focuses on production-grade systems, family-first values, and continuous learning. Fluent in English and Vietnamese.",
 	"key_strengths": ["responsibility","adaptability","technical-expertise","mentoring","problem-solving"],
 	"core_values": ["family","meaningful-impact","collaboration","continuous-improvement"],
-	"last_updated": "2025-10-06"
+	"last_updated": "2026-08-25"
 }
 ```
 

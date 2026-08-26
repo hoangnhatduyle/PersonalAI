@@ -1,7 +1,7 @@
 # Contact Information
 
 **Tags:** contact, professional-contact, location, availability
-**Last Updated:** 2026-04-05
+**Last Updated:** 2026-08-25
 
 ## Basic Contact Details
 
@@ -9,9 +9,9 @@
 
 **Preferred Name:** Hoang Le
 
-**Email:** Available upon request (professional email)
+**Email:** lehoangnhatduy2000@gmail.com
 
-**Phone:** Available upon request
+**Phone:** (419) 699-9535
 
 **LinkedIn:** https://www.linkedin.com/in/hoangnhatduyle/
 
@@ -21,7 +21,7 @@
 
 ## Current Location
 
-**City:** Toledo, Ohio
+**City:** Cincinnati, Ohio
 
 **State:** Ohio
 
@@ -35,25 +35,25 @@
 
 ## Work Authorization
 
-**Current Status:** F-1 OPT STEM Extension — **expiring May 14, 2026**
+**Current Status:** F-1 Student Visa — enrolled in the Master of Science in Computer Science program at the University of Cincinnati
 
-**Work Authorization:** Authorized to work in the United States through May 14, 2026
+**Work Authorization:** On F-1 status as a graduate student (CPT/OPT eligible); the Bachelor's-degree STEM OPT extension concluded May 14, 2026
 
-**H1B FY2027:** Not selected in the lottery
+**H1B FY2027:** Not selected in the lottery — returning to graduate school was the resulting visa-transition plan, now completed
 
-**Next Step:** Returning to graduate school (Fall 2026, August start) to transition back to F-1 student status. Applications submitted to University of Toledo (MS CSE) and University of Cincinnati (MS CS), both awaiting decisions.
+**Next Step:** Currently a full-time graduate student at the University of Cincinnati (MS Computer Science). Left First Solar in May 2026 to begin the program.
 
-**Visa Sponsorship:** Will require sponsorship or student visa for long-term employment (EB-2 NIW strategy in progress for future)
+**Visa Sponsorship:** Will need CPT/OPT authorization for internships or part-time work during the program, and sponsorship or OPT for full-time employment after graduation (EB-2 NIW strategy in progress for the long term)
 
 ## Availability
 
-**Current Employment Status:** Employed full-time at First Solar (MES Software Engineer I)
+**Current Employment Status:** Full-time graduate student at the University of Cincinnati (MS Computer Science); former MES Software Engineer I at First Solar (February 2025 – May 2026)
 
-**Open to Opportunities:** Interested in roles involving AI/ML, LLM Engineering, Software Engineering with AI specialization
+**Open to Opportunities:** Open to internships, co-ops, part-time roles, and research assistantships during the graduate program; interested in AI/ML, LLM Engineering, and Software Engineering with AI specialization for full-time roles upon graduation
 
-**Notice Period:** Standard professional notice (typically 2 weeks)
+**Notice Period:** Standard professional notice (typically 2 weeks) for any part-time/internship commitments
 
-**Preferred Start Date:** Flexible based on opportunity
+**Preferred Start Date:** Flexible based on opportunity; scheduled around graduate coursework
 
 ## Professional Networks
 
@@ -69,10 +69,10 @@
 
 ## Geographic Preferences
 
-**Current Focus:** Toledo, Ohio area and surrounding regions
+**Current Focus:** Cincinnati, Ohio area and surrounding regions
 
 **Open to Consider:**
-- Cincinnati, Ohio
+- Toledo, Ohio
 - Columbus, Ohio
 - Detroit, Michigan area
 - Remote opportunities with US-based companies
@@ -85,12 +85,12 @@
     "title": "Contact Information & Availability",
     "entity_type": "contact_profile",
     "tags": ["contact","location","work-authorization","availability","remote-work"],
-    "location": "Toledo-Ohio-USA",
-    "work_status": "F1-OPT-STEM-expiring-2026-05-14",
-    "visa_plan": "returning-to-graduate-school-Fall-2026",
-    "open_to": ["AI-ML-roles","LLM-engineering","software-engineering"],
+    "location": "Cincinnati-Ohio-USA",
+    "work_status": "F1-student-visa-MS-CS-University-of-Cincinnati",
+    "visa_plan": "enrolled-graduate-school-Fall-2026-completed-transition",
+    "open_to": ["AI-ML-roles","LLM-engineering","software-engineering","internships","research-assistantships"],
     "languages": ["Vietnamese-native","English-fluent"],
-    "last_updated": "2026-04-05"
+    "last_updated": "2026-08-25"
 }
 ```
 
@@ -100,7 +100,7 @@
 
 When answering questions about contacting Hoang:
 - Direct professional inquiries to LinkedIn or portfolio website
-- Mention Toledo, Ohio as current location
+- Mention Cincinnati, Ohio as current location
 - Highlight willingness to relocate or work remotely
-- Note that STEM OPT expires May 14, 2026 and graduate school (Fall 2026) is the plan
+- Note that Hoang is now a full-time graduate student (MS Computer Science, University of Cincinnati) on F-1 status, having concluded the First Solar role and STEM OPT in May 2026
 - Note bilingual capabilities (Vietnamese + English)

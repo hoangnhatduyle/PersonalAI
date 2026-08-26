@@ -1,21 +1,22 @@
 # MES Software Engineer I — First Solar
 
-**Tags:** full-time, MES, software-engineering, manufacturing, AI, .NET, Next.js, PostgreSQL, Docker, Kubernetes
-**Last Updated:** 2026-04-05
+**Tags:** full-time, MES, software-engineering, manufacturing, AI, .NET, Next.js, PostgreSQL, Docker, Kubernetes, former-role
+**Last Updated:** 2026-08-25
 
 **Role:** MES Software Engineer I
 **Company:** First Solar
 **Location:** Perrysburg, Ohio (Remote)
-**Dates:** February 2025 – Present (14+ months)
+**Dates:** February 2025 – May 2026 (15 months)
 **Employment Type:** Full-time
 **Team / Dept:** MES Software Engineering
 **Manager:** Aaron Bollinger
+**Status:** Concluded — Hoang left First Solar in May 2026 to begin full-time graduate study (MS Computer Science, University of Cincinnati) as his STEM OPT work authorization ended. This is Hoang's most recent employer; he is not currently employed and is focused on graduate school.
 
 ---
 
 ## Role Overview
 
-MES Software Engineer I at First Solar, one of the world's largest thin-film solar panel manufacturers. Responsible for developing and maintaining software systems that support manufacturing, reliability, and R&D processes. Now 14+ months into the role, having grown from onboarding into being the **main/lead developer** on a key internal project.
+MES Software Engineer I at First Solar, one of the world's largest thin-film solar panel manufacturers, from February 2025 to May 2026. Responsible for developing and maintaining software systems that support manufacturing, reliability, and R&D processes. Grew from onboarding into being the **main/lead developer** on a key internal project before concluding the role to start graduate school.
 
 ---
 
@@ -132,28 +133,30 @@ Delivered a PLC tag discovery and MQTT publishing pipeline for **Palantir Foundr
 
 ## Evidence & Recognition
 
-- Annual review rated **Green** (positive) by manager Aaron Bollinger (full review at `Knowledge_Base/Achievements & Recognition/first_solar_annual_review.md`)
+- Annual review rated **Green** (positive) by manager Aaron Bollinger (see `Knowledge_Base/Achievements & Recognition/recognition_feedback.md`)
 - Named specifically for: Image Data Mart → AI Auto Reply capability, ESD/JB1 onboarding, PLC/MQTT/Palantir Foundry pipeline
-- Growing into lead developer role on confidential incident intelligence project
+- Grew into a lead-developer role on the confidential incident intelligence project before the role concluded in May 2026
 
 ---
 
 ## RAG-Friendly Metadata (JSON)
 ```json
 {
-    "id": "role-first-solar-20260405",
+    "id": "role-first-solar-20260825",
     "title": "MES Software Engineer I — First Solar",
     "entity_type": "work_experience",
-    "tags": ["full-time","MES","manufacturing","AI","dotnet","Next.js","PostgreSQL","Docker","Kubernetes","Airflow","first-solar","current-role"],
+    "tags": ["full-time","MES","manufacturing","AI","dotnet","Next.js","PostgreSQL","Docker","Kubernetes","Airflow","first-solar","former-role","most-recent-role"],
     "company": "First Solar",
     "location": "Perrysburg-Ohio-remote",
-    "dates": "February-2025-to-Present",
-    "duration_months": 14,
+    "dates": "February-2025-to-May-2026",
+    "duration_months": 15,
+    "employment_status": "concluded",
+    "reason_for_leaving": "STEM-OPT-work-authorization-ended-transitioned-to-graduate-school",
     "role_type": "full-time",
     "technologies": [".NET-10","C#","Next.js","PostgreSQL","Docker","Kubernetes","Apache-Airflow","Fleet","Helm","MQTT","Palantir-Foundry","Azure-DevOps"],
     "key_projects": ["Incident-Intelligence-Dashboard","Image-Data-Mart","AI-Auto-Reply","Remote-Reset","ESD-JB1","PLC-MQTT-Palantir","Module-Inventory","Dumpster-Weight-Validation"],
     "annual_review_status": "Green",
     "manager": "Aaron-Bollinger",
-    "last_updated": "2026-04-05"
+    "last_updated": "2026-08-25"
 }
 ```
