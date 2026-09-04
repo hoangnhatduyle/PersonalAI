@@ -14,6 +14,8 @@ interface Props {
   newMessageIndex: number | null;
   topicColor: string;
   onSuggestionSelect: (q: string) => void;
+  contactAsk: { question: string } | null;
+  onSkipContact: () => void;
 }
 
 export default function ChatWindow({
@@ -25,6 +27,8 @@ export default function ChatWindow({
   newMessageIndex,
   topicColor,
   onSuggestionSelect,
+  contactAsk,
+  onSkipContact,
 }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -74,6 +78,20 @@ export default function ChatWindow({
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* Contact-info ask — deterministic Skip path, shown until resolved */}
+      {!isStreaming && contactAsk && messages.at(-1)?.role === "assistant" && (
+        <div className="pl-11">
+          <button
+            onClick={onSkipContact}
+            className="text-xs px-3 py-1.5 rounded-full border border-zinc-700 bg-zinc-800/60
+                       text-zinc-300 hover:bg-zinc-800 hover:text-white hover:border-indigo-500/60
+                       transition-all duration-150"
+          >
+            Skip — don&apos;t share contact info
+          </button>
         </div>
       )}
 

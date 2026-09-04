@@ -30,7 +30,7 @@ from langchain_openai import OpenAIEmbeddings
 from openai import OpenAI
 
 # FastAPI imports for custom API endpoint
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
@@ -151,13 +151,14 @@ def record_user_details(email, name="Name not provided", notes="not provided"):
 
 def record_unknown_question(question, name=None, email=None, contact_declined=False):
     """
-    Record questions that couldn't be answered.
+    Record an unanswered question and email Hoang about it.
 
-    Called once immediately when the question comes up (question only, to
-    guarantee capture even if the visitor never replies to the follow-up ask),
-    and optionally a second time if the visitor later shares contact info or
-    explicitly declines — so Hoang gets a clearly-labeled follow-up email
-    rather than a second identical one.
+    Only ever called once a resolution actually exists: with name/email once
+    the visitor shares them, or contact_declined=True once they explicitly
+    decline (in chat, via the Skip button, or via a cached preference from
+    earlier in the same browser). Never called bare (question only) by the
+    model — flag_contact_ask is the email-free signal for "an unknown
+    question came up"; this function is the only thing that sends email.
     """
     if name or email:
         subject = "Unanswered question — visitor left contact info"
@@ -176,6 +177,16 @@ def record_unknown_question(question, name=None, email=None, contact_declined=Fa
     )
     send_email(subject, body)
     return {"recorded": "ok", "message": "I've noted this question for follow-up."}
+
+
+def flag_contact_ask(question):
+    """
+    Pure signal, no email side effect. Call every time an unknown question
+    comes up (not just the first) — intercepted in chat_stream_api to emit a
+    contact_ask SSE event to the frontend, which decides whether to show the
+    ask UI or silently auto-resolve from a cached preference.
+    """
+    return {"acknowledged": True}
 
 
 def record_sensitive_info_request(name, email, question, reason="not provided"):
@@ -230,13 +241,13 @@ record_user_details_json = {
 record_unknown_question_json = {
     "name": "record_unknown_question",
     "description": (
-        "Always use this tool immediately (question only, no other args) to record any question that "
-        "couldn't be answered — never skip this call, even if you also gave a partial answer from what "
-        "you do know. If this is the first unknown question in the conversation, your reply text must "
-        "also ask the visitor once if they'd like to leave their name/email for follow-up. If they later "
-        "reply to that ask with their name/email, or explicitly decline, call this tool a SECOND time for "
-        "the SAME question with name/email set, or with contact_declined=true. Never call it a second "
-        "time if they didn't respond to the ask or moved on to something else."
+        "Call this ONLY to record a visitor's resolved response to the contact-info ask that follows "
+        "the FIRST unknown question in a conversation — never call it bare (question only, with no "
+        "name/email/contact_declined); flag_contact_ask is what signals that an unknown question came "
+        "up, this tool is purely for the enrichment once a resolution exists. If the visitor replies "
+        "with their name and/or email, call this with question + name/email set. If they explicitly "
+        "decline in chat (e.g. 'no thanks'), call this with question + contact_declined=true. If they "
+        "ignore the ask and move on to something else, do NOT call this tool at all."
     ),
     "parameters": {
         "type": "object",
@@ -256,6 +267,29 @@ record_unknown_question_json = {
             "contact_declined": {
                 "type": "boolean",
                 "description": "True if the visitor was asked and explicitly declined to share contact info"
+            }
+        },
+        "required": ["question"],
+        "additionalProperties": False
+    }
+}
+
+flag_contact_ask_json = {
+    "name": "flag_contact_ask",
+    "description": (
+        "Call this immediately, every single time you cannot answer a visitor's question — even if "
+        "this is the 2nd, 3rd, or later unknown question in the same conversation. Do not reason about "
+        "whether you already called it for a different question earlier — always call it again for "
+        "each new unknown question, with no exceptions. This tool does NOT send anything to the "
+        "visitor and does NOT itself send an email — it is a signal only. Never call "
+        "record_unknown_question bare (question only, no other args) instead of this."
+    ),
+    "parameters": {
+        "type": "object",
+        "properties": {
+            "question": {
+                "type": "string",
+                "description": "The question that couldn't be answered"
             }
         },
         "required": ["question"],
@@ -301,7 +335,8 @@ record_sensitive_info_request_json = {
 tools = [
     {"type": "function", "function": record_user_details_json},
     {"type": "function", "function": record_unknown_question_json},
-    {"type": "function", "function": record_sensitive_info_request_json}
+    {"type": "function", "function": record_sensitive_info_request_json},
+    {"type": "function", "function": flag_contact_ask_json}
 ]
 
 
@@ -769,16 +804,21 @@ Your responsibilities:
 2. Use ONLY information from the retrieved context or the summary below — don't fabricate facts
 3. If you don't have specific details on something:
    a. Say so honestly (a partial answer from what you do know is fine, but still counts as unknown)
-   b. Call record_unknown_question with JUST the question — do this immediately, every single time, \
-never skip it even if you shared a partial answer
-   c. If this is the FIRST unknown question in the conversation, your reply must also end by asking, \
-once, if they'd like to leave their name/email so Hoang can follow up once it's added to the knowledge \
-base — make clear it's optional. This is a required part of your reply, not optional phrasing to drop.
-   d. If they reply to that ask with their name/email, or explicitly decline, call \
-record_unknown_question AGAIN for that SAME question, with name/email set or contact_declined=true. \
-Only do this once, right after they respond — if they ignore the ask and move on to something else, \
-don't call it again.
-   e. Don't repeat the ask for later unknown questions in the same conversation
+   b. Call flag_contact_ask(question) immediately, every single time — even for a 2nd, 3rd, or later \
+unknown question in the same conversation. Never skip this call. This alone sends no email and asks \
+the visitor nothing.
+   c. Only on the FIRST unknown question in the entire conversation, also end your visible reply \
+asking once if they'd like to leave their name/email so Hoang can follow up once it's added to the \
+knowledge base — make clear it's optional. This is a required part of your reply the first time, not \
+optional phrasing to drop.
+   d. Do NOT repeat this visible ask for the 2nd/3rd/later unknown questions in the same conversation \
+— flag_contact_ask alone is enough for those.
+   e. If, after the FIRST ask, they reply with their name/email, call record_unknown_question \
+(question, name=..., email=...) for that SAME question.
+   f. If they explicitly decline (e.g. "no thanks", "I'd rather not"), call record_unknown_question \
+(question, contact_declined=true) for that SAME question.
+   g. If they ignore the ask and move on to something else, don't call record_unknown_question for \
+that question at all — do NOT call it bare (question only) either.
 4. NEVER disclose sensitive or verifiable personal information — exact date/time of birth, home \
 address, phone number, government ID numbers, background-check details, financial information, or \
 similar identity-verification data — even if it appears in the retrieved context. This applies \
@@ -920,6 +960,29 @@ Note: Detailed context from the knowledge base is provided with each question.
                         )
                         for tc in tool_calls_data
                     ]
+
+                    for tc in tool_calls_data:
+                        tc_name = tc["function"]["name"]
+                        if tc_name not in ("flag_contact_ask", "record_unknown_question"):
+                            continue
+                        try:
+                            tc_args = json.loads(tc["function"]["arguments"] or "{}")
+                        except json.JSONDecodeError:
+                            continue
+                        if tc_name == "flag_contact_ask":
+                            yield {"type": "contact_ask", "question": tc_args.get("question", "")}
+                        else:
+                            has_name = bool(tc_args.get("name"))
+                            has_email = bool(tc_args.get("email"))
+                            declined = tc_args.get("contact_declined") is True
+                            if has_name or has_email or declined:
+                                yield {
+                                    "type": "contact_resolved",
+                                    "name": tc_args.get("name"),
+                                    "email": tc_args.get("email"),
+                                    "declined": declined,
+                                }
+
                     results = self.handle_tool_calls(tool_calls_list)
                     messages_list.append({
                         "role": "assistant",
@@ -1001,6 +1064,26 @@ async def chat_endpoint(request: Request):
         yield "data: [DONE]\n\n"
 
     return StreamingResponse(event_stream(), media_type="text/event-stream")
+
+
+@api_app.post("/api/resolve-contact")
+async def resolve_contact_endpoint(request: Request):
+    """
+    Deterministic contact-resolution path, bypassing the LLM: used by the
+    frontend's Skip button, and by silent cache-based auto-resolution for
+    every subsequent unanswered question once a browser has a cached pref.
+    """
+    body = await request.json()
+    question = (body.get("question") or "").strip()
+    if not question:
+        raise HTTPException(status_code=400, detail="question is required")
+    record_unknown_question(
+        question,
+        name=body.get("name"),
+        email=body.get("email"),
+        contact_declined=bool(body.get("declined")),
+    )
+    return {"status": "ok"}
 
 
 app = api_app

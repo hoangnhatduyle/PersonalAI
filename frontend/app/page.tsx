@@ -2,7 +2,8 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import confetti from "canvas-confetti";
-import { streamChatEvents, pingBackend, type Message } from "@/lib/api";
+import { streamChatEvents, pingBackend, resolveContact, type Message } from "@/lib/api";
+import { getContactPreference, setContactPreference } from "@/lib/contactCache";
 import ChatWindow from "@/components/ChatWindow";
 import InputBar from "@/components/InputBar";
 import StarterQuestions from "@/components/StarterQuestions";
@@ -54,6 +55,7 @@ export default function Home() {
   const [newMessageIndex, setNewMessageIndex] = useState<number | null>(null);
   const [sheetOpen,       setSheetOpen]       = useState(false);
   const [waking,          setWaking]          = useState(false);
+  const [contactAsk,      setContactAsk]      = useState<{ question: string } | null>(null);
 
   const abortRef = useRef<AbortController | null>(null);
 
@@ -107,6 +109,7 @@ export default function Home() {
     setStreamingContent("");
     setSuggestions([]);
     setThinkingStatus(null);
+    setContactAsk(null);
 
     const controller = new AbortController();
     abortRef.current = controller;
@@ -125,6 +128,25 @@ export default function Home() {
           setTopic(event.value);
         } else if (event.type === "suggestions") {
           setSuggestions(event.items);
+        } else if (event.type === "contact_ask") {
+          const cached = getContactPreference();
+          if (cached) {
+            resolveContact({
+              question: event.question,
+              name: cached.status === "given" ? cached.name : undefined,
+              email: cached.status === "given" ? cached.email : undefined,
+              declined: cached.status === "declined",
+            });
+          } else {
+            setContactAsk(prev => prev ?? { question: event.question });
+          }
+        } else if (event.type === "contact_resolved") {
+          setContactPreference(
+            event.declined
+              ? { status: "declined" }
+              : { status: "given", name: event.name, email: event.email }
+          );
+          setContactAsk(null);
         } else if (event.type === "error") {
           console.error("Backend error:", event.message);
           fullResponse = fullResponse || "Sorry, I ran into an error. Please try again.";
@@ -145,6 +167,13 @@ export default function Home() {
       setTimeout(() => setNewMessageIndex(null), 2000);
     }
   }, [messages, isStreaming]);
+
+  const handleSkipContact = useCallback(async () => {
+    if (!contactAsk) return;
+    setContactPreference({ status: "declined" });
+    await resolveContact({ question: contactAsk.question, declined: true });
+    setContactAsk(null);
+  }, [contactAsk]);
 
   const exportChat = useCallback(() => {
     if (messages.length === 0) return;
@@ -256,6 +285,8 @@ export default function Home() {
                   newMessageIndex={newMessageIndex}
                   topicColor={topicColor}
                   onSuggestionSelect={sendMessage}
+                  contactAsk={contactAsk}
+                  onSkipContact={handleSkipContact}
                 />
               )}
               <InputBar

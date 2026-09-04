@@ -8,6 +8,8 @@ export type StreamEvent =
   | { type: "token"; text: string }
   | { type: "topic"; value: string }
   | { type: "suggestions"; items: string[] }
+  | { type: "contact_ask"; question: string }
+  | { type: "contact_resolved"; name?: string; email?: string; declined?: boolean }
   | { type: "error"; message: string };
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:7860";
@@ -16,6 +18,25 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:7860";
 export async function pingBackend(): Promise<boolean> {
   try {
     const res = await fetch(`${API_URL}/api/health`, { cache: "no-store" });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+/** Resolve (or silently auto-resolve) a pending contact-info ask. Returns true on success. */
+export async function resolveContact(payload: {
+  question: string;
+  name?: string;
+  email?: string;
+  declined?: boolean;
+}): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_URL}/api/resolve-contact`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
     return res.ok;
   } catch {
     return false;
