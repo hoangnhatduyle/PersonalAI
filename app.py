@@ -39,6 +39,7 @@ from fastapi.responses import StreamingResponse
 # Configuration
 # ─────────────────────────────────────────────
 MODEL = "gpt-5-mini"
+UTILITY_MODEL = "gpt-5-nano"  # cheap/fast model for lightweight utility calls (suggestions, file selection)
 DB_NAME = "vector_db"
 KNOWLEDGE_BASE_PATH = "Knowledge_Base"
 GITHUB_CACHE_PATH = "github_cache"
@@ -53,7 +54,7 @@ GITHUB_MAX_FILE_SIZE_CHARS = 8000
 # RAG performance settings
 CHUNK_SIZE = 600
 CHUNK_OVERLAP = 100
-TOP_K_RETRIEVAL = 5        # slightly wider net; HyDE + better embeddings handle precision
+TOP_K_RETRIEVAL = 5        # slightly wider net to offset dropping HyDE's answer-shaped query expansion
 MAX_CONTEXT_LENGTH = 4000  # slightly larger since re-ranking improves precision
 
 
@@ -413,7 +414,7 @@ class PersonalAI:
         tree_text = "\n".join(file_tree[:800])
         try:
             response = self.openai.chat.completions.create(
-                model=MODEL,
+                model=UTILITY_MODEL,
                 messages=[{
                     "role": "user",
                     "content": f"""You are inspecting the file tree of a GitHub repository called '{repo_name}'.
@@ -677,30 +678,8 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
         print(f"  ✓ Vector store: {len(self.chunks)} chunks indexed")
 
     # ── Intelligence Helpers ───────────────────
-    def _hyde_query(self, message: str) -> str:
-        """
-        HyDE: generate a short hypothetical answer to use as the search query.
-        Answer-shaped text embeds closer to document chunks than question-shaped text.
-        """
-        try:
-            resp = self.openai.chat.completions.create(
-                model=MODEL,
-                messages=[{
-                    "role": "user",
-                    "content": (
-                        f"In 2-3 sentences, write what a software engineer's profile or resume "
-                        f"might say to answer this question: {message}"
-                    )
-                }],
-                max_tokens=100
-            )
-            return resp.choices[0].message.content.strip()
-        except Exception as e:
-            print(f"  ⚠ HyDE failed: {e} — using original query")
-            return message
-
     def _rerank(self, query: str, docs: list) -> list:
-        """Pass-through — retrieval precision is handled by HyDE + text-embedding-3-small."""
+        """Pass-through — retrieval precision is handled by text-embedding-3-small directly."""
         return docs
 
     def _build_context(self, docs: list) -> str:
@@ -752,7 +731,7 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
         """Generate 3 natural follow-up question suggestions via LLM."""
         try:
             resp = self.openai.chat.completions.create(
-                model=MODEL,
+                model=UTILITY_MODEL,
                 messages=[{
                     "role": "user",
                     "content": (
@@ -814,9 +793,15 @@ optional phrasing to drop.
    d. Do NOT repeat this visible ask for the 2nd/3rd/later unknown questions in the same conversation \
 — flag_contact_ask alone is enough for those.
    e. If, after the FIRST ask, they reply with their name/email, call record_unknown_question \
-(question, name=..., email=...) for that SAME question.
+(question, name=..., email=...) for that SAME question. Your reply that turn must be ONLY a short \
+acknowledgment thanking them by name and saying you'll follow up soon (for example: "Thanks, Jake — \
+I appreciate you sharing that, I'll follow up with you soon."). Do NOT restate, re-answer, or \
+elaborate on the original question again — it was already answered earlier in the conversation.
    f. If they explicitly decline (e.g. "no thanks", "I'd rather not"), call record_unknown_question \
-(question, contact_declined=true) for that SAME question.
+(question, contact_declined=true) for that SAME question. Your reply that turn must be ONLY a short \
+acknowledgment — e.g. "No worries! If you change your mind, you can reach me directly through my \
+email or the Contact form on my portfolio." Do NOT restate, re-answer, or elaborate on the original \
+question again.
    g. If they ignore the ask and move on to something else, don't call record_unknown_question for \
 that question at all — do NOT call it bare (question only) either.
 4. NEVER disclose sensitive or verifiable personal information — exact date/time of birth, home \
@@ -875,8 +860,7 @@ Note: Detailed context from the knowledge base is provided with each question.
         try:
             yield {"type": "status", "text": "Searching knowledge base..."}
 
-            search_query = self._hyde_query(message)
-            docs = self.retriever.invoke(search_query)
+            docs = self.retriever.invoke(message)
             docs = self._rerank(message, docs)
             context = self._build_context(docs)
 
@@ -915,6 +899,7 @@ Note: Detailed context from the knowledge base is provided with each question.
                     model=MODEL,
                     messages=messages_list,
                     tools=tools,
+                    reasoning_effort="low",
                     stream=True
                 )
 
