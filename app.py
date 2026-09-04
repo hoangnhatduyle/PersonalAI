@@ -150,14 +150,24 @@ def record_user_details(email, name="Name not provided", notes="not provided"):
 
 
 def record_unknown_question(question, name=None, email=None, contact_declined=False):
-    """Record questions that couldn't be answered, with optional visitor contact info"""
-    subject = "Unanswered question"
+    """
+    Record questions that couldn't be answered.
+
+    Called once immediately when the question comes up (question only, to
+    guarantee capture even if the visitor never replies to the follow-up ask),
+    and optionally a second time if the visitor later shares contact info or
+    explicitly declines — so Hoang gets a clearly-labeled follow-up email
+    rather than a second identical one.
+    """
     if name or email:
+        subject = "Unanswered question — visitor left contact info"
         contact_block = f"Name:  {name or 'not provided'}\nEmail: {email or 'not provided'}\n\n"
     elif contact_declined:
+        subject = "Unanswered question — visitor declined contact info"
         contact_block = "Visitor declined to share contact info.\n\n"
     else:
-        contact_block = "Visitor wasn't asked for contact info (or the conversation moved on).\n\n"
+        subject = "Unanswered question"
+        contact_block = ""
     body = (
         f"A visitor asked something I couldn't answer:\n\n"
         f"\"{question}\"\n\n"
@@ -220,13 +230,13 @@ record_user_details_json = {
 record_unknown_question_json = {
     "name": "record_unknown_question",
     "description": (
-        "Always use this tool to record any question that couldn't be answered as you didn't know the "
-        "answer. The FIRST time this happens in a conversation, ask the visitor once if they'd like to "
-        "leave their name/email so Hoang can follow up once it's added to the knowledge base — then call "
-        "this tool with name/email if they shared them, or contact_declined=true if they explicitly said "
-        "no. Don't block on a reply if they move on to something else — call it with neither field set. "
-        "For any later unknown question in the same conversation, don't ask again: reuse contact info "
-        "already given, or just call this tool with the question alone."
+        "Always use this tool immediately (question only, no other args) to record any question that "
+        "couldn't be answered — never skip this call, even if you also gave a partial answer from what "
+        "you do know. If this is the first unknown question in the conversation, your reply text must "
+        "also ask the visitor once if they'd like to leave their name/email for follow-up. If they later "
+        "reply to that ask with their name/email, or explicitly decline, call this tool a SECOND time for "
+        "the SAME question with name/email set, or with contact_declined=true. Never call it a second "
+        "time if they didn't respond to the ask or moved on to something else."
     ),
     "parameters": {
         "type": "object",
@@ -758,14 +768,17 @@ Your responsibilities:
 1. Answer in first person, faithfully and professionally
 2. Use ONLY information from the retrieved context or the summary below — don't fabricate facts
 3. If you don't have specific details on something:
-   a. Say so honestly
-   b. The FIRST time this happens in the conversation, ask once if they'd like to leave their name/email \
-so Hoang can follow up once it's added to the knowledge base — make clear it's optional, and don't stall \
-the conversation waiting on it if they'd rather move on
-   c. Call record_unknown_question with the question, plus name/email if they gave them, or \
-contact_declined=true if they explicitly said no
-   d. For any later unknown question in the same conversation, don't ask again — just call \
-record_unknown_question with the question (reusing contact info already given, if any)
+   a. Say so honestly (a partial answer from what you do know is fine, but still counts as unknown)
+   b. Call record_unknown_question with JUST the question — do this immediately, every single time, \
+never skip it even if you shared a partial answer
+   c. If this is the FIRST unknown question in the conversation, your reply must also end by asking, \
+once, if they'd like to leave their name/email so Hoang can follow up once it's added to the knowledge \
+base — make clear it's optional. This is a required part of your reply, not optional phrasing to drop.
+   d. If they reply to that ask with their name/email, or explicitly decline, call \
+record_unknown_question AGAIN for that SAME question, with name/email set or contact_declined=true. \
+Only do this once, right after they respond — if they ignore the ask and move on to something else, \
+don't call it again.
+   e. Don't repeat the ask for later unknown questions in the same conversation
 4. NEVER disclose sensitive or verifiable personal information — exact date/time of birth, home \
 address, phone number, government ID numbers, background-check details, financial information, or \
 similar identity-verification data — even if it appears in the retrieved context. This applies \
@@ -828,7 +841,7 @@ Note: Detailed context from the knowledge base is provided with each question.
             context = self._build_context(docs)
 
             src_word = "source" if len(docs) == 1 else "sources"
-            yield {"type": "status", "text": f"Found {len(docs)} relevant {src_word} · generating response..."}
+            yield {"type": "status", "text": f"Checked {len(docs)} {src_word} · generating response..."}
 
             # Build conversation history
             history_text = ""
