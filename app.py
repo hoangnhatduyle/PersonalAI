@@ -149,10 +149,21 @@ def record_user_details(email, name="Name not provided", notes="not provided"):
     return {"recorded": "ok", "message": "Thank you! I've recorded your details and will be in touch."}
 
 
-def record_unknown_question(question):
-    """Record questions that couldn't be answered"""
+def record_unknown_question(question, name=None, email=None, contact_declined=False):
+    """Record questions that couldn't be answered, with optional visitor contact info"""
     subject = "Unanswered question"
-    body = f"A visitor asked something I couldn't answer:\n\n\"{question}\"\n\nConsider adding this to the knowledge base."
+    if name or email:
+        contact_block = f"Name:  {name or 'not provided'}\nEmail: {email or 'not provided'}\n\n"
+    elif contact_declined:
+        contact_block = "Visitor declined to share contact info.\n\n"
+    else:
+        contact_block = "Visitor wasn't asked for contact info (or the conversation moved on).\n\n"
+    body = (
+        f"A visitor asked something I couldn't answer:\n\n"
+        f"\"{question}\"\n\n"
+        f"{contact_block}"
+        f"Consider adding this to the knowledge base."
+    )
     send_email(subject, body)
     return {"recorded": "ok", "message": "I've noted this question for follow-up."}
 
@@ -208,13 +219,33 @@ record_user_details_json = {
 
 record_unknown_question_json = {
     "name": "record_unknown_question",
-    "description": "Always use this tool to record any question that couldn't be answered as you didn't know the answer",
+    "description": (
+        "Always use this tool to record any question that couldn't be answered as you didn't know the "
+        "answer. The FIRST time this happens in a conversation, ask the visitor once if they'd like to "
+        "leave their name/email so Hoang can follow up once it's added to the knowledge base — then call "
+        "this tool with name/email if they shared them, or contact_declined=true if they explicitly said "
+        "no. Don't block on a reply if they move on to something else — call it with neither field set. "
+        "For any later unknown question in the same conversation, don't ask again: reuse contact info "
+        "already given, or just call this tool with the question alone."
+    ),
     "parameters": {
         "type": "object",
         "properties": {
             "question": {
                 "type": "string",
                 "description": "The question that couldn't be answered"
+            },
+            "name": {
+                "type": "string",
+                "description": "The visitor's name, if they shared it when asked"
+            },
+            "email": {
+                "type": "string",
+                "description": "The visitor's email, if they shared it when asked"
+            },
+            "contact_declined": {
+                "type": "boolean",
+                "description": "True if the visitor was asked and explicitly declined to share contact info"
             }
         },
         "required": ["question"],
@@ -726,7 +757,15 @@ Example: "I'm currently working on..." not "Hoang is currently working on..."
 Your responsibilities:
 1. Answer in first person, faithfully and professionally
 2. Use ONLY information from the retrieved context or the summary below — don't fabricate facts
-3. If you don't have specific details on something, say so honestly and use the record_unknown_question tool
+3. If you don't have specific details on something:
+   a. Say so honestly
+   b. The FIRST time this happens in the conversation, ask once if they'd like to leave their name/email \
+so Hoang can follow up once it's added to the knowledge base — make clear it's optional, and don't stall \
+the conversation waiting on it if they'd rather move on
+   c. Call record_unknown_question with the question, plus name/email if they gave them, or \
+contact_declined=true if they explicitly said no
+   d. For any later unknown question in the same conversation, don't ask again — just call \
+record_unknown_question with the question (reusing contact info already given, if any)
 4. NEVER disclose sensitive or verifiable personal information — exact date/time of birth, home \
 address, phone number, government ID numbers, background-check details, financial information, or \
 similar identity-verification data — even if it appears in the retrieved context. This applies \
