@@ -56,6 +56,7 @@ CHUNK_SIZE = 600
 CHUNK_OVERLAP = 100
 TOP_K_RETRIEVAL = 5        # slightly wider net to offset dropping HyDE's answer-shaped query expansion
 MAX_CONTEXT_LENGTH = 4000  # slightly larger since re-ranking improves precision
+RELEVANCE_THRESHOLD = 0.25 # min cosine similarity to call retrieval "relevant" in the status message — tune after observing real scores
 
 
 # ─────────────────────────────────────────────
@@ -359,12 +360,14 @@ class SimpleVectorStore:
         ), dtype=np.float32)
         self._normalized = vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
 
-    def similarity_search(self, query: str, k: int) -> list[Document]:
+    def similarity_search(self, query: str, k: int) -> tuple[list[Document], float]:
+        """Returns the top-k chunks plus the best cosine similarity score, so callers can tell whether anything actually relevant was found."""
         query_vec = np.array(self._embed_query(query), dtype=np.float32)
         query_vec /= np.linalg.norm(query_vec)
         scores = self._normalized @ query_vec
         top_k = np.argsort(-scores)[:k]
-        return [self._chunks[i] for i in top_k]
+        top_score = float(scores[top_k[0]]) if len(top_k) else 0.0
+        return [self._chunks[i] for i in top_k], top_score
 
 
 class SimpleRetriever:
@@ -372,7 +375,7 @@ class SimpleRetriever:
         self._store = store
         self._k = k
 
-    def invoke(self, query: str) -> list[Document]:
+    def invoke(self, query: str) -> tuple[list[Document], float]:
         return self._store.similarity_search(query, self._k)
 
 
@@ -860,12 +863,15 @@ Note: Detailed context from the knowledge base is provided with each question.
         try:
             yield {"type": "status", "text": "Searching knowledge base..."}
 
-            docs = self.retriever.invoke(message)
+            docs, top_score = self.retriever.invoke(message)
             docs = self._rerank(message, docs)
             context = self._build_context(docs)
 
-            src_word = "source" if len(docs) == 1 else "sources"
-            yield {"type": "status", "text": f"Checked {len(docs)} {src_word} · generating response..."}
+            if top_score >= RELEVANCE_THRESHOLD:
+                src_word = "source" if len(docs) == 1 else "sources"
+                yield {"type": "status", "text": f"Checked {len(docs)} {src_word} · generating response..."}
+            else:
+                yield {"type": "status", "text": "Thinking..."}
 
             # Build conversation history
             history_text = ""
