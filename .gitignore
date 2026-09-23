@@ -11,3 +11,7 @@ vector_db/
 
 __pycache__/
 .vercel
+
+# Supabase CLI local/session state (project-ref, pooler URL, version pins)
+supabase/.temp/
+.env*

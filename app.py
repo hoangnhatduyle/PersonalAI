@@ -9,8 +9,9 @@ import json
 import base64
 import asyncio
 import requests
+import secrets
 import warnings
-from datetime import datetime
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from pypdf import PdfReader
 import numpy as np
@@ -30,7 +31,7 @@ from langchain_openai import OpenAIEmbeddings
 from openai import OpenAI
 
 # FastAPI imports for custom API endpoint
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
 
@@ -38,8 +39,8 @@ from fastapi.responses import StreamingResponse
 # ─────────────────────────────────────────────
 # Configuration
 # ─────────────────────────────────────────────
-MODEL = "gpt-5-mini"
-UTILITY_MODEL = "gpt-5-nano"  # cheap/fast model for lightweight utility calls (suggestions, file selection)
+MODEL = "gpt-5.6-luna"
+UTILITY_MODEL = "gpt-5.4-nano"  # cheap/fast model for lightweight utility calls (suggestions, file selection)
 DB_NAME = "vector_db"
 KNOWLEDGE_BASE_PATH = "Knowledge_Base"
 GITHUB_CACHE_PATH = "github_cache"
@@ -70,6 +71,13 @@ if not openai_api_key:
         "OPENAI_API_KEY not found! Please set it as an environment variable in your deployment platform.\n"
     )
 os.environ['OPENAI_API_KEY'] = openai_api_key
+
+# Conversation logging (Supabase)
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_SERVICE_ROLE_KEY = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+ADMIN_TOKEN = os.getenv("ADMIN_TOKEN")
+CRON_SECRET = os.getenv("CRON_SECRET")
+RETENTION_DAYS = 90
 
 # Re-ranking is handled by the OpenAI client (no extra dependency needed)
 
@@ -133,6 +141,28 @@ def send_email(subject: str, body: str):
             print(f"  ⚠ Resend error {resp.status_code}: {resp.text}")
     except Exception as e:
         print(f"  ⚠ Email failed: {e}")
+
+
+# ─────────────────────────────────────────────
+# Conversation logging (Supabase, via PostgREST)
+# ─────────────────────────────────────────────
+def log_conversation(user_message: str, assistant_response: str, topic: str | None):
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        return
+    try:
+        requests.post(
+            f"{SUPABASE_URL}/rest/v1/conversations",
+            headers={
+                "apikey": SUPABASE_SERVICE_ROLE_KEY,
+                "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+                "Content-Type": "application/json",
+                "Prefer": "return=minimal",
+            },
+            json={"user_message": user_message, "assistant_response": assistant_response, "topic": topic},
+            timeout=5,
+        )
+    except Exception as e:
+        print(f"  ⚠ Failed to log conversation: {e}")
 
 
 # ─────────────────────────────────────────────
@@ -335,10 +365,10 @@ record_sensitive_info_request_json = {
 }
 
 tools = [
-    {"type": "function", "function": record_user_details_json},
-    {"type": "function", "function": record_unknown_question_json},
-    {"type": "function", "function": record_sensitive_info_request_json},
-    {"type": "function", "function": flag_contact_ask_json}
+    {"type": "function", **record_user_details_json},
+    {"type": "function", **record_unknown_question_json},
+    {"type": "function", **record_sensitive_info_request_json},
+    {"type": "function", **flag_contact_ask_json}
 ]
 
 
@@ -439,7 +469,7 @@ File tree:
 Return ONLY a valid JSON array of file paths with no explanation.
 Example: ["README.md", "src/main.py", "pyproject.toml"]"""
                 }],
-                max_tokens=300
+                max_completion_tokens=300
             )
             raw = response.choices[0].message.content.strip()
             # Strip markdown code fences if present
@@ -746,7 +776,7 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
                         f'Example: ["What projects have you built?", "What\'s your tech stack?", "Are you open to work?"]'
                     )
                 }],
-                max_tokens=120
+                max_completion_tokens=120
             )
             raw = resp.choices[0].message.content.strip()
             if raw.startswith("```"):
@@ -762,15 +792,15 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
     def handle_tool_calls(self, tool_calls):
         results = []
         for tool_call in tool_calls:
-            tool_name = tool_call.function.name
-            arguments = json.loads(tool_call.function.arguments)
+            tool_name = tool_call.name
+            arguments = json.loads(tool_call.arguments)
             print(f"🔧 Tool called: {tool_name}")
             tool = globals().get(tool_name)
             result = tool(**arguments) if tool else {"error": "Tool not found"}
             results.append({
-                "role": "tool",
-                "content": json.dumps(result),
-                "tool_call_id": tool_call.id
+                "type": "function_call_output",
+                "call_id": tool_call.call_id,
+                "output": json.dumps(result)
             })
         return results
 
@@ -907,63 +937,37 @@ Note: Detailed context from the knowledge base is provided with each question.
             while not done and iteration < max_iterations:
                 iteration += 1
 
-                stream = self.openai.chat.completions.create(
+                stream = self.openai.responses.create(
                     model=MODEL,
-                    messages=messages_list,
+                    input=messages_list,
                     tools=tools,
-                    reasoning_effort="low",
+                    reasoning={"effort": "low"},
                     stream=True
                 )
 
                 collected_messages = []
-                tool_calls_data = []
-                finish_reason = None
+                final_response = ""
+                completed_output = []
 
-                for chunk in stream:
-                    if chunk.choices:
-                        delta = chunk.choices[0].delta
-                        finish_reason = chunk.choices[0].finish_reason
+                for event in stream:
+                    if event.type == "response.output_text.delta":
+                        collected_messages.append(event.delta)
+                        final_response = "".join(collected_messages)
+                        yield {"type": "token", "text": final_response}
+                    elif event.type == "response.completed":
+                        completed_output = event.response.output
 
-                        if delta.content:
-                            collected_messages.append(delta.content)
-                            final_response = "".join(collected_messages)
-                            yield {"type": "token", "text": final_response}
+                function_calls = [
+                    item for item in completed_output if item.type == "function_call"
+                ]
 
-                        if delta.tool_calls:
-                            for tool_call_chunk in delta.tool_calls:
-                                if len(tool_calls_data) <= tool_call_chunk.index:
-                                    tool_calls_data.append({
-                                        "id": "",
-                                        "function": {"name": "", "arguments": ""}
-                                    })
-                                tc = tool_calls_data[tool_call_chunk.index]
-                                if tool_call_chunk.id:
-                                    tc["id"] = tool_call_chunk.id
-                                if tool_call_chunk.function:
-                                    if tool_call_chunk.function.name:
-                                        tc["function"]["name"] = tool_call_chunk.function.name
-                                    if tool_call_chunk.function.arguments:
-                                        tc["function"]["arguments"] += tool_call_chunk.function.arguments
-
-                if finish_reason == "tool_calls" and tool_calls_data:
-                    from types import SimpleNamespace
-                    tool_calls_list = [
-                        SimpleNamespace(
-                            id=tc["id"],
-                            function=SimpleNamespace(
-                                name=tc["function"]["name"],
-                                arguments=tc["function"]["arguments"]
-                            )
-                        )
-                        for tc in tool_calls_data
-                    ]
-
-                    for tc in tool_calls_data:
-                        tc_name = tc["function"]["name"]
+                if function_calls:
+                    for tc in function_calls:
+                        tc_name = tc.name
                         if tc_name not in ("flag_contact_ask", "record_unknown_question"):
                             continue
                         try:
-                            tc_args = json.loads(tc["function"]["arguments"] or "{}")
+                            tc_args = json.loads(tc.arguments or "{}")
                         except json.JSONDecodeError:
                             continue
                         if tc_name == "flag_contact_ask":
@@ -980,19 +984,16 @@ Note: Detailed context from the knowledge base is provided with each question.
                                     "declined": declined,
                                 }
 
-                    results = self.handle_tool_calls(tool_calls_list)
-                    messages_list.append({
-                        "role": "assistant",
-                        "content": None,
-                        "tool_calls": [
-                            {
-                                "id": tc.id,
-                                "type": "function",
-                                "function": {"name": tc.function.name, "arguments": tc.function.arguments}
-                            }
-                            for tc in tool_calls_list
-                        ]
-                    })
+                    results = self.handle_tool_calls(function_calls)
+                    messages_list.extend([
+                        {
+                            "type": "function_call",
+                            "call_id": tc.call_id,
+                            "name": tc.name,
+                            "arguments": tc.arguments
+                        }
+                        for tc in function_calls
+                    ])
                     messages_list.extend(results)
                     collected_messages = []
                     final_response = ""
@@ -1045,22 +1046,29 @@ async def health():
 
 
 @api_app.post("/api/chat")
-async def chat_endpoint(request: Request):
+async def chat_endpoint(request: Request, background_tasks: BackgroundTasks):
     """SSE streaming endpoint for the Next.js frontend."""
     body = await request.json()
     message = body.get("message", "")
     history = body.get("history", [])
 
     async def event_stream():
+        final_text, topic = "", None
         try:
             for event in personal_ai.chat_stream_api(message, history):
+                if event["type"] == "token":
+                    final_text = event["text"]
+                elif event["type"] == "topic":
+                    topic = event["value"]
                 yield f"data: {json.dumps(event)}\n\n"
                 await asyncio.sleep(0)
         except Exception as e:
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
         yield "data: [DONE]\n\n"
+        if final_text:
+            background_tasks.add_task(log_conversation, message, final_text, topic)
 
-    return StreamingResponse(event_stream(), media_type="text/event-stream")
+    return StreamingResponse(event_stream(), media_type="text/event-stream", background=background_tasks)
 
 
 @api_app.post("/api/resolve-contact")
@@ -1081,6 +1089,66 @@ async def resolve_contact_endpoint(request: Request):
         contact_declined=bool(body.get("declined")),
     )
     return {"status": "ok"}
+
+
+def _check_admin_token(request: Request):
+    auth = request.headers.get("Authorization", "")
+    token = auth.removeprefix("Bearer ").strip()
+    if not ADMIN_TOKEN or not secrets.compare_digest(token, ADMIN_TOKEN):
+        raise HTTPException(status_code=401, detail="Unauthorized")
+
+
+@api_app.get("/api/admin/conversations")
+async def admin_conversations(
+    request: Request,
+    q: str | None = None,
+    since: str | None = None,
+    limit: int = 20,
+    offset: int = 0,
+):
+    _check_admin_token(request)
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        raise HTTPException(status_code=503, detail="Supabase not configured")
+
+    params = {"select": "*", "order": "created_at.desc", "limit": str(limit), "offset": str(offset)}
+    if since:
+        params["created_at"] = f"gte.{since}"
+    if q:
+        # PostgREST uses `*` as the ilike wildcard; strip characters that are
+        # syntactically significant to its filter grammar out of free-text input.
+        safe_q = q.replace(",", "").replace("*", "").replace("(", "").replace(")", "")
+        params["or"] = f"(user_message.ilike.*{safe_q}*,assistant_response.ilike.*{safe_q}*)"
+
+    resp = requests.get(
+        f"{SUPABASE_URL}/rest/v1/conversations",
+        headers={
+            "apikey": SUPABASE_SERVICE_ROLE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+            "Prefer": "count=exact",
+        },
+        params=params,
+        timeout=10,
+    )
+    resp.raise_for_status()
+    total = int(resp.headers.get("content-range", "0/0").split("/")[-1] or 0)
+    return {"items": resp.json(), "total": total}
+
+
+@api_app.get("/api/cron/cleanup-conversations")
+async def cleanup_conversations(request: Request):
+    auth = request.headers.get("Authorization", "")
+    if not CRON_SECRET or auth != f"Bearer {CRON_SECRET}":
+        raise HTTPException(status_code=401, detail="Unauthorized")
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        return {"deleted": False, "reason": "Supabase not configured"}
+    cutoff = (datetime.utcnow() - timedelta(days=RETENTION_DAYS)).isoformat()
+    requests.delete(
+        f"{SUPABASE_URL}/rest/v1/conversations",
+        headers={"apikey": SUPABASE_SERVICE_ROLE_KEY, "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}"},
+        params={"created_at": f"lt.{cutoff}"},
+        timeout=10,
+    )
+    return {"deleted": True}
 
 
 app = api_app
