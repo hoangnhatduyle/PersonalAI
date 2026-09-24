@@ -1,6 +1,8 @@
 export interface Message {
   role: "user" | "assistant";
   content: string;
+  sources?: string[];
+  clientMessageId?: string;
 }
 
 export type StreamEvent =
@@ -10,6 +12,8 @@ export type StreamEvent =
   | { type: "suggestions"; items: string[] }
   | { type: "contact_ask"; question: string }
   | { type: "contact_resolved"; name?: string; email?: string; declined?: boolean }
+  | { type: "response_id"; value: string }
+  | { type: "sources"; items: string[] }
   | { type: "error"; message: string };
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:7860";
@@ -43,20 +47,43 @@ export async function resolveContact(payload: {
   }
 }
 
+/** Submit thumbs up/down feedback for a previously logged assistant message. Returns true on success. */
+export async function submitFeedback(clientMessageId: string, value: "up" | "down"): Promise<boolean> {
+  try {
+    const res = await fetch(`${API_URL}/api/feedback`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ client_message_id: clientMessageId, value }),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Stream typed events from the Personal AI backend via SSE.
  * Yields strongly-typed StreamEvent objects.
  */
 export async function* streamChatEvents(
   message: string,
-  history: Message[],
-  signal?: AbortSignal
+  opts: {
+    previousResponseId?: string | null;
+    regenerate?: boolean;
+    clientMessageId: string;
+    signal?: AbortSignal;
+  }
 ): AsyncGenerator<StreamEvent> {
   const response = await fetch(`${API_URL}/api/chat`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ message, history }),
-    signal,
+    body: JSON.stringify({
+      message,
+      previous_response_id: opts.previousResponseId ?? null,
+      regenerate: opts.regenerate ?? false,
+      client_message_id: opts.clientMessageId,
+    }),
+    signal: opts.signal,
   });
 
   if (!response.ok) {

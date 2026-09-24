@@ -146,7 +146,8 @@ def send_email(subject: str, body: str):
 # ─────────────────────────────────────────────
 # Conversation logging (Supabase, via PostgREST)
 # ─────────────────────────────────────────────
-def log_conversation(user_message: str, assistant_response: str, topic: str | None):
+def log_conversation(user_message: str, assistant_response: str, topic: str | None,
+                      response_id: str | None = None, client_message_id: str | None = None) -> None:
     if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
         return
     try:
@@ -158,7 +159,13 @@ def log_conversation(user_message: str, assistant_response: str, topic: str | No
                 "Content-Type": "application/json",
                 "Prefer": "return=minimal",
             },
-            json={"user_message": user_message, "assistant_response": assistant_response, "topic": topic},
+            json={
+                "user_message": user_message,
+                "assistant_response": assistant_response,
+                "topic": topic,
+                "response_id": response_id,
+                "client_message_id": client_message_id,
+            },
             timeout=5,
         )
     except Exception as e:
@@ -405,8 +412,8 @@ class SimpleRetriever:
         self._store = store
         self._k = k
 
-    def invoke(self, query: str) -> tuple[list[Document], float]:
-        return self._store.similarity_search(query, self._k)
+    def invoke(self, query: str, k: int | None = None) -> tuple[list[Document], float]:
+        return self._store.similarity_search(query, k or self._k)
 
 
 # ─────────────────────────────────────────────
@@ -870,23 +877,22 @@ without both name and contact info.
 Note: Detailed context from the knowledge base is provided with each question.
 """
 
-    def _iter_history_messages(self, history):
-        """Yield normalized (role, content) pairs from Gradio history across versions."""
-        for item in history or []:
-            if isinstance(item, dict):
-                role = item.get("role")
-                content = item.get("content")
-                if role and content is not None:
-                    yield role, content
-                continue
-            if isinstance(item, (list, tuple)) and len(item) == 2:
-                user_msg, assistant_msg = item
-                if user_msg:
-                    yield "user", user_msg
-                if assistant_msg:
-                    yield "assistant", assistant_msg
+    def _create_response(self, turn_items: list, previous_response_id: str | None, effort: str):
+        """Thin wrapper around responses.create with the chaining/parallel-tool-call args fixed."""
+        kwargs = {
+            "model": MODEL,
+            "input": turn_items,
+            "tools": tools,
+            "reasoning": {"effort": effort},
+            "store": True,
+            "parallel_tool_calls": False,
+            "stream": True,
+        }
+        if previous_response_id:
+            kwargs["previous_response_id"] = previous_response_id
+        return self.openai.responses.create(**kwargs)
 
-    def chat_stream_api(self, message: str, history: list):
+    def chat_stream_api(self, message: str, previous_response_id: str | None = None, regenerate: bool = False):
         """
         Core streaming generator for the FastAPI endpoint.
         Yields typed event dicts consumed by the Next.js frontend:
@@ -894,12 +900,17 @@ Note: Detailed context from the knowledge base is provided with each question.
           {"type": "token",       "text": cumulative}   — streamed response
           {"type": "topic",       "value": str}         — profile card topic
           {"type": "suggestions", "items": [str, ...]}  — follow-up chips
+          {"type": "sources",     "items": [str, ...]}  — retrieved KB section labels
+          {"type": "response_id", "value": str}         — anchor for the next turn's chaining
           {"type": "error",       "message": str}       — on failure
         """
+        final_response_id = None
         try:
             yield {"type": "status", "text": "Searching knowledge base..."}
 
-            docs, top_score = self.retriever.invoke(message)
+            docs, top_score = self.retriever.invoke(
+                message, k=(TOP_K_RETRIEVAL + 2) if regenerate else None
+            )
             docs = self._rerank(message, docs)
             context = self._build_context(docs)
 
@@ -909,41 +920,63 @@ Note: Detailed context from the knowledge base is provided with each question.
             else:
                 yield {"type": "status", "text": "Thinking..."}
 
-            # Build conversation history
-            history_text = ""
-            if history:
-                recent_history = history[-6:]
-                for role, content in self._iter_history_messages(recent_history):
-                    if role == "user":
-                        history_text += f"User: {content}\n"
-                    elif role == "assistant":
-                        history_text += f"Assistant: {content}\n"
+            if top_score >= RELEVANCE_THRESHOLD:
+                seen = set()
+                source_labels = []
+                for doc in docs:
+                    doc_type = doc.metadata.get("doc_type", "Unknown")
+                    heading_parts = [doc.metadata[k] for k in ("h1", "h2", "h3") if doc.metadata.get(k)]
+                    heading = " > ".join(heading_parts)
+                    label = f"{doc_type}: {heading}" if heading else doc_type
+                    if label not in seen:
+                        seen.add(label)
+                        source_labels.append(label)
+                yield {"type": "sources", "items": source_labels[:4]}
 
-            user_message_with_context = f"Context:\n{context}\n\nQuestion: {message}"
-            if history_text:
-                user_message_with_context = f"Recent conversation:\n{history_text}\n\n" + user_message_with_context
+            user_content = f"Context:\n{context}\n\nQuestion: {message}"
+            if regenerate:
+                user_content = (
+                    "The visitor wasn't satisfied with your previous answer to this question. Give a "
+                    "more complete answer or approach it from a different angle. If you genuinely don't "
+                    "have the information, say so and offer to connect them with Hoang directly — don't "
+                    "invent details.\n\n"
+                ) + user_content
 
-            messages_list = [
-                {"role": "system", "content": self.system_prompt()},
-                {"role": "user", "content": user_message_with_context}
-            ]
+            if previous_response_id:
+                turn_items = [{"role": "user", "content": user_content}]
+            else:
+                turn_items = [
+                    {"role": "system", "content": self.system_prompt()},
+                    {"role": "user", "content": user_content},
+                ]
+
+            effort = "medium" if regenerate else "low"
 
             # Stream with function calling
             done = False
             max_iterations = 5
             iteration = 0
             final_response = ""
+            current_previous_id = previous_response_id
 
             while not done and iteration < max_iterations:
                 iteration += 1
 
-                stream = self.openai.responses.create(
-                    model=MODEL,
-                    input=messages_list,
-                    tools=tools,
-                    reasoning={"effort": "low"},
-                    stream=True
-                )
+                try:
+                    stream = self._create_response(turn_items, current_previous_id, effort)
+                except Exception as e:
+                    if "No tool output found for function call" in str(e) and current_previous_id:
+                        # Documented 400 bug tied to previous_response_id + parallel tool calls +
+                        # elevated reasoning effort — retry once, stateless, with the full transcript.
+                        fallback_items = [
+                            {"role": "system", "content": self.system_prompt()},
+                            {"role": "user", "content": user_content},
+                        ]
+                        stream = self._create_response(fallback_items, None, effort)
+                        current_previous_id = None
+                        turn_items = fallback_items
+                    else:
+                        raise
 
                 collected_messages = []
                 final_response = ""
@@ -956,6 +989,7 @@ Note: Detailed context from the knowledge base is provided with each question.
                         yield {"type": "token", "text": final_response}
                     elif event.type == "response.completed":
                         completed_output = event.response.output
+                        final_response_id = event.response.id
 
                 function_calls = [
                     item for item in completed_output if item.type == "function_call"
@@ -985,16 +1019,8 @@ Note: Detailed context from the knowledge base is provided with each question.
                                 }
 
                     results = self.handle_tool_calls(function_calls)
-                    messages_list.extend([
-                        {
-                            "type": "function_call",
-                            "call_id": tc.call_id,
-                            "name": tc.name,
-                            "arguments": tc.arguments
-                        }
-                        for tc in function_calls
-                    ])
-                    messages_list.extend(results)
+                    current_previous_id = final_response_id
+                    turn_items = results
                     collected_messages = []
                     final_response = ""
                 else:
@@ -1004,6 +1030,9 @@ Note: Detailed context from the knowledge base is provided with each question.
                 final_response = "I apologize, but I couldn't generate a response. Please try again."
                 yield {"type": "token", "text": final_response}
 
+            if final_response_id:
+                yield {"type": "response_id", "value": final_response_id}
+
             # Post-response: topic classification + suggestions
             yield {"type": "topic", "value": self._classify_topic(message)}
             suggestions = self._generate_suggestions(message, final_response)
@@ -1011,6 +1040,8 @@ Note: Detailed context from the knowledge base is provided with each question.
 
         except Exception as e:
             print(f"⚠ chat_stream_api error: {e}")
+            if final_response_id:
+                yield {"type": "response_id", "value": final_response_id}
             yield {"type": "error", "message": str(e)}
 
 
@@ -1050,25 +1081,60 @@ async def chat_endpoint(request: Request, background_tasks: BackgroundTasks):
     """SSE streaming endpoint for the Next.js frontend."""
     body = await request.json()
     message = body.get("message", "")
-    history = body.get("history", [])
+    previous_response_id = body.get("previous_response_id")
+    regenerate = bool(body.get("regenerate", False))
+    client_message_id = body.get("client_message_id")
 
     async def event_stream():
-        final_text, topic = "", None
+        final_text, topic, response_id = "", None, None
         try:
-            for event in personal_ai.chat_stream_api(message, history):
+            for event in personal_ai.chat_stream_api(message, previous_response_id, regenerate):
                 if event["type"] == "token":
                     final_text = event["text"]
                 elif event["type"] == "topic":
                     topic = event["value"]
+                elif event["type"] == "response_id":
+                    response_id = event["value"]
                 yield f"data: {json.dumps(event)}\n\n"
                 await asyncio.sleep(0)
         except Exception as e:
             yield f"data: {json.dumps({'type': 'error', 'message': str(e)})}\n\n"
         yield "data: [DONE]\n\n"
         if final_text:
-            background_tasks.add_task(log_conversation, message, final_text, topic)
+            background_tasks.add_task(log_conversation, message, final_text, topic, response_id, client_message_id)
 
     return StreamingResponse(event_stream(), media_type="text/event-stream", background=background_tasks)
+
+
+@api_app.post("/api/feedback")
+async def feedback_endpoint(request: Request):
+    """Record thumbs up/down feedback for a previously logged assistant message."""
+    body = await request.json()
+    client_message_id = (body.get("client_message_id") or "").strip()
+    value = body.get("value")
+    if not client_message_id:
+        raise HTTPException(status_code=400, detail="client_message_id is required")
+    if value not in ("up", "down"):
+        raise HTTPException(status_code=400, detail="value must be 'up' or 'down'")
+    if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
+        raise HTTPException(status_code=503, detail="Supabase not configured")
+
+    resp = requests.patch(
+        f"{SUPABASE_URL}/rest/v1/conversations",
+        headers={
+            "apikey": SUPABASE_SERVICE_ROLE_KEY,
+            "Authorization": f"Bearer {SUPABASE_SERVICE_ROLE_KEY}",
+            "Content-Type": "application/json",
+            "Prefer": "return=representation",
+        },
+        params={"client_message_id": f"eq.{client_message_id}"},
+        json={"feedback": value},
+        timeout=5,
+    )
+    resp.raise_for_status()
+    if resp.json():
+        return {"ok": True}
+    return {"ok": False, "reason": "not_found"}
 
 
 @api_app.post("/api/resolve-contact")

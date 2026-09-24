@@ -10,16 +10,33 @@ interface Props {
   isStreaming?: boolean;
   highlight?: boolean;
   topicColor?: string;
+  isLastAssistant?: boolean;
+  onRegenerate?: () => void;
+  onFeedback?: (value: "up" | "down") => void;
 }
 
-export default function MessageBubble({ message, isStreaming, highlight, topicColor = "bg-zinc-700" }: Props) {
+export default function MessageBubble({
+  message,
+  isStreaming,
+  highlight,
+  topicColor = "bg-zinc-700",
+  isLastAssistant,
+  onRegenerate,
+  onFeedback,
+}: Props) {
   const [copied, setCopied] = useState(false);
+  const [feedback, setFeedback] = useState<"up" | "down" | null>(null);
   const isUser = message.role === "user";
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(message.content);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
+  };
+
+  const handleFeedback = (value: "up" | "down") => {
+    setFeedback(value);
+    onFeedback?.(value);
   };
 
   return (
@@ -64,15 +81,52 @@ export default function MessageBubble({ message, isStreaming, highlight, topicCo
           </div>
         )}
 
-        {/* Copy button — assistant only, appears on hover */}
+        {/* Source chips — assistant only, shown when retrieval was confident */}
+        {!isUser && !isStreaming && message.sources && message.sources.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-2">
+            {message.sources.map((src) => (
+              <span
+                key={src}
+                className="text-[10px] px-2 py-0.5 rounded-full border border-zinc-600 bg-zinc-900/60 text-zinc-400"
+                title={src}
+              >
+                {src}
+              </span>
+            ))}
+          </div>
+        )}
+
+        {/* Action row — assistant only, appears on hover */}
         {!isUser && !isStreaming && (
-          <button
-            onClick={handleCopy}
-            className="absolute -bottom-6 right-0 text-xs text-zinc-500 hover:text-zinc-300
+          <div
+            className="absolute -bottom-6 right-0 flex items-center gap-3 text-xs text-zinc-500
                        opacity-0 group-hover:opacity-100 transition-opacity duration-150"
           >
-            {copied ? "✓ Copied" : "Copy"}
-          </button>
+            {isLastAssistant && onRegenerate && (
+              <button onClick={onRegenerate} className="hover:text-zinc-300">
+                Regenerate
+              </button>
+            )}
+            <button
+              onClick={() => handleFeedback("up")}
+              className={feedback === "up" ? "text-indigo-400" : "hover:text-zinc-300"}
+              aria-label="Good response"
+              aria-pressed={feedback === "up"}
+            >
+              👍
+            </button>
+            <button
+              onClick={() => handleFeedback("down")}
+              className={feedback === "down" ? "text-indigo-400" : "hover:text-zinc-300"}
+              aria-label="Bad response"
+              aria-pressed={feedback === "down"}
+            >
+              👎
+            </button>
+            <button onClick={handleCopy} className="hover:text-zinc-300">
+              {copied ? "✓ Copied" : "Copy"}
+            </button>
+          </div>
         )}
       </div>
     </div>

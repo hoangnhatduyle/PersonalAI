@@ -2,8 +2,9 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import confetti from "canvas-confetti";
-import { streamChatEvents, pingBackend, resolveContact, type Message } from "@/lib/api";
+import { streamChatEvents, pingBackend, resolveContact, submitFeedback, type Message } from "@/lib/api";
 import { getContactPreference, setContactPreference } from "@/lib/contactCache";
+import { getPreviousResponseId, setPreviousResponseId } from "@/lib/sessionCache";
 import ChatWindow from "@/components/ChatWindow";
 import InputBar from "@/components/InputBar";
 import StarterQuestions from "@/components/StarterQuestions";
@@ -89,10 +90,18 @@ export default function Home() {
     abortRef.current?.abort();
   }, []);
 
-  const sendMessage = useCallback(async (text: string) => {
+  const runTurn = useCallback(async ({
+    text,
+    regenerate,
+    replaceIndex,
+  }: {
+    text: string;
+    regenerate?: boolean;
+    replaceIndex?: number;
+  }) => {
     if (isStreaming) return;
 
-    if (CONFETTI_TRIGGERS.some(kw => text.toLowerCase().includes(kw))) {
+    if (!regenerate && CONFETTI_TRIGGERS.some(kw => text.toLowerCase().includes(kw))) {
       confetti({
         particleCount: 160,
         spread: 80,
@@ -101,10 +110,14 @@ export default function Home() {
       });
     }
 
-    const userMessage: Message     = { role: "user", content: text };
-    const historyBeforeMessage      = [...messages];
-    const updatedMessages           = [...messages, userMessage];
-    setMessages(updatedMessages);
+    const clientMessageId = crypto.randomUUID();
+    const baseMessages = replaceIndex === undefined
+      ? [...messages, { role: "user", content: text } as Message]
+      : messages;
+
+    if (replaceIndex === undefined) {
+      setMessages(baseMessages);
+    }
     setIsStreaming(true);
     setStreamingContent("");
     setSuggestions([]);
@@ -114,9 +127,15 @@ export default function Home() {
     const controller = new AbortController();
     abortRef.current = controller;
     let fullResponse = "";
+    let sources: string[] | undefined;
 
     try {
-      const gen = streamChatEvents(text, historyBeforeMessage, controller.signal);
+      const gen = streamChatEvents(text, {
+        previousResponseId: getPreviousResponseId(),
+        regenerate,
+        clientMessageId,
+        signal: controller.signal,
+      });
       for await (const event of gen) {
         if (event.type === "status") {
           setThinkingStatus(event.text);
@@ -128,6 +147,10 @@ export default function Home() {
           setTopic(event.value);
         } else if (event.type === "suggestions") {
           setSuggestions(event.items);
+        } else if (event.type === "sources") {
+          sources = event.items;
+        } else if (event.type === "response_id") {
+          setPreviousResponseId(event.value);
         } else if (event.type === "contact_ask") {
           const cached = getContactPreference();
           if (cached) {
@@ -159,14 +182,34 @@ export default function Home() {
       }
     } finally {
       const committed = fullResponse || "Sorry, something went wrong. Please try again.";
-      setMessages([...updatedMessages, { role: "assistant", content: committed }]);
-      setNewMessageIndex(updatedMessages.length);
+      const assistantMessage: Message = { role: "assistant", content: committed, sources, clientMessageId };
+      if (replaceIndex === undefined) {
+        setMessages([...baseMessages, assistantMessage]);
+        setNewMessageIndex(baseMessages.length);
+      } else {
+        setMessages(prev => prev.map((m, i) => (i === replaceIndex ? assistantMessage : m)));
+        setNewMessageIndex(replaceIndex);
+      }
       setStreamingContent("");
       setThinkingStatus(null);
       setIsStreaming(false);
       setTimeout(() => setNewMessageIndex(null), 2000);
     }
   }, [messages, isStreaming]);
+
+  const sendMessage = useCallback((text: string) => runTurn({ text }), [runTurn]);
+
+  const handleRegenerate = useCallback((index: number) => {
+    const original = messages[index - 1];
+    if (!original || original.role !== "user") return;
+    runTurn({ text: original.content, regenerate: true, replaceIndex: index });
+  }, [messages, runTurn]);
+
+  const handleFeedback = useCallback((index: number, value: "up" | "down") => {
+    const msg = messages[index];
+    if (!msg?.clientMessageId) return;
+    submitFeedback(msg.clientMessageId, value);
+  }, [messages]);
 
   const handleSkipContact = useCallback(async () => {
     if (!contactAsk) return;
@@ -287,6 +330,8 @@ export default function Home() {
                   onSuggestionSelect={sendMessage}
                   contactAsk={contactAsk}
                   onSkipContact={handleSkipContact}
+                  onRegenerate={handleRegenerate}
+                  onFeedback={handleFeedback}
                 />
               )}
               <InputBar

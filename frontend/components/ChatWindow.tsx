@@ -16,6 +16,8 @@ interface Props {
   onSuggestionSelect: (q: string) => void;
   contactAsk: { question: string } | null;
   onSkipContact: () => void;
+  onRegenerate: (index: number) => void;
+  onFeedback: (index: number, value: "up" | "down") => void;
 }
 
 export default function ChatWindow({
@@ -29,6 +31,8 @@ export default function ChatWindow({
   onSuggestionSelect,
   contactAsk,
   onSkipContact,
+  onRegenerate,
+  onFeedback,
 }: Props) {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -44,6 +48,9 @@ export default function ChatWindow({
           message={msg}
           highlight={i === newMessageIndex}
           topicColor={topicColor}
+          isLastAssistant={i === messages.length - 1 && msg.role === "assistant"}
+          onRegenerate={() => onRegenerate(i)}
+          onFeedback={(value) => onFeedback(i, value)}
         />
       ))}
 
