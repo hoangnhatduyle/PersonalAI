@@ -40,7 +40,7 @@ export default function MessageBubble({
   };
 
   return (
-    <div className={`flex gap-3 ${isUser ? "flex-row-reverse" : "flex-row"} group ${highlight ? "message-highlight" : ""}`}>
+    <div className={`flex gap-3 ${isUser ? "flex-row-reverse" : "flex-row"} ${highlight ? "message-highlight" : ""}`}>
       {/* Avatar */}
       <div
         className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors duration-500
@@ -96,20 +96,17 @@ export default function MessageBubble({
           </div>
         )}
 
-        {/* Action row — assistant only, appears on hover */}
+        {/* Action row — assistant only, always visible so it isn't missed */}
         {!isUser && !isStreaming && (
-          <div
-            className="absolute -bottom-6 right-0 flex items-center gap-3 text-xs text-zinc-500
-                       opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-          >
+          <div className="absolute -bottom-6 right-0 flex items-center gap-3 text-xs text-zinc-500">
             {isLastAssistant && onRegenerate && (
-              <button onClick={onRegenerate} className="hover:text-zinc-300">
+              <button onClick={onRegenerate} className="hover:text-zinc-300 transition-colors">
                 Regenerate
               </button>
             )}
             <button
               onClick={() => handleFeedback("up")}
-              className={feedback === "up" ? "text-indigo-400" : "hover:text-zinc-300"}
+              className={`transition-colors ${feedback === "up" ? "text-indigo-400" : "hover:text-zinc-300"}`}
               aria-label="Good response"
               aria-pressed={feedback === "up"}
             >
@@ -117,13 +114,13 @@ export default function MessageBubble({
             </button>
             <button
               onClick={() => handleFeedback("down")}
-              className={feedback === "down" ? "text-indigo-400" : "hover:text-zinc-300"}
+              className={`transition-colors ${feedback === "down" ? "text-indigo-400" : "hover:text-zinc-300"}`}
               aria-label="Bad response"
               aria-pressed={feedback === "down"}
             >
               👎
             </button>
-            <button onClick={handleCopy} className="hover:text-zinc-300">
+            <button onClick={handleCopy} className="hover:text-zinc-300 transition-colors">
               {copied ? "✓ Copied" : "Copy"}
             </button>
           </div>
