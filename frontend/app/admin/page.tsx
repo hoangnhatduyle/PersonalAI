@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { fetchConversations, type LoggedConversation } from "@/lib/adminApi";
 
 const LIMIT = 20;
@@ -70,7 +72,15 @@ function ConversationRow({ item }: { item: LoggedConversation }) {
         </div>
         <div>
           <p className="text-[10px] font-semibold text-zinc-500 uppercase tracking-wider mb-1">Assistant</p>
-          <p className="text-sm text-zinc-400 whitespace-pre-wrap">{item.assistant_response}</p>
+          <div
+            className="prose prose-sm prose-invert max-w-none text-zinc-400
+              prose-p:my-1 prose-p:leading-relaxed prose-ul:my-1 prose-ul:pl-4
+              prose-ol:my-1 prose-ol:pl-4 prose-li:my-0.5 prose-strong:text-white
+              prose-headings:text-white prose-headings:font-semibold
+              prose-a:text-indigo-400 prose-a:no-underline hover:prose-a:underline"
+          >
+            <ReactMarkdown remarkPlugins={[remarkGfm]}>{item.assistant_response}</ReactMarkdown>
+          </div>
         </div>
       </div>
     </div>
