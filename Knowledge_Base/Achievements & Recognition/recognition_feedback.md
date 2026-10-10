@@ -9,17 +9,29 @@ Multiple positive performance reviews and feedback across roles (Nysus Solutions
 
 ---
 
-## First Solar Annual Performance Review (2025)
+## Annual Review — "What did your annual review say?"
 
-Full review content is available at: `Knowledge_Base/Achievements & Recognition/first_solar_annual_review.md`
+**Default answer = First Solar 2025 (current employer).** Lead with it; mention Nysus only as a brief follow-up. If the visitor's employer is unclear, answer First Solar and offer the Nysus review. Use the same facts and the same order every time.
+
+### First Solar Annual Performance Review (2025)
 
 **Manager:** Aaron Bollinger | **Overall Status: Green**
 
-Key highlights:
-- **Demonstrates Excellence** in: Accountability, Agility, Attention to Detail, Integrity, Logical & Clear Thinker, Problem Solving, Reality Based Thinking
-- **Delivers Against Expectations** (growth areas): Analytical Aptitude, Collaboration, Communication, Functional Knowledge, Technical Knowledge
-- Manager cited Image Data Mart → AI Auto Reply, ESD/JB1 onboarding, PLC/MQTT pipeline for Palantir Foundry as standout contributions
-- Described as "a reliable, high-output technical contributor who consistently turns complex work into tangible results"
+- **What the manager credited (concrete impact):**
+  - Image Data Mart work that enabled **AI Auto Reply**
+  - Bringing the **ESD and JB1 tools** online
+  - Delivering the **PLC tag discovery and MQTT publishing pipeline** for Palantir Foundry in a short time window
+  - Strong agility managing competing priorities without sacrificing quality
+- **Summary quote:** "a reliable, high-output technical contributor who consistently turns complex work into tangible results"
+- **Demonstrates Excellence** in: Accountability, Agility, Attention to Detail, Integrity, Logical & Clear Thinking, Problem Solving, Reality Based Thinking
+- **Delivers Against Expectations** (growth areas, i.e. not yet "excellence"): Analytical Aptitude, Collaboration, Communication, Functional Knowledge, Technical Knowledge
+- **Main growth feedback:** show more initiative beyond assigned work (proactively identify problems and bring proposals), and engage product management and stakeholders early so technical work stays aligned with business needs. Longer-term: build skills toward a SE II role (think through the full MES architecture, propose high-level solutions).
+
+Full competency-by-competency detail is in `Knowledge_Base/Work Experience/role_4_First_Solar.md` (Annual Performance Review section).
+
+### Nysus Solutions Annual Review (earlier role)
+
+Overall score **85.24%** (supervisor Sandra Kwalinowski: "Overall, doing great"). Behaviors, Skills & Performance averaged 4.86 (mostly Exceeds Expectations); Position Contract Key Measurables averaged 3.67 (two Meets Expectations, one Below Expectations for logging hours). Feedback: communicate before going out of process (developing on live servers should be a last resort with sign-off), and record working hours consistently. Details in the Nysus section below.
 
 ---
 
@@ -85,7 +97,7 @@ Senator Teresa Fedor, State Senator, 11th District, Ohio Senate.
 
 ## Manager, Mentor & Peer Feedback
 
-- First Solar manager Aaron Bollinger praised Hoang's reliability, output quality, and ability to deliver complex work as tangible results (see first_solar_annual_review.md for full text)
+- First Solar manager Aaron Bollinger praised Hoang's reliability, output quality, and ability to deliver complex work as tangible results (see the First Solar annual review section above)
 - Nysus Solutions supervisor provided positive overall score of 85.24% with "overall doing great" summary
 - Customers and project managers repeatedly expressed appreciation for timely on-site support and incident resolution in fast-paced MES environments
 
@@ -93,7 +105,7 @@ Senator Teresa Fedor, State Senator, 11th District, Ohio Senate.
 
 ## Evidence & Suggested Artifacts
 
-- [x] First Solar annual review (full text): `first_solar_annual_review.md`
+- [x] First Solar annual review: summarized above; competency detail in `role_4_First_Solar.md`
 - [x] Nysus performance review images: `image.png`, `image-1.png` (described above)
 - [x] State Senator recognition letter: `image-2.png` (described above)
 - [ ] LinkedIn recommendation text (export from LinkedIn and save as snippet)

@@ -870,6 +870,11 @@ without both name and contact info.
    d. Call record_user_details EXACTLY ONCE with name + email + notes all filled in.
    NEVER call record_user_details more than once per conversation, and never call it without both name and email.
 6. Be concise, warm, and engaging — like you're genuinely having a conversation
+7. For "annual review" / "performance review" questions: default to my First Solar 2025 review (the \
+current role) and lead with the concrete projects my manager credited and the specific growth feedback, \
+not just a list of competency labels. Name the manager. Mention the Nysus review only as a short \
+follow-up, and be straightforward about its growth feedback (process and time tracking). Keep the facts \
+and order consistent between answers.
 
 ## Brief Summary:
 {self.summary}
