@@ -4,7 +4,6 @@ Combines vector database retrieval with OpenAI function calling
 """
 
 import os
-import glob
 import json
 import base64
 import asyncio
@@ -21,11 +20,10 @@ warnings.filterwarnings('ignore', message='Created a chunk of size.*')
 
 # LangChain imports for RAG
 from langchain_core.documents import Document
-from langchain_text_splitters import (
-    MarkdownHeaderTextSplitter,
-    RecursiveCharacterTextSplitter,
-)
 from langchain_openai import OpenAIEmbeddings
+
+import rag_index
+from rag_index import SimpleRetriever, SimpleVectorStore
 
 # OpenAI imports for function calling
 from openai import OpenAI
@@ -53,8 +51,6 @@ GITHUB_MAX_FILES_PER_REPO = 10
 GITHUB_MAX_FILE_SIZE_CHARS = 8000
 
 # RAG performance settings
-CHUNK_SIZE = 600
-CHUNK_OVERLAP = 100
 TOP_K_RETRIEVAL = 5        # slightly wider net to offset dropping HyDE's answer-shaped query expansion
 MAX_CONTEXT_LENGTH = 4000  # slightly larger since re-ranking improves precision
 RELEVANCE_THRESHOLD = 0.25 # min cosine similarity to call retrieval "relevant" in the status message — tune after observing real scores
@@ -380,43 +376,6 @@ tools = [
 
 
 # ─────────────────────────────────────────────
-# Lightweight in-memory vector store
-#
-# The knowledge base is a few hundred chunks, rebuilt fresh on every
-# cold start (no persistence). A numpy cosine-similarity scan does the
-# same job as Chroma here without the onnxruntime/kubernetes/grpc
-# dependency chain, which is what pushed the Vercel function past its
-# 500MB bundle limit.
-# ─────────────────────────────────────────────
-class SimpleVectorStore:
-    def __init__(self, chunks: list[Document], embeddings: OpenAIEmbeddings):
-        self._chunks = chunks
-        self._embed_query = embeddings.embed_query
-        vectors = np.array(embeddings.embed_documents(
-            [chunk.page_content for chunk in chunks]
-        ), dtype=np.float32)
-        self._normalized = vectors / np.linalg.norm(vectors, axis=1, keepdims=True)
-
-    def similarity_search(self, query: str, k: int) -> tuple[list[Document], float]:
-        """Returns the top-k chunks plus the best cosine similarity score, so callers can tell whether anything actually relevant was found."""
-        query_vec = np.array(self._embed_query(query), dtype=np.float32)
-        query_vec /= np.linalg.norm(query_vec)
-        scores = self._normalized @ query_vec
-        top_k = np.argsort(-scores)[:k]
-        top_score = float(scores[top_k[0]]) if len(top_k) else 0.0
-        return [self._chunks[i] for i in top_k], top_score
-
-
-class SimpleRetriever:
-    def __init__(self, store: SimpleVectorStore, k: int):
-        self._store = store
-        self._k = k
-
-    def invoke(self, query: str, k: int | None = None) -> tuple[list[Document], float]:
-        return self._store.similarity_search(query, k or self._k)
-
-
-# ─────────────────────────────────────────────
 # PersonalAI class
 # ─────────────────────────────────────────────
 class PersonalAI:
@@ -634,85 +593,35 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
         print(f"✓ GitHub cache: {cached_files} files from {len(repos)} repos")
 
     # ── RAG Initialization ─────────────────────
-    @staticmethod
-    def _load_markdown_dir(folder: str, doc_type: str) -> list:
-        """Load all *.md files under folder as Documents."""
-        docs = []
-        for path in glob.glob(os.path.join(folder, "**", "*.md"), recursive=True):
-            with open(path, "r", encoding="utf-8") as f:
-                docs.append(Document(
-                    page_content=f.read(),
-                    metadata={"source": path, "doc_type": doc_type},
-                ))
-        return docs
-
     def _initialize_rag(self):
-        """Initialize RAG: load documents, chunk with heading awareness, embed, store."""
-        self.documents = []
+        """Initialize RAG from the precomputed index (scripts/build_index.py).
 
-        # Load Knowledge_Base folders
-        folders = glob.glob(f"{KNOWLEDGE_BASE_PATH}/*")
-        for folder in folders:
-            if not os.path.isdir(folder):
-                continue
-            doc_type = os.path.basename(folder)
-            self.documents.extend(self._load_markdown_dir(folder, doc_type))
+        Falls back to chunking + embedding at startup only if the index is
+        missing or incompatible, which costs OpenAI calls and fails if the
+        account is out of quota.
+        """
+        embeddings = OpenAIEmbeddings(model=rag_index.EMBEDDING_MODEL)
 
-        # Load GitHub cache
-        if os.path.exists(GITHUB_CACHE_PATH) and os.listdir(GITHUB_CACHE_PATH):
-            github_docs = self._load_markdown_dir(GITHUB_CACHE_PATH, "GitHub")
-            self.documents.extend(github_docs)
-            print(f"  + Loaded {len(github_docs)} GitHub cached docs")
+        loaded = rag_index.load_index()
+        if loaded is not None:
+            self.chunks = loaded.chunks
+            self.documents = [None] * loaded.document_count  # only the count is used
+            vectors = loaded.vectors
+            print(f"  ✓ Loaded precomputed index: {len(self.chunks)} chunks")
+        else:
+            print("  ⚠ No usable precomputed index — embedding at startup (run scripts/build_index.py)")
+            self.documents = rag_index.load_knowledge_base_docs(KNOWLEDGE_BASE_PATH)
+            if os.path.exists(GITHUB_CACHE_PATH) and os.listdir(GITHUB_CACHE_PATH):
+                github_docs = rag_index.load_markdown_dir(GITHUB_CACHE_PATH, "GitHub")
+                self.documents.extend(github_docs)
+                print(f"  + Loaded {len(github_docs)} GitHub cached docs")
+            self.chunks = rag_index.chunk_documents(self.documents)
+            vectors = np.array(
+                embeddings.embed_documents([c.page_content for c in self.chunks]),
+                dtype=np.float32,
+            )
 
-        print(f"  Loaded {len(self.documents)} documents total — chunking...")
-
-        # Two-pass chunking: heading-aware → size-aware
-        header_splitter = MarkdownHeaderTextSplitter(
-            headers_to_split_on=[
-                ("#", "h1"),
-                ("##", "h2"),
-                ("###", "h3"),
-            ],
-            strip_headers=False,
-        )
-        size_splitter = RecursiveCharacterTextSplitter(
-            chunk_size=CHUNK_SIZE,
-            chunk_overlap=CHUNK_OVERLAP,
-        )
-
-        self.chunks = []
-        for doc in self.documents:
-            try:
-                # First pass: split by markdown headers
-                header_splits = header_splitter.split_text(doc.page_content)
-
-                # Convert to Document objects, preserving original metadata
-                header_docs = []
-                for split in header_splits:
-                    merged_meta = {**doc.metadata}
-                    # Add heading context as metadata
-                    for key in ("h1", "h2", "h3"):
-                        if key in split.metadata:
-                            merged_meta[key] = split.metadata[key]
-                    header_docs.append(Document(
-                        page_content=split.page_content,
-                        metadata=merged_meta
-                    ))
-
-                # Second pass: split oversized sections by character count
-                sized_chunks = size_splitter.split_documents(header_docs)
-                self.chunks.extend(sized_chunks)
-            except Exception:
-                # Fallback: just size-split the whole document
-                fallback = size_splitter.split_documents([doc])
-                self.chunks.extend(fallback)
-
-        # Create embeddings with upgraded model
-        embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-
-        # Build in-memory vector store (no disk persistence — compatible with
-        # read-only filesystems such as Vercel serverless functions)
-        vectorstore = SimpleVectorStore(self.chunks, embeddings)
+        vectorstore = SimpleVectorStore(self.chunks, vectors, embeddings.embed_query)
         self.retriever = SimpleRetriever(vectorstore, TOP_K_RETRIEVAL)
 
         print(f"  ✓ Vector store: {len(self.chunks)} chunks indexed")
