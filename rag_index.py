@@ -158,6 +158,15 @@ class LoadedIndex:
     chunk_fingerprint: str
 
 
+def github_docs_needed(index: "LoadedIndex | None") -> bool:
+    """GitHub docs only feed the embed-at-startup fallback (no usable precomputed index).
+
+    With a valid index they are never read, so fetching them, which also costs OpenAI calls to
+    choose files, is skipped and startup makes no network calls at all.
+    """
+    return index is None
+
+
 def save_index(
     chunks: list[Document],
     vectors: np.ndarray,

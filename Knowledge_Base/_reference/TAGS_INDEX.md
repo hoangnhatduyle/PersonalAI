@@ -210,9 +210,6 @@ This index helps you quickly find documents by topic. Each tag lists all documen
 
 ### E
 
-**EB-2**
-- `Career_Goals/career_goals.md`
-
 **elevator-pitch**
 - `Narrative & Storytelling/narrative.md`
 
@@ -617,7 +614,7 @@ This index helps you quickly find documents by topic. Each tag lists all documen
 
 ### 🎯 Career & Goals
 - career-goals, career-plan, long-term, short-term
-- EB-2, graduate-applications, graduate-school
+- graduate-applications, graduate-school
 - professional-development, professional-identity
 
 ### 📚 Skills & Learning
@@ -699,7 +696,7 @@ This index helps you quickly find documents by topic. Each tag lists all documen
 ### To Find Information About...
 
 **Career Direction:**
-→ career-goals, professional-development, EB-2, graduate-applications
+→ career-goals, professional-development, graduate-applications
 
 **Technical Abilities:**
 → technical-skills, programming, AI, ML, cloud, DevOps

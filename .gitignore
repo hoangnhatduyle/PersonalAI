@@ -1,6 +1,8 @@
 .env
 .venv/
 *.md
+# Knowledge-base documents are source data for the RAG index: never ignore them.
+!Knowledge_Base/**/*.md
 Knowledge_Base/Extra/Bone Conduction Railing Project/*.png
 
 # GitHub docs cache (rebuilt at startup from GitHub API)

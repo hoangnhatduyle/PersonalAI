@@ -4,7 +4,7 @@ const STARTERS = [
   "What's your educational background?",
   "What tech stack do you use?",
   "What are your career goals?",
-  "What did your annual review say?",
+  "What research do you do at CincySI Lab?",
 ];
 
 interface Props {

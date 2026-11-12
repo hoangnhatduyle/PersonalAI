@@ -120,22 +120,6 @@ These teaching principles apply directly to:
 
 ---
 
-## Evidence for EB-2 NIW
-
-Teaching and mentoring experience supports EB-2 National Interest Waiver case by demonstrating:
-1. **Knowledge dissemination:** Commitment to sharing expertise with others
-2. **Leadership potential:** Ability to guide and develop others
-3. **Communication skills:** Can explain specialized knowledge to diverse audiences
-4. **Community contribution:** Willing to invest time in educating and supporting others
-
-### Potential Evidence to Collect
-- Letters of recommendation from professors or students (if available)
-- Course evaluations or feedback
-- Documentation of mentoring activities at Nysus Solutions
-- Future: blog posts, tutorials, conference presentations, open-source contributions
-
----
-
 ## Skills Transferable to AI/LLM Engineering
 
 ### Technical Communication

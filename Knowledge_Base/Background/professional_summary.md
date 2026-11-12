@@ -5,11 +5,11 @@
 
 ## 30-Second Elevator Pitch
 
-"I'm Hoang Le, a graduate student pursuing an MS in Computer Science at the University of Cincinnati, coming off 3+ years as a full-stack MES Software Engineer — most recently at First Solar. I build production-grade applications that connect manufacturing equipment with enterprise software, and I'm now deepening my focus on LLM engineering and RAG systems through my graduate studies. I hold a Bachelor's in Computer Science from the University of Toledo, where I graduated magna cum laude with a 3.89 GPA."
+"I'm Hoang Le, a graduate student pursuing an MS in Computer Science at the University of Cincinnati, coming off 4+ years as a full-stack MES Software Engineer — most recently at First Solar. I build production-grade applications that connect manufacturing equipment with enterprise software, and I'm now deepening my focus on LLM engineering and RAG systems through my graduate studies. I hold a Bachelor's in Computer Science from the University of Toledo, where I graduated magna cum laude with a 3.89 GPA."
 
 ## 60-Second Version
 
-"I'm currently a full-time graduate student in the MS Computer Science program at the University of Cincinnati, following 3+ years as a Software Engineer building Manufacturing Execution Systems — most recently at First Solar (Feb 2025 – May 2026), before that at Nysus Solutions. My background includes full-stack development with C#, ASP.NET, React, and SQL Server, plus hands-on experience integrating PLCs, vision controllers, and ERP systems.
+"I'm currently a full-time graduate student in the MS Computer Science program at the University of Cincinnati, following 4+ years as a Software Engineer building Manufacturing Execution Systems — most recently at First Solar (Feb 2025 – May 2026), before that at Nysus Solutions. My background includes full-stack development with C#, ASP.NET, React, and SQL Server, plus hands-on experience integrating PLCs, vision controllers, and ERP systems.
 
 What sets me apart is my focus on AI and LLM engineering. I've built production RAG systems and multi-agent applications, and I'm using my graduate coursework to go deeper into Machine Learning and LLM Engineering. I led projects like Remote Operations at First Solar—enabling operators to make remote decisions through AI-powered image analysis—and I'm passionate about applying AI to solve real manufacturing challenges.
 
@@ -17,7 +17,7 @@ I'm looking for internships, research assistantships, or part-time opportunities
 
 ## 2-Minute Professional Narrative
 
-"I'm Hoang Le, currently a full-time graduate student in the MS Computer Science program at the University of Cincinnati, where I'm building on 3+ years of experience as a Software Engineer specializing in Manufacturing Execution Systems and deepening my expertise in AI and LLM engineering.
+"I'm Hoang Le, currently a full-time graduate student in the MS Computer Science program at the University of Cincinnati, where I'm building on 4+ years of experience as a Software Engineer specializing in Manufacturing Execution Systems and deepening my expertise in AI and LLM engineering.
 
 **My Background:**
 I moved from Vietnam to Toledo, Ohio in 2018 to pursue Computer Science at the University of Toledo. I graduated magna cum laude in 2023 with a 3.89 GPA and a dual focus in Computer Science and Data Science. During my studies, I completed multiple co-ops that gave me real-world experience in full-stack development, DevOps, and manufacturing systems.
@@ -26,7 +26,7 @@ I moved from Vietnam to Toledo, Ohio in 2018 to pursue Computer Science at the U
 At First Solar (February 2025 – May 2026), I developed and maintained MES applications that integrate vision controllers, PLCs, and enterprise systems. One of my key projects was Remote Operations—a system that enables operators to inspect manufacturing data remotely by leveraging image capture, data pipelines, and intelligent UI workflows. This project demonstrates my ability to deliver production systems that improve operational efficiency while reducing downtime. I left this role in May 2026 to begin graduate school full-time.
 
 **My Transition to AI & Graduate School:**
-I'm passionate about AI's potential to transform manufacturing and enterprise operations. Not being selected in the H1B FY2027 lottery led me to pursue an MS in Computer Science at the University of Cincinnati (started Fall 2026), where I can deepen my theoretical foundations in LLM Engineering, Machine Learning, and Agentic AI Systems while maintaining F-1 status. I've built several RAG applications, including a Personal AI Assistant that uses vector databases and retrieval-augmented generation to answer questions about my professional background.
+I'm passionate about AI's potential to transform manufacturing and enterprise operations. That's why I chose to pursue an MS in Computer Science at the University of Cincinnati (started Fall 2026), where I can deepen my theoretical foundations in LLM Engineering, Machine Learning, and Agentic AI Systems. I've built several RAG applications, including a Personal AI Assistant that uses vector databases and retrieval-augmented generation to answer questions about my professional background.
 
 **What I'm Looking For:**
 During my program, I'm open to internships, research assistantships, and part-time opportunities that combine manufacturing systems expertise with AI/ML engineering. After graduation, I want to build production-grade LLM applications, RAG systems, and intelligent agents that solve real business problems, in roles like LLM Engineer, AI Systems Engineer, or Software Engineer with AI specialization.
@@ -39,7 +39,7 @@ I bring a unique combination of production systems experience, strong technical 
 ## Key Value Propositions
 
 ### 1. Dual Expertise: Manufacturing Systems + AI
-- **Manufacturing:** 3+ years building MES/ERP integrations, PLC communications, and shop floor applications
+- **Manufacturing:** 4+ years building MES/ERP integrations, PLC communications, and shop floor applications
 - **AI/ML:** Active training in LLM engineering, RAG systems, and multi-agent architectures
 - **Unique Value:** Can apply AI to real manufacturing problems, not just theoretical use cases
 
@@ -90,7 +90,7 @@ I bring a unique combination of production systems experience, strong technical 
 ## Target Audience Variations
 
 ### For Recruiters
-"MES Software Engineer with 3+ years of production experience (most recently at First Solar, Feb 2025 – May 2026), now a full-time MS Computer Science student at the University of Cincinnati specializing in LLM Engineering and RAG systems. Strong full-stack background (C#, React, SQL Server) plus active AI/ML training. Open to internships, research assistantships, and part-time roles during the program, and targeting Software Engineer II or LLM Engineer roles upon graduation."
+"MES Software Engineer with 4+ years of production experience (most recently at First Solar, Feb 2025 – May 2026), now a full-time MS Computer Science student at the University of Cincinnati specializing in LLM Engineering and RAG systems. Strong full-stack background (C#, React, SQL Server) plus active AI/ML training. Open to internships, research assistantships, and part-time roles during the program, and targeting Software Engineer II or LLM Engineer roles upon graduation."
 
 ### For Hiring Managers
 "I bring production engineering discipline to AI/ML development. My manufacturing systems background means I understand operational constraints, data quality issues, and the importance of observability—all critical for deploying LLMs in enterprise settings. I've led projects from requirements to deployment and I'm committed to building AI systems that actually work in production."
@@ -117,8 +117,14 @@ A: I'm not leaving manufacturing—I'm bringing AI TO manufacturing. My goal is 
 **Q: What are your long-term career goals?**
 A: Within 5 years, I want to be a Senior AI Systems Engineer or AI Architect, leading teams that build production RAG and agentic systems for enterprise applications. I'm currently pursuing my Master's degree (started Fall 2026 at the University of Cincinnati) to deepen my theoretical foundations while continuing to ship production systems.
 
+**Q: What research are you doing?**
+A: I'm a graduate researcher at the CincySI Lab at the University of Cincinnati, advised by Professor Justin Zhan, working on multi-agent LLM systems. One line of work asks whether the evidence multi-agent systems cite is what actually drove their decisions; another looks at how confidence changes as claims pass between agents. Two papers on these topics are under review at NAACL 2027, so I can describe the ideas but can't share titles or results yet.
+
+**Q: What are you looking for next?**
+A: I'm looking for research opportunities for Summer 2027, and full-time roles after I graduate in May 2028. I'm especially interested in building and evaluating production multi-agent and RAG systems.
+
 **Q: Are you still at First Solar?**
-A: No — I left First Solar in May 2026 when my STEM OPT work authorization concluded. I'm now a full-time graduate student in the MS Computer Science program at the University of Cincinnati, which is also my path back to F-1 student status after not being selected in the H1B FY2027 lottery.
+A: No — I left First Solar in May 2026 to start full-time graduate study. I'm now in the MS Computer Science program at the University of Cincinnati, where I also do research at the CincySI Lab.
 
 ---
 

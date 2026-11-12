@@ -15,7 +15,7 @@ Pragmatic systems engineer + LLM/agent specialist: I design, deploy, and operate
 - **Early career:** Began in co-op roles learning full-stack and systems engineering fundamentals
 - **Growth phase:** Progressed into MES/production projects with increasing responsibility for on-site deployments and first-response ownership
 - **Key milestone:** Delivered high-visibility work (Dana Virtual Stations) as sole developer and on-site engineer, shifting focus toward systems reliability and operational readiness
-- **Current evolution:** Applying LLMs and agentic tooling to automate knowledge work, improve decision support, and reduce operational friction. Concurrent plan for MS study to enable research collaborations and strengthen EB-2 evidence.
+- **Current evolution:** Applying LLMs and agentic tooling to automate knowledge work, improve decision support, and reduce operational friction. Concurrent plan for MS study to enable research collaborations.
 
 ## Key Turning Points & Decisions
 - **Early co-op impact:** Demonstrated reliability and shipped features that earned continued responsibility

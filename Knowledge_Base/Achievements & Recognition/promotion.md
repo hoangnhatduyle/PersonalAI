@@ -21,7 +21,7 @@ Short summary
 
 ## Evidence & suggested artifacts
 
-- Evidence to collect for CV / EB‑2 / applications:
+- Evidence to collect for CV / applications:
 	- Manager testimonials / LinkedIn reviews: collect direct quotes or profile URLs that reference on-site ownership and problem resolution (you noted there are reviews on your LinkedIn).
 	- Pull request & production-fix list: locate or request a list of PRs you reviewed and major production fixes you implemented (if unavailable, ask repo admins or include concise incident descriptions instead).
 	- Incident records / phone logs: export customer call logs or incident tickets from Nysus that document on-site problems you helped resolve (you mentioned Nysus kept phone call logs).

@@ -100,7 +100,7 @@ These three skills represent the intersection of:
 
 ## LinkedIn Skill Endorsement Strategy
 
-To strengthen LinkedIn profile and support EB-2 NIW case:
+To strengthen LinkedIn profile:
 1. **Request endorsements** from colleagues at First Solar and Nysus Solutions
 2. **Add more skills** related to specific technologies (LangChain, RAG, Chroma, OpenAI)
 3. **Take LinkedIn skill assessments** for Python, Machine Learning, SQL

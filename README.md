@@ -132,11 +132,31 @@ The backend at `http://localhost:7860` serves the Gradio fallback UI and the `/a
 
 ---
 
+## Updating the knowledge base (rebuild the index)
+
+The backend answers from a **precomputed vector index** (`index/chunks.json` + `index/chunk_vectors.npy`)
+that is committed to the repo. On startup it loads that index from disk, so a cold start makes **no OpenAI
+or GitHub calls**. The index is only as fresh as its last build, so whenever you add or edit anything under
+`Knowledge_Base/` (or the loader in `rag_index.py`):
+
+1. `python scripts/build_index.py` — re-chunks the knowledge base and embeds it (needs `OPENAI_API_KEY` in `.env`; about a cent).
+2. `python -m pytest tests` — `test_committed_index_matches_current_knowledge_base` fails if you forgot step 1.
+3. Commit `Knowledge_Base/` **and** `index/` together, push, and deploy.
+
+What goes wrong if you skip it: a stale index does not make startup call OpenAI, it makes the chatbot answer
+from old content. Startup only falls back to embedding everything itself (slow, costs OpenAI calls, and fetches
+GitHub docs first) when `index/` is missing, corrupt, or was built with a different embedding model.
+
+Knowledge-base documents must be committed even though `*.md` is ignored elsewhere; `.gitignore` has an
+explicit `!Knowledge_Base/**/*.md` exception for them.
+
+---
+
 ## Deployment
 
 ### HuggingFace Spaces (backend only)
 
-The backend is HuggingFace Spaces compatible — Gradio is mounted at the root. Push `app.py`, `requirements.txt`, `Knowledge_Base/`, `me/`, and `vector_db/` using `huggingface_hub`:
+The backend is HuggingFace Spaces compatible — Gradio is mounted at the root. Push `app.py`, `rag_index.py`, `requirements.txt`, `Knowledge_Base/`, `me/`, and `index/` using `huggingface_hub`:
 
 ```python
 from huggingface_hub import HfApi
@@ -145,6 +165,12 @@ api.upload_folder(folder_path=".", repo_id="your-username/your-space", repo_type
 ```
 
 Set secrets (`OPENAI_API_KEY`, etc.) in the Space settings — not in the repo.
+
+### Vercel (how this repo is linked)
+
+- Repo root → Vercel project `personal-ai-cycv`: the FastAPI backend, entry point `api/index.py`.
+- `frontend/` → Vercel project `personal-ai`: the Next.js chat UI. Its `NEXT_PUBLIC_API_URL` must point at the backend.
+- Backend environment variables are listed below; set them in the Vercel project settings, never in the repo.
 
 ### Frontend
 

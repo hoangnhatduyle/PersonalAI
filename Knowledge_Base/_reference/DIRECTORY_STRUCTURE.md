@@ -37,7 +37,7 @@ Knowledge_Base/
 │   └── background_identity.md              [Personal info, values, professional identity]
 │
 ├── 🎯 Career_Goals/
-│   └── career_goals.md                     [Short & long-term goals, graduate programs, EB-2 strategy]
+│   └── career_goals.md                     [Short & long-term goals, graduate programs]
 │
 ├── 🎓 Education/
 │   ├── academic_highlights.md              [Impactful courses, senior design project]
@@ -55,7 +55,6 @@ Knowledge_Base/
 │   ├── BareMinimumWithDebug_Loop.ino       [Arduino code for bone conduction project]
 │   ├── Final Report Assessment.docx
 │   ├── Final Report Assessment.md
-│   ├── LLM Conversation about EB2.txt
 │   ├── OfficialTranscript.pdf
 │   ├── Poster.pdf
 │   ├── Resume.pdf
@@ -114,7 +113,7 @@ Knowledge_Base/
 **RAG Priority:** ⭐⭐⭐ High (foundational context)
 
 ### 🎯 Career_Goals (1 file)
-**Purpose:** Short/long-term goals, graduate applications, EB-2 strategy  
+**Purpose:** Short/long-term goals, graduate applications  
 **Key Files:** career_goals.md  
 **Contains:** 1 comprehensive markdown file  
 **RAG Priority:** ⭐⭐⭐ High (future planning)

@@ -10,7 +10,7 @@
 **Employment Type:** Full-time
 **Team / Dept:** MES Software Engineering
 **Manager:** Aaron Bollinger
-**Status:** Concluded — Hoang left First Solar in May 2026 to begin full-time graduate study (MS Computer Science, University of Cincinnati) as his STEM OPT work authorization ended. This is Hoang's most recent employer; he is not currently employed and is focused on graduate school.
+**Status:** Concluded — Hoang left First Solar in May 2026 to begin full-time graduate study (MS Computer Science, University of Cincinnati). This is Hoang's most recent employer; he is not currently employed and is focused on graduate school.
 
 ---
 
@@ -151,7 +151,7 @@ Delivered a PLC tag discovery and MQTT publishing pipeline for **Palantir Foundr
     "dates": "February-2025-to-May-2026",
     "duration_months": 15,
     "employment_status": "concluded",
-    "reason_for_leaving": "STEM-OPT-work-authorization-ended-transitioned-to-graduate-school",
+    "reason_for_leaving": "transitioned-to-graduate-school",
     "role_type": "full-time",
     "technologies": [".NET-10","C#","Next.js","PostgreSQL","Docker","Kubernetes","Apache-Airflow","Fleet","Helm","MQTT","Palantir-Foundry","Azure-DevOps"],
     "key_projects": ["Incident-Intelligence-Dashboard","Image-Data-Mart","AI-Auto-Reply","Remote-Reset","ESD-JB1","PLC-MQTT-Palantir","Module-Inventory","Dumpster-Weight-Validation"],

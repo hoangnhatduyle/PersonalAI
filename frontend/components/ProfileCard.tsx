@@ -118,11 +118,6 @@ function WorkCard() {
           ))}
         </div>
       </Section>
-      <Divider />
-      <div className="flex items-center gap-2 text-xs text-emerald-400">
-        <span className="w-2 h-2 rounded-full bg-emerald-400" />
-        First Solar annual review: Rated <span className="font-semibold ml-0.5">Green ✓</span>
-      </div>
     </>
   );
 }
@@ -263,18 +258,6 @@ function SkillsCard() {
 function CareerCard() {
   return (
     <>
-      <Section title="Visa Status">
-        <div className="bg-zinc-800/60 rounded-lg p-3 space-y-1.5">
-          <div className="flex justify-between text-xs">
-            <span className="text-zinc-400">F-1 Student</span>
-            <span className="text-emerald-400 font-medium">MS CS @ Univ. of Cincinnati</span>
-          </div>
-          <div className="flex justify-between text-xs">
-            <span className="text-zinc-400">H1B FY2027</span>
-            <span className="text-zinc-500">Not selected → returned to school</span>
-          </div>
-        </div>
-      </Section>
       <Section title="Next Steps">
         <ul className="space-y-1.5 text-xs text-zinc-400">
           {[
@@ -339,21 +322,18 @@ const TOPICS: Record<string, { icon: string; title: string; subtitle: string; ca
   projects:  { icon: "🚀", title: "Projects",          subtitle: "8+ shipped projects",                 card: <ProjectsCard /> },
   education: { icon: "🎓", title: "Education",         subtitle: "M.S. CS in progress · B.S. CS '23",   card: <EducationCard /> },
   skills:    { icon: "⚙️", title: "Tech Stack",         subtitle: "Full-Stack + AI/ML + Infra",          card: <SkillsCard /> },
-  career:    { icon: "🎯", title: "Career Goals",       subtitle: "F-1 Student @ Univ. of Cincinnati",   card: <CareerCard /> },
+  career:    { icon: "🎯", title: "Career Goals",       subtitle: "MS CS @ Univ. of Cincinnati",   card: <CareerCard /> },
   contact:   { icon: "📫", title: "Get in Touch",       subtitle: "GitHub · LinkedIn · Email",           card: <ContactCard /> },
 };
 
 export default function ProfileCard({ topic }: Props) {
   const [displayed, setDisplayed] = useState(topic);
-  const [fading, setFading] = useState(false);
+  // The card fades out for as long as it still shows the previous topic; no separate state to sync.
+  const fading = topic !== displayed;
 
   useEffect(() => {
     if (topic === displayed) return;
-    setFading(true);
-    const t = setTimeout(() => {
-      setDisplayed(topic);
-      setFading(false);
-    }, 180);
+    const t = setTimeout(() => setDisplayed(topic), 180);
     return () => clearTimeout(t);
   }, [topic, displayed]);
 

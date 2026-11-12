@@ -33,17 +33,9 @@
 
 **Remote Work Preference:** Open to remote, hybrid, or on-site arrangements
 
-## Work Authorization
-
-**Current Status:** F-1 Student Visa — enrolled in the Master of Science in Computer Science program at the University of Cincinnati
-
-**Work Authorization:** On F-1 status as a graduate student (CPT/OPT eligible); the Bachelor's-degree STEM OPT extension concluded May 14, 2026
-
-**H1B FY2027:** Not selected in the lottery — returning to graduate school was the resulting visa-transition plan, now completed
+## Current Status
 
 **Next Step:** Currently a full-time graduate student at the University of Cincinnati (MS Computer Science). Left First Solar in May 2026 to begin the program.
-
-**Visa Sponsorship:** Will need CPT/OPT authorization for internships or part-time work during the program, and sponsorship or OPT for full-time employment after graduation (EB-2 NIW strategy in progress for the long term)
 
 ## Availability
 
@@ -84,10 +76,8 @@
     "id": "contact-info-20251104",
     "title": "Contact Information & Availability",
     "entity_type": "contact_profile",
-    "tags": ["contact","location","work-authorization","availability","remote-work"],
+    "tags": ["contact","location","availability","remote-work"],
     "location": "Cincinnati-Ohio-USA",
-    "work_status": "F1-student-visa-MS-CS-University-of-Cincinnati",
-    "visa_plan": "enrolled-graduate-school-Fall-2026-completed-transition",
     "open_to": ["AI-ML-roles","LLM-engineering","software-engineering","internships","research-assistantships"],
     "languages": ["Vietnamese-native","English-fluent"],
     "last_updated": "2026-08-25"
@@ -102,5 +92,5 @@ When answering questions about contacting Hoang:
 - Direct professional inquiries to LinkedIn or portfolio website
 - Mention Cincinnati, Ohio as current location
 - Highlight willingness to relocate or work remotely
-- Note that Hoang is now a full-time graduate student (MS Computer Science, University of Cincinnati) on F-1 status, having concluded the First Solar role and STEM OPT in May 2026
+- Note that Hoang is now a full-time graduate student (MS Computer Science, University of Cincinnati) having left the First Solar role in May 2026
 - Note bilingual capabilities (Vietnamese + English)

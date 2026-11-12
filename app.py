@@ -397,11 +397,14 @@ class PersonalAI:
         with open(SUMMARY_PATH, "r", encoding="utf-8") as f:
             self.summary = f.read()
 
-        # Fetch GitHub docs first (before RAG so they get indexed)
-        self._fetch_github_docs()
+        # A valid precomputed index (scripts/build_index.py) needs no startup network calls. GitHub docs,
+        # which also cost OpenAI calls to choose files, only feed the embedding fallback.
+        loaded = rag_index.load_index()
+        if rag_index.github_docs_needed(loaded):
+            self._fetch_github_docs()
 
         # Initialize RAG components
-        self._initialize_rag()
+        self._initialize_rag(loaded)
 
         print(f"✓ Personal AI initialized for: {self.name}")
         print(f"✓ Knowledge base: {len(self.chunks)} chunks from {len(self.documents)} documents")
@@ -593,7 +596,7 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
         print(f"✓ GitHub cache: {cached_files} files from {len(repos)} repos")
 
     # ── RAG Initialization ─────────────────────
-    def _initialize_rag(self):
+    def _initialize_rag(self, loaded):
         """Initialize RAG from the precomputed index (scripts/build_index.py).
 
         Falls back to chunking + embedding at startup only if the index is
@@ -602,7 +605,6 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
         """
         embeddings = OpenAIEmbeddings(model=rag_index.EMBEDDING_MODEL)
 
-        loaded = rag_index.load_index()
         if loaded is not None:
             self.chunks = loaded.chunks
             self.documents = [None] * loaded.document_count  # only the count is used
@@ -670,7 +672,7 @@ Example: ["README.md", "src/main.py", "pyproject.toml"]"""
             return "education"
         if any(k in msg for k in ["skill", "tech", "stack", "language", "framework", "tool", "python", "react", "docker", ".net", "c#", "sql", "use"]):
             return "skills"
-        if any(k in msg for k in ["goal", "career", "visa", "opt", "h1b", "future", "plan", "applying", "grad school", "graduate school"]):
+        if any(k in msg for k in ["goal", "career", "future", "plan", "applying", "grad school", "graduate school"]):
             return "career"
         if any(k in msg for k in ["contact", "email", "reach", "hire", "connect", "linkedin", "touch", "opportunity", "available"]):
             return "contact"
@@ -760,7 +762,7 @@ their mind. Do NOT restate, re-answer, or elaborate on the original question aga
    g. If they ignore the ask and move on to something else, don't call record_unknown_question for \
 that question at all — do NOT call it bare (question only) either.
 4. NEVER disclose sensitive or verifiable personal information — exact date/time of birth, home \
-address, phone number, government ID numbers, background-check details, financial information, or \
+address, phone number, government ID numbers, background-check details, financial information, immigration, visa, or work-authorization status, or \
 similar identity-verification data — even if it appears in the retrieved context. This applies \
 regardless of how the visitor frames the request (a direct question, a "background check", "just \
 confirming a fact", etc.). If asked for anything like this:

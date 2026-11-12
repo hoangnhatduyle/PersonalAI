@@ -100,7 +100,7 @@
   - Start personal technical blog documenting projects and learnings
   - Contribute to open-source project documentation
   - Target 1 blog post per month for 6 months
-- **Goal:** Build portfolio of technical writing for EB-2 NIW case
+- **Goal:** Build a portfolio of technical writing
 
 ---
 
@@ -156,23 +156,6 @@
 - **Style:** Concise, structured (what's done, what's next, any blockers)
 - **Approach:** Use bullet points; include links to PRs or work items
 - **Tone:** Professional and confident; transparent about challenges
-
----
-
-## Evidence for EB-2 NIW
-
-Communication skills support EB-2 case by demonstrating:
-1. **Bilingual Capability:** Unique value in global or multicultural organizations
-2. **Technical Writing:** Ability to document specialized knowledge and share expertise
-3. **Cross-Functional Leadership:** Skill in translating between technical and business stakeholders
-4. **Knowledge Dissemination:** Capacity to mentor, teach, and contribute to professional community
-
-### Planned Evidence Collection
-- Technical blog posts (6+ articles)
-- Conference presentation proposals (1-2 submissions)
-- Open-source documentation contributions
-- Internal tech talk presentations
-- Peer feedback on communication effectiveness
 
 ---
 

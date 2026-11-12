@@ -1,10 +1,16 @@
 [Tags] AI, ML, deep-learning, RAG, agents, MLOps, enterprise-integration
-[Last Updated] 2025-10-08
+[Last Updated] 2026-11-11
 
 # Research interests — AI, ML & Deep Learning
 
 Short summary
 - I focus on building production-grade AI systems (RAG and agentic workflows) that turn data into reliable decisions, automate complex operations, and amplify human capability in enterprise settings (MES/ERP and cloud).
+
+## Current research (CincySI Lab, University of Cincinnati)
+
+- Since October 2026 I am a graduate researcher at the CincySI Lab under Professor Justin Zhan, focused on multi-agent LLM systems: how to make decisions made by groups of LLM agents accountable and trustworthy.
+- Two themes: (1) auditing whether the evidence multi-agent LLM systems cite is what actually drove their decisions, and (2) how confidence changes as claims pass between agents.
+- Two manuscripts on these themes are under review at NAACL 2027. Titles and details are not shared while under review (see `Knowledge_Base/Publication_Research/publications.md`).
 
 Motivation
 - Professional impact: Apply data-driven methods and engineering practices to improve consistency, automation, and decision quality in real projects.
@@ -39,7 +45,7 @@ Long-term goals
 
 Career & graduate study alignment
 - Short-term: apply RAG and agentic prototypes in production projects to demonstrate ROI and reliability.
-- Mid-term: pursue a Master’s in AI/CS to deepen theoretical foundations (optimization, learning theory, DL/RL).
+- Mid-term: complete the M.S. in Computer Science at the University of Cincinnati (May 2028) while doing research at CincySI Lab, deepening theoretical foundations (optimization, learning theory, DL/RL) and the evaluation of multi-agent systems.
 - Long-term: combine academic research and practitioner tooling; publish applied papers and open-source components.
 
 Suggested RAG metadata (JSON)

@@ -1,9 +1,9 @@
-My name is Hoang Nhat Duy Le. I'm an MES Software Engineer I at First Solar, where I build manufacturing execution systems and AI-powered tools for solar panel production. I'm originally from Ho Chi Minh City, Vietnam, and moved to Toledo, Ohio in 2018 for university.
+My name is Hoang Nhat Duy Le. I'm a graduate student in the M.S. Computer Science program at the University of Cincinnati and a researcher at the CincySI Lab, working on multi-agent LLM systems. Before graduate school I was an MES Software Engineer at First Solar (February 2025 – May 2026), where I built manufacturing execution systems and AI-powered tools for solar panel production. I'm originally from Ho Chi Minh City, Vietnam, and moved to Toledo, Ohio in 2018 for university.
 
 I hold a B.S. in Computer Science from the University of Toledo (3.89 GPA, magna cum laude, 2023) and have completed courses in LLM Engineering and Agentic AI. I'm passionate about applying large language models and agentic AI systems to real-world manufacturing and enterprise problems.
 
 My recent personal projects include a Personal AI Assistant (RAG-powered portfolio chatbot using LangChain + ChromaDB + OpenAI) and a Multi-Agent AI Trading Platform (5 autonomous AI traders, auditor agent, genetic algorithm strategy optimizer, Next.js dashboard).
 
-I'm currently applying to Master's programs (University of Toledo MS CSE, University of Cincinnati MS CS) for Fall 2026 enrollment, as my F-1 OPT STEM expires May 14, 2026 and I was not selected in the H1B FY2027 lottery.
+I'm looking for research opportunities for Summer 2027 and full-time roles after I graduate in May 2028.
 
 I love Vietnamese and Asian food, enjoy chess competitively, and am enthusiastic about how AI is reshaping the world.

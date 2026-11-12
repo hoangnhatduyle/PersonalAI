@@ -1,40 +1,50 @@
-[Tags] publications, research, future-work, open-source, collaborations
-[Last Updated] 2025-10-08
+[Tags] publications, research, under-review, NAACL-2027, CincySI, multi-agent-systems, future-work, open-source
+[Last Updated] 2026-11-11
 
-# Publications & research output (planned)
+# Publications & research output
 
-Status (short)
-- Currently no formal publications or conference presentations. Actively preparing to conduct, document, and share applied research in AI, ML, and intelligent systems.
+## Current status
 
-Intent & motivation
-- Goal: produce practitioner-oriented outputs that bridge theory and enterprise application (case studies, benchmarks, reproducible code).
-- Collaborate with faculty, peers, and industry to increase impact and access to real-world data and validation environments.
+- No papers have been accepted or published yet.
+- **Two manuscripts are currently under review at NAACL 2027.** Both were written at the CincySI Lab, University of Cincinnati (advisor: Professor Justin Zhan), on multi-agent LLM systems.
+  - One is about auditing whether the evidence multi-agent LLM systems cite is what actually drove their decisions.
+  - The other is about how confidence changes as claims pass between agents in a multi-agent pipeline.
+- See `Knowledge_Base/Work Experience/role_5_CincySI_Lab.md` for the research role.
+
+## What to say when asked about the papers
+
+- Say that two papers are under review at NAACL 2027 and describe the two topics above in plain language.
+- Do not share the paper titles, abstracts, methods, benchmark or metric names, results, datasets, or author lists. The review is anonymous, so these stay private until the review is over.
+- If a visitor asks for titles or details, say that politely and suggest they contact Hoang directly to discuss the work.
+- Never claim a paper is accepted, published, or presented, and never invent a title.
+
+## Intent & motivation
+
+- Goal: produce research and practitioner outputs that bridge theory and real-world applications (case studies, benchmarks, reproducible code).
+- Collaborate with faculty, peers, and industry to increase impact and access to real-world validation environments.
 - Use publications and open-source releases to refine ideas, gather feedback, and contribute to the community.
 
-Planned output types
+## Planned output types
+
 - Short-form: technical blog posts, whitepapers, and reproducible notebooks demonstrating prototypes and evaluations.
-- Medium-form: conference/workshop papers and practitioner articles (IEEE, ACM, domain workshops).
+- Medium-form: conference and workshop papers (ACL-family venues, IEEE, ACM, domain workshops).
 - Long-form: case studies or system papers showing production integrations (RAG, agents, MES/ERP automation) and open-source toolkits.
 
-Activities & commitments
-- Maintain a research project log (notes, experiments, reproducible scripts) and open-source repository for project artifacts.
-- Draft at least one workshop paper or practitioner report per year during graduate study or applied research cycles.
-- Present findings through talks, posters, or internal tech talks to gather feedback before formal submission.
+## How research is produced (process)
 
-How publications will be produced (process)
-- Problem selection: choose problems with clear evaluation metrics and enterprise relevance (e.g., retrieval quality, latency, reliability).
-- Reproducibility: publish data-splits, evaluation scripts, and minimal reproducible examples where permitted (PII and licensing permitting).
-- Evaluation: use both offline metrics and small-scale field trials (A/B or controlled deployments) where feasible.
+- Problem selection: choose problems with clear evaluation metrics and real-world relevance (for example retrieval quality, latency, reliability, and accountability of agent decisions).
+- Reproducibility: publish data splits, evaluation scripts, and minimal reproducible examples where permitted.
+- Evaluation: use both offline metrics and small-scale field trials where feasible.
 
-RAG-friendly metadata example (JSON)
+## RAG-friendly metadata (JSON)
 ```
 {
-	"id": "publications-plan-20251008",
-	"title": "Planned publications & research outputs",
-	"tags": ["publications","research","RAG","open-source","case-studies"],
-	"status": "planning",
-	"short_summary": "No formal publications yet; committing to practitioner-oriented case studies, reproducible code, and conference/workshop submissions.",
-	"planned_outputs": ["blog","workshop-paper","conference-paper","open-source-tool"],
-	"last_updated": "2025-10-08"
+	"id": "publications-20261111",
+	"title": "Publications & research output",
+	"tags": ["publications","research","under-review","NAACL-2027","CincySI","multi-agent-systems"],
+	"status": "two-manuscripts-under-review",
+	"venue": "NAACL-2027",
+	"short_summary": "No papers published yet; two manuscripts on multi-agent LLM systems from CincySI Lab are under review at NAACL 2027. Titles and details are not shared while under review.",
+	"last_updated": "2026-11-11"
 }
 ```

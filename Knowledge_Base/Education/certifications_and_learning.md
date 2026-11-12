@@ -204,16 +204,6 @@ Active learner pursuing specialized training in AI, Large Language Models, Machi
 
 ---
 
-## Evidence for EB-2 NIW Strategy
-
-These certifications and courses support the EB-2 National Interest Waiver case by demonstrating:
-1. **Specialized Knowledge:** Advanced training in cutting-edge AI/LLM technologies
-2. **Continuous Learning:** Commitment to staying current with rapid AI advancements
-3. **Applied Expertise:** Building production systems, not just completing courses
-4. **Industry Recognition:** Certificates from respected institutions (DeepLearning.AI, industry experts)
-
----
-
 ## RAG-Friendly Metadata (JSON)
 ```json
 {

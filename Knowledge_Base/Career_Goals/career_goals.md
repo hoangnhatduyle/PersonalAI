@@ -6,7 +6,7 @@
 - Link: https://webapps2.uc.edu/ecurriculum/degreeprograms/program/detail/20MAS-CMPE-MS
 
 **Priority 3: University of Toledo**
-**Tags:** career-goals, long-term, EB-2, professional-development, AI-systems, graduate-school
+**Tags:** career-goals, long-term, professional-development, AI-systems, graduate-school
 **Last Updated:** 2026-04-05
 
 ## Executive Summary
@@ -31,7 +31,6 @@ Improve current myHome project (see Projects Knowledge Base) by bug fixing and a
 
 ### Graduate Applications Status (Updated August 2026 — RESOLVED)
 
-> **H1B FY2027 Update:** Not selected in the H1B FY2027 lottery. Returned to school for Fall 2026 (August start) to maintain F-1 student status — this plan is now complete.
 
 **University of Cincinnati — MS in Computer Science — ✅ ENROLLED (current program)**
 - **Status:** Admitted and enrolled, started Fall 2026. This is Hoang's current graduate program.
@@ -157,7 +156,7 @@ Engineering-led teams in manufacturing or energy companies, cloud/infra provider
 	"id": "career-goals-20251008",
 	"title": "Career Goals & Professional Development Plan",
 	"entity_type": "career_plan",
-	"tags": ["career-goals","EB-2","graduate-applications","AI-systems","RAG","professional-development"],
+	"tags": ["career-goals","graduate-applications","AI-systems","RAG","professional-development"],
 	"short_term_goals": ["LLM-ML-DL-training","DigitalTwin-RAG-project","graduate-school-admission","engineer-II-role"],
 	"long_term_goals": ["AI-systems-architect","production-RAG-systems","publications","mentorship"],
 	"target_industries": ["manufacturing","industrial-automation","cloud","enterprise-SaaS","AI-products"],
@@ -167,47 +166,9 @@ Engineering-led teams in manufacturing or energy companies, cloud/infra provider
 }
 ```
 
-Immigration / EB‑2 Strategy
-
-- Strengthening the case: Build a record of specialized contributions (production systems, measurable business impact, and reproducible technical artifacts) plus applied publications or workshop papers documenting those contributions.
-- Evidence to collect: case-study style reports (RAG/agent deployments), reproducible code repositories, presentations or accepted workshop papers, and strong recommendation letters from managers and academic collaborators.
-- Networks & associations: Join IEEE/ACM special interest groups, industry practitioner communities, local AI meetups, and university research groups to create collaboration and co-authorship opportunities.
-- Graduate study contribution: Use an MS program to connect with faculty for applied research, co-author workshop papers, and obtain advisor letters that confirm specialized expertise and research contribution.
-
-📘 Graduate Application & EB‑2 Strategy Roadmap
-Prepared for Hoang – October 2025
-
-🎯 Goals
-- Secure admission to a Master’s program (Fall 2026) to maintain status after STEM OPT ends (May 2026).
-- Build a strong EB‑2 petition profile through research, publications, projects, and recognition.
-- Balance budget, commute, and prestige while maximizing EB‑2 potential.
-
-🏫 Shortlisted Universities
-From the graduate programs above
-
-📚 AI/ML Courses Plan (Oct 2025 → May 2026)
-- Ed Donner – LLM Engineering (Udemy) → Finish Oct 2025 (50% done).
-- Machine Learning Specialization (Andrew Ng, Coursera) → Oct–Nov 2025.
-- Ed Donner – Complete Agentic AI Engineering (2025, Udemy) → Nov–Jan 2026.
-- Deep Learning Specialization (Andrew Ng, Coursera) → Dec 2025–Feb 2026.
-- TensorFlow Developer Certificate (Laurence Moroney, Coursera) → Feb–Apr 2026.
-- Fast.ai Practical Deep Learning (Optional) → Apr–May 2026.
-
-📝 Application Timeline
-- Oct 2025: Build tracking sheet, request recommendations, draft base SOP.
-- Nov–Dec 2025: SOPs for U‑M, MSU, UC; submit early apps (Dec 15 deadlines).
-- Jan 2026: Submit Kent, Wright, Wayne.
-- Feb 2026: Submit UC, Toledo, Miami, Oakland.
-- Mar–Apr 2026: Track statuses, confirm rec letters, prep for funding interviews.
-- May 2026: Finalize enrollment, transition to F‑1 visa.
-
-🛠 EB‑2 Evidence Building
-- GitHub Projects:
-- Oct: 1 repo (LLM agent project).
-
 # Career goals (short- and long-term)
 
-**Tags:** career-goals, long-term, EB-2, professional-development, AI-systems
+**Tags:** career-goals, long-term, professional-development, AI-systems
 **Last Updated:** 2026-04-05
 
 ## Short-Term Goals (1–2 years)
@@ -223,7 +184,7 @@ From the graduate programs above
 
 ### Graduate applications (Updated August 2026 — RESOLVED)
 - **Enrolled:** University of Cincinnati, MS in Computer Science — started Fall 2026. This is Hoang's current program; see `Knowledge_Base/Education/masters_degree.md`.
-- **Context:** H1B FY2027 was not selected; returning to school in August 2026 was the visa-transition plan, now completed. Hoang left First Solar in May 2026 and relocated to Cincinnati, Ohio.
+- **Context:** Hoang left First Solar in May 2026 and relocated to Cincinnati, Ohio.
 
 ### Near-term roles
 - Target titles: Software Engineer II; LLM Engineer; Software Engineer (AI specialization).
@@ -241,18 +202,10 @@ From the graduate programs above
 - Roles that align: AI Systems Engineer, LLM/Agent Engineer, MLOps / Production ML Engineer, AI Systems Architect, Applied Research‑Practitioner.
 - Employer types: Engineering-led teams at manufacturers, cloud providers, enterprise SaaS companies, and early-stage startups building RAG/agent tooling.
 
-## Immigration / EB‑2 Strategy
+## Graduate Application Roadmap (summary)
 
-- Strengthen the case by demonstrating specialized contributions: production systems with measurable impact, reproducible technical artifacts, and applied publications/workshop acceptances.
-- Collect evidence: case-study reports (RAG/agent deployments), reproducible GitHub repos, blog/whitepapers, conference/workshop submissions, and strong letters from managers and faculty.
-- Network strategy: join IEEE/ACM SIGs, industry practitioner groups, local AI meetups, and university research groups to create co-authorship and recommendation opportunities.
-- Graduate study role: use an MS program to collaborate with faculty, co-author workshop papers, and obtain advisor letters validating specialized expertise.
-
-## Graduate Application & EB‑2 Roadmap (summary)
-
-- Goals: secure MS admission (Fall 2026), build EB-2 evidence, balance budget & commute while maximizing research/career impact.
+- Goals: secure MS admission (Fall 2026), balance budget & commute while maximizing research/career impact.
 - **Applied:** UToledo (awaiting), UCincinnati (awaiting final rec letter); target list: UToledo, UCincinnati, Miami, Kent State.
-- **H1B FY2027:** Not selected. Graduate school (F-1 student visa) is the visa transition path for August 2026.
 
 ### Month-by-month milestones (Oct 2025 → May 2026)
 - Oct 2025: Finish LLM Engineering course; draft base SOP; request recommendation letters.
@@ -262,12 +215,7 @@ From the graduate programs above
 - Feb 2026: Submit remaining apps (UC/Toledo/Miami/Oakland); join IEEE/ACM; publish Blog #4.
 - Mar 2026: Build TensorFlow GitHub project; publish Blog #5; track application statuses.
 - Apr 2026: Finalize portfolio; prepare funding interviews.
-- May 2026: Enroll/transition to F‑1; assemble EB‑2 evidence binder for long-term planning.
-
-### EB‑2 Evidence building (concrete)
-- GitHub: 6+ public repos (LLM agent, TensorFlow projects, reproducible experiments).
-- Writing: 6+ technical blog posts / whitepapers documenting methods and outcomes.
-- Community: IEEE/ACM membership, open-source contributions, and one workshop submission.
+- May 2026: Enroll at the University of Cincinnati.
 
 ## Professional Development Strategy
 
@@ -288,8 +236,8 @@ From the graduate programs above
 ```
 {
 	"id": "career-goals-20260825",
-	"title": "Career goals & EB-2 roadmap",
-	"tags": ["career-goals","EB-2","graduate-school-enrolled","AI-systems","RAG"],
+	"title": "Career goals & roadmap",
+	"tags": ["career-goals","graduate-school-enrolled","AI-systems","RAG"],
 	"short_summary": "Currently a full-time MS Computer Science student at the University of Cincinnati (started Fall 2026), after leaving First Solar in May 2026. Short-term: finish LLM/ML/DL training and build DigitalTwin RAG project. Long-term: become AI Systems Engineer/Architect focused on production RAG and agentic systems.",
 	"last_updated": "2026-08-25"
 }
