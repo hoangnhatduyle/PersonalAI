@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Props {
@@ -316,8 +317,8 @@ function ContactCard() {
 
 // ── Topic config ────────────────────────────────────────
 
-const TOPICS: Record<string, { icon: string; title: string; subtitle: string; card: React.ReactNode }> = {
-  general:   { icon: "👋", title: "Hoang Nhat Duy Le", subtitle: "MS Computer Science student @ Univ. of Cincinnati", card: <GeneralCard /> },
+const TOPICS: Record<string, { icon: React.ReactNode; banner?: React.ReactNode; title: string; subtitle: string; card: React.ReactNode }> = {
+  general:   { icon: null, banner: <Image src="/uc-logo-full.png" alt="University of Cincinnati" width={132} height={56} className="h-auto w-full" />, title: "Hoang Nhat Duy Le", subtitle: "MS Computer Science student @ Univ. of Cincinnati", card: <GeneralCard /> },
   work:      { icon: "💼", title: "Work Experience",   subtitle: "First Solar · Feb 2025–May 2026 (past role)", card: <WorkCard /> },
   projects:  { icon: "🚀", title: "Projects",          subtitle: "8+ shipped projects",                 card: <ProjectsCard /> },
   education: { icon: "🎓", title: "Education",         subtitle: "M.S. CS in progress · B.S. CS '23",   card: <EducationCard /> },
@@ -343,11 +344,20 @@ export default function ProfileCard({ topic }: Props) {
     <div className={`transition-opacity duration-200 ${fading ? "opacity-0" : "opacity-100"} h-full flex flex-col`}>
       {/* Card header */}
       <div className="p-4 border-b border-zinc-800 flex-shrink-0">
-        <div className="flex items-center gap-2 mb-1">
-          <span className="text-lg">{cfg.icon}</span>
-          <h2 className="text-sm font-semibold text-white leading-tight">{cfg.title}</h2>
-        </div>
-        <p className="text-[11px] text-zinc-500">{cfg.subtitle}</p>
+        {cfg.banner ? (
+          <>
+            {cfg.banner}
+            <h2 className="sr-only">{cfg.title}</h2>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center gap-2 mb-1">
+              {cfg.icon && <span className="text-lg">{cfg.icon}</span>}
+              <h2 className="text-sm font-semibold text-white leading-tight">{cfg.title}</h2>
+            </div>
+            <p className="text-[11px] text-zinc-500">{cfg.subtitle}</p>
+          </>
+        )}
       </div>
 
       {/* Card body */}
