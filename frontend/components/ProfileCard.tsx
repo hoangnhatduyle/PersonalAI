@@ -318,7 +318,7 @@ function ContactCard() {
 // ── Topic config ────────────────────────────────────────
 
 const TOPICS: Record<string, { icon: React.ReactNode; banner?: React.ReactNode; title: string; subtitle: string; card: React.ReactNode }> = {
-  general:   { icon: null, banner: <Image src="/uc-logo-full.png" alt="University of Cincinnati" width={132} height={56} className="h-auto w-full" />, title: "Hoang Nhat Duy Le", subtitle: "MS Computer Science student @ Univ. of Cincinnati", card: <GeneralCard /> },
+  general:   { icon: null, banner: <Image src="/uc-logo-full.png" alt="University of Cincinnati" width={132} height={56} className="h-auto w-full p-[15px]" />, title: "Hoang Nhat Duy Le", subtitle: "MS Computer Science student @ Univ. of Cincinnati", card: <GeneralCard /> },
   work:      { icon: "💼", title: "Work Experience",   subtitle: "First Solar · Feb 2025–May 2026 (past role)", card: <WorkCard /> },
   projects:  { icon: "🚀", title: "Projects",          subtitle: "8+ shipped projects",                 card: <ProjectsCard /> },
   education: { icon: "🎓", title: "Education",         subtitle: "M.S. CS in progress · B.S. CS '23",   card: <EducationCard /> },
