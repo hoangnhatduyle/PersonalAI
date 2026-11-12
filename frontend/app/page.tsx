@@ -24,13 +24,13 @@ const TOPIC_COLORS: Record<string, string> = {
 
 // ── Topic → two blob colors [top-right, bottom-left] ─────
 const TOPIC_BLOB_COLORS: Record<string, [string, string]> = {
-  general:   ["#6366f1", "#a855f7"],   // indigo + purple
-  work:      ["#3b82f6", "#06b6d4"],   // blue + cyan
-  projects:  ["#8b5cf6", "#ec4899"],   // violet + pink
-  education: ["#10b981", "#3b82f6"],   // emerald + blue
-  skills:    ["#f59e0b", "#ef4444"],   // amber + red
-  career:    ["#f43f5e", "#f97316"],   // rose + orange
-  contact:   ["#14b8a6", "#a855f7"],   // teal + purple
+  general:   ["#c8102e", "#ff6b7d"],   // UC red + soft red
+  work:      ["#a50d26", "#c8102e"],   // deep red
+  projects:  ["#c8102e", "#7e0a1d"],   // red + oxblood
+  education: ["#ff6b7d", "#a50d26"],   // soft red + deep red
+  skills:    ["#c8102e", "#9c9a95"],   // red + warm grey
+  career:    ["#e63950", "#7e0a1d"],   // bright red + oxblood
+  contact:   ["#a50d26", "#ff6b7d"],   // deep red + soft red
 };
 
 /** Convert a 6-digit hex colour to rgba(). */
@@ -106,7 +106,7 @@ export default function Home() {
         particleCount: 160,
         spread: 80,
         origin: { y: 0.7 },
-        colors: ["#818cf8", "#a78bfa", "#c084fc", "#f472b6", "#60a5fa"],
+        colors: ["#c8102e", "#ff6b7d", "#ffa3ae", "#ebe9e6", "#9c9a95"],
       });
     }
 

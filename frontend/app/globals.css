@@ -2,8 +2,50 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  --background: #09090b;  /* zinc-950 */
+  --background: #0e0f12;  /* portfolio chat background */
   --foreground: #f4f4f5;  /* zinc-100 */
+}
+
+/* Portfolio theme: UC red replaces indigo/violet/blue, and the dark neutrals match the site's sidebar. */
+@theme {
+  --color-indigo-50: #fff1f2;
+  --color-indigo-100: #ffe0e4;
+  --color-indigo-200: #ffc2ca;
+  --color-indigo-300: #ffa3ae;
+  --color-indigo-400: #ff6b7d;
+  --color-indigo-500: #e63950;
+  --color-indigo-600: #c8102e;
+  --color-indigo-700: #a50d26;
+  --color-indigo-800: #7e0a1d;
+  --color-indigo-900: #4d0611;
+  --color-indigo-950: #2e030a;
+  --color-violet-50: #fff1f2;
+  --color-violet-100: #ffe0e4;
+  --color-violet-200: #ffc2ca;
+  --color-violet-300: #ffa3ae;
+  --color-violet-400: #ff6b7d;
+  --color-violet-500: #e63950;
+  --color-violet-600: #c8102e;
+  --color-violet-700: #a50d26;
+  --color-violet-800: #7e0a1d;
+  --color-violet-900: #4d0611;
+  --color-violet-950: #2e030a;
+  --color-blue-50: #fff1f2;
+  --color-blue-100: #ffe0e4;
+  --color-blue-200: #ffc2ca;
+  --color-blue-300: #ffa3ae;
+  --color-blue-400: #ff6b7d;
+  --color-blue-500: #e63950;
+  --color-blue-600: #c8102e;
+  --color-blue-700: #a50d26;
+  --color-blue-800: #7e0a1d;
+  --color-blue-900: #4d0611;
+  --color-blue-950: #2e030a;
+  --color-zinc-950: #0e0f12;
+  --color-zinc-900: #17181c;
+  --color-zinc-800: #22242a;
+  --color-zinc-700: #34363d;
+  --color-zinc-600: #4a4c54;
 }
 
 @theme inline {
@@ -26,17 +68,17 @@ body {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #3f3f46; /* zinc-700 */
+  background: #34363d; /* zinc-700 */
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #52525b; /* zinc-600 */
+  background: #4a4c54; /* zinc-600 */
 }
 
 /* New message highlight flash */
 @keyframes highlight-flash {
   0%   { background-color: transparent; box-shadow: none; }
-  25%  { background-color: rgba(99, 102, 241, 0.12); box-shadow: 0 0 0 1px rgba(99,102,241,0.2); }
+  25%  { background-color: rgba(200, 16, 46, 0.14); box-shadow: 0 0 0 1px rgba(200,16,46,0.28); }
   100% { background-color: transparent; box-shadow: none; }
 }
 
