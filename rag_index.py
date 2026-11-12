@@ -28,6 +28,9 @@ INDEX_DIR = "index"
 VECTORS_FILE = "chunk_vectors.npy"
 CHUNKS_FILE = "chunks.json"
 
+# Meta-docs about the KB itself; indexing them leaks internals into chatbot answers.
+EXCLUDED_KB_FOLDERS = frozenset({"_reference"})
+
 
 # ─────────────────────────────────────────────
 # Loading + chunking
@@ -48,7 +51,7 @@ def load_knowledge_base_docs(kb_path: str) -> list[Document]:
     """Load every Knowledge_Base subfolder, using the folder name as doc_type."""
     docs = []
     for folder in sorted(glob.glob(os.path.join(kb_path, "*"))):
-        if os.path.isdir(folder):
+        if os.path.isdir(folder) and os.path.basename(folder) not in EXCLUDED_KB_FOLDERS:
             docs.extend(load_markdown_dir(folder, os.path.basename(folder)))
     return docs
 

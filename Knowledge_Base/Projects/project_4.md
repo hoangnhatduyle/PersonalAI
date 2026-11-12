@@ -107,11 +107,6 @@ Artifacts & evidence to collect (recommended)
 - Seed data: `Knowledge_Base/Extra/Air3550/Air3550/API/Data/UserSeedData.json`
 - Demo: short screencast showing booking → payment → manifest export
 
-Suggested next steps (pick one)
-1. Create a 1‑page technical README with commands to run the full stack locally (I can draft this now).
-2. Convert the Test Plan spreadsheet into runnable unit/integration tests (xunit + Playwright) and add a small CI task.
-3. Produce 3 resume bullets derived from this project (impact + technologies).
-
 RAG metadata (JSON)
 ```json
 {
@@ -123,12 +118,3 @@ RAG metadata (JSON)
     "source_paths": ["Extra/Air3550 Design Document","Extra/Air3550 Project Requirement","Extra/Air3550 Test Plan.xlsx","Extra/Air3550/Air3550"]
 }
 ```
-
-If you want, I can start on any of the suggested next steps (README, test conversion, or resume bullets). Which should I do first?
-- **Cancellation Window**: Tickets can only be cancelled 1+ hours before departure
-
-- **Check-in Window**: Flights can be checked in up to 24 hours before departure
-
-
-
-### Flight Operations Logic

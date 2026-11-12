@@ -65,12 +65,6 @@ Evidence & artifacts to attach (recommended)
 - Demo video or short GIF showing someone using the railing and hearing audio only when touching it.
  - Project poster: `Knowledge_Base/Extra/Poster.pdf` (conference/poster presentation materials).
 
-Suggested next steps
-1) Create a one‑page case study (architecture diagram, BOM, test graphs, and 3 evidence files) suitable for portfolio and applications — I can draft the first pass.
-2) Prepare a short demo video (30–60s) showing the privacy behavior (touch vs. no-touch) for portfolio embedding.
-3) Clean up the Arduino code repo: add a README describing wiring, expected SD file names/format (.AFM or WAV conversion), and troubleshooting steps (Serial debug messages). Consider changing filenames to zero‑padded scheme (e.g., 01.AFM) for easier ordering.
-4) Add annotated measurement CSVs and test scripts to `Knowledge_Base/Projects/project_3/evidence/` for reproducibility.
-
 RAG-friendly JSON metadata (for embedding ingestion)
 ```json
 {
@@ -86,10 +80,3 @@ RAG-friendly JSON metadata (for embedding ingestion)
 Credits
 - Project sponsors: College of Arts and Letters and UT Green Fund (per Final Report).
 - Team: senior design students (mechanical group + EECS/software group) — see Final Report for full contributor list.
-
-If you want, I can now:
-- Draft the one‑page case study with embedded images and an architecture diagram.  
-- Create the `Projects/project_3/evidence/` folder and copy selected images and the Arduino file into it (I will not overwrite originals unless you say so).  
-- Generate a README for the Arduino code explaining how to produce the `.AFM` files, wiring, and basic commissioning steps.
-
-Which of these should I start?  

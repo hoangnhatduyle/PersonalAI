@@ -45,8 +45,3 @@ _Notes on metrics:_ Where possible replace qualitative results above with concre
 - Link or screenshots of the personal web app (screens, architecture notes, small repo link).
 - Project summary for Dana Virtual Stations (brief writeup with your role, responsibilities, and outcomes).
 - Customer emails or ticket comments praising incident response or on‑site support.
-
-## Next steps (practical)
-- Add short, dated evidentiary files to an `evidence/` folder (reviews, screenshots, app screenshots, email snippets).
-- Convert each STAR story into a 2–3 sentence bullet for your resume and a 1‑paragraph entry for portfolio pages.
-- If you want, I can: (a) rename and move images into `Achievements & Recognition/evidence/`, (b) update this file to include embedded evidence links, and (c) generate resume‑friendly one‑liners for each accomplishment.

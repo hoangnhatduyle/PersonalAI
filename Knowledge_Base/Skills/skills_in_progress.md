@@ -58,10 +58,3 @@ Focused on gaining practical AI/LLM skills and production‑grade infrastructure
 ## Risks & mitigation
 - Risk: scope creep on projects delaying completion — mitigate by defining small, time‑boxed MVPs and clear acceptance criteria.
 - Risk: lack of infrastructure access for k8s or GPUs — mitigate by using managed free tiers, local minikube, or lightweight CPU‑based experiments.
-
-## Next steps (practical)
-1. Choose the first RAG POC goal and list the minimal dataset and expected user flow — I can draft the repo README and task list.
-2. If you want, I can draft a 12‑week learning calendar with weekly milestones and links to courses/resources.
-3. I can also generate 3 resume bullets from completed milestones once you tag evidence files in an `evidence/` folder.
-
-Tell me which next step you want me to start: draft the POC README, create the 12‑week calendar, or draft resume bullets from planned outcomes.
