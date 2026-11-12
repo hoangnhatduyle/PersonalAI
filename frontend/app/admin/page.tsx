@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { fetchConversations, type LoggedConversation } from "@/lib/adminApi";
+import { setAdminToken, useAdminToken } from "@/lib/adminToken";
 
 const LIMIT = 20;
 const RANGE_OPTIONS: { label: string; days: 3 | 7 | 30 | 90 }[] = [
@@ -87,25 +88,21 @@ function ConversationRow({ item }: { item: LoggedConversation }) {
   );
 }
 
+interface LoadedPage {
+  /** Identifies the request this page answers (token, search, range, page). */
+  key: string;
+  items: LoggedConversation[];
+  total: number;
+  error: string | null;
+}
+
 export default function AdminPage() {
-  const [token, setToken] = useState<string | null>(null);
-  const [items, setItems] = useState<LoggedConversation[]>([]);
-  const [total, setTotal] = useState(0);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const token = useAdminToken();
+  const [loaded, setLoaded] = useState<LoadedPage | null>(null);
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [rangeDays, setRangeDays] = useState<3 | 7 | 30 | 90>(7);
   const [page, setPage] = useState(0);
-
-  useEffect(() => {
-    try {
-      const stored = sessionStorage.getItem("admin_token");
-      if (stored) setToken(stored);
-    } catch {
-      // sessionStorage unavailable — fall through to login form
-    }
-  }, []);
 
   useEffect(() => {
     const t = setTimeout(() => {
@@ -115,10 +112,18 @@ export default function AdminPage() {
     return () => clearTimeout(t);
   }, [query]);
 
+  // Loading, items and error are derived from "has the response for the current request arrived?",
+  // so no state is set synchronously inside the effect, and a slow stale response can never
+  // overwrite a newer one.
+  const requestKey = token ? `${token}|${debouncedQuery}|${rangeDays}|${page}` : null;
+  const loading = requestKey !== null && loaded?.key !== requestKey;
+  const items = loaded?.items ?? [];
+  const total = loaded?.total ?? 0;
+  const error = loaded && (requestKey === null || loaded.key === requestKey) ? loaded.error : null;
+
   useEffect(() => {
-    if (!token) return;
-    setLoading(true);
-    setError(null);
+    if (!token || !requestKey) return;
+    let cancelled = false;
     fetchConversations(token, {
       q: debouncedQuery || undefined,
       since: sinceForDays(rangeDays),
@@ -126,31 +131,25 @@ export default function AdminPage() {
       offset: page * LIMIT,
     })
       .then((res) => {
-        setItems(res.items);
-        setTotal(res.total);
+        if (!cancelled) setLoaded({ key: requestKey, items: res.items, total: res.total, error: null });
       })
       .catch((err: Error) => {
-        setError(err.message);
-        if (err.message === "Invalid token") {
-          setToken(null);
-          try {
-            sessionStorage.removeItem("admin_token");
-          } catch {
-            // ignore
-          }
-        }
-      })
-      .finally(() => setLoading(false));
-  }, [token, debouncedQuery, rangeDays, page]);
+        if (cancelled) return;
+        // keep whatever was on screen, and show the error
+        setLoaded((prev) => ({
+          key: requestKey,
+          items: prev?.items ?? [],
+          total: prev?.total ?? 0,
+          error: err.message,
+        }));
+        if (err.message === "Invalid token") setAdminToken(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [token, requestKey, debouncedQuery, rangeDays, page]);
 
-  const handleLogin = (candidate: string) => {
-    try {
-      sessionStorage.setItem("admin_token", candidate);
-    } catch {
-      // ignore — token still works for this render, just won't persist
-    }
-    setToken(candidate);
-  };
+  const handleLogin = (candidate: string) => setAdminToken(candidate);
 
   if (!token) {
     return (
