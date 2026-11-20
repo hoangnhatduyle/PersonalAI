@@ -15,9 +15,10 @@ export interface ConversationPage {
 
 export async function fetchConversations(
   token: string,
-  opts: { q?: string; since?: string; limit: number; offset: number }
+  opts: { q?: string; since?: string; topic?: string; limit: number; offset: number }
 ): Promise<ConversationPage> {
   const params = new URLSearchParams({ limit: String(opts.limit), offset: String(opts.offset) });
+  if (opts.topic) params.set("topic", opts.topic);
   if (opts.q) params.set("q", opts.q);
   if (opts.since) params.set("since", opts.since);
   const res = await fetch(`${API_URL}/api/admin/conversations?${params}`, {

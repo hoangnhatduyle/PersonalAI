@@ -14,6 +14,9 @@ const RANGE_OPTIONS: { label: string; days: 3 | 7 | 30 | 90 }[] = [
   { label: "3 months", days: 90 },
 ];
 
+// Must match the labels produced by the backend's _classify_topic.
+const TOPIC_OPTIONS = ["projects", "work", "education", "skills", "career", "contact", "general"];
+
 function sinceForDays(days: number): string {
   return new Date(Date.now() - days * 86_400_000).toISOString();
 }
@@ -102,6 +105,7 @@ export default function AdminPage() {
   const [query, setQuery] = useState("");
   const [debouncedQuery, setDebouncedQuery] = useState("");
   const [rangeDays, setRangeDays] = useState<3 | 7 | 30 | 90>(7);
+  const [topic, setTopic] = useState<string | null>(null);
   const [page, setPage] = useState(0);
 
   useEffect(() => {
@@ -115,7 +119,7 @@ export default function AdminPage() {
   // Loading, items and error are derived from "has the response for the current request arrived?",
   // so no state is set synchronously inside the effect, and a slow stale response can never
   // overwrite a newer one.
-  const requestKey = token ? `${token}|${debouncedQuery}|${rangeDays}|${page}` : null;
+  const requestKey = token ? `${token}|${debouncedQuery}|${rangeDays}|${topic ?? ""}|${page}` : null;
   const loading = requestKey !== null && loaded?.key !== requestKey;
   const items = loaded?.items ?? [];
   const total = loaded?.total ?? 0;
@@ -127,6 +131,7 @@ export default function AdminPage() {
     fetchConversations(token, {
       q: debouncedQuery || undefined,
       since: sinceForDays(rangeDays),
+      topic: topic ?? undefined,
       limit: LIMIT,
       offset: page * LIMIT,
     })
@@ -147,7 +152,7 @@ export default function AdminPage() {
     return () => {
       cancelled = true;
     };
-  }, [token, requestKey, debouncedQuery, rangeDays, page]);
+  }, [token, requestKey, debouncedQuery, rangeDays, topic, page]);
 
   const handleLogin = (candidate: string) => setAdminToken(candidate);
 
@@ -192,6 +197,40 @@ export default function AdminPage() {
           placeholder="Search..."
           className="ml-auto bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-1.5 text-sm text-white placeholder:text-zinc-600 focus:outline-none focus:border-indigo-500 min-w-[160px]"
         />
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2 mb-4" role="group" aria-label="Filter by topic">
+        {TOPIC_OPTIONS.map((t) => {
+          const active = topic === t;
+          return (
+            <button
+              key={t}
+              aria-pressed={active}
+              onClick={() => {
+                setTopic(active ? null : t);
+                setPage(0);
+              }}
+              className={`text-xs px-2.5 py-1 rounded-full border font-medium transition-colors ${
+                active
+                  ? "bg-indigo-600 border-indigo-500 text-white"
+                  : "bg-indigo-900/40 border-indigo-700/40 text-indigo-300 hover:bg-indigo-900/70"
+              }`}
+            >
+              {t}
+            </button>
+          );
+        })}
+        {topic && (
+          <button
+            onClick={() => {
+              setTopic(null);
+              setPage(0);
+            }}
+            className="text-xs px-2 py-1 text-zinc-500 hover:text-white transition-colors"
+          >
+            Clear
+          </button>
+        )}
       </div>
 
       {error && <p className="text-sm text-rose-400 mb-4">{error}</p>}

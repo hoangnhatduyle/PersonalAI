@@ -1103,6 +1103,10 @@ async def resolve_contact_endpoint(request: Request):
     return {"status": "ok"}
 
 
+# Must match the labels produced by ChatBot._classify_topic.
+ADMIN_TOPICS = {"projects", "work", "education", "skills", "career", "contact", "general"}
+
+
 def _check_admin_token(request: Request):
     auth = request.headers.get("Authorization", "")
     token = auth.removeprefix("Bearer ").strip()
@@ -1115,16 +1119,21 @@ async def admin_conversations(
     request: Request,
     q: str | None = None,
     since: str | None = None,
+    topic: str | None = None,
     limit: int = 20,
     offset: int = 0,
 ):
     _check_admin_token(request)
+    if topic and topic not in ADMIN_TOPICS:
+        raise HTTPException(status_code=400, detail="Unknown topic")
     if not SUPABASE_URL or not SUPABASE_SERVICE_ROLE_KEY:
         raise HTTPException(status_code=503, detail="Supabase not configured")
 
     params = {"select": "*", "order": "created_at.desc", "limit": str(limit), "offset": str(offset)}
     if since:
         params["created_at"] = f"gte.{since}"
+    if topic:
+        params["topic"] = f"eq.{topic}"
     if q:
         # PostgREST uses `*` as the ilike wildcard; strip characters that are
         # syntactically significant to its filter grammar out of free-text input.
